@@ -1,35 +1,3 @@
-//Constants
-const CONST = {
-	ratings: {
-		initRating: 0,
-		initDeviation: 350 / 173.7178,
-		initVolatility: 0.06,
-	},
-	pages: {
-		mainPage: {
-			name: "Master List",
-			columns: {
-				name: 0,
-				group: 1,
-				rating: 2,
-				ratingDeviation: 3,
-				ratingVolatility: 4,
-			},
-		},
-	},
-	templates: {
-		attendance: {
-			name: "Template-Attendance",
-			columns: {
-				name: 0,
-				rating: 1,
-				attendance: 2,
-				dontPair: 3,
-			},
-		},
-	},
-};
-
 //describes a person in our club
 interface IPerson
 {
@@ -43,7 +11,7 @@ interface IPerson
 
 function test()
 {
-	formatPageFromTemplate(SpreadsheetApp.getActive(), SpreadsheetApp.getActive().getSheetByName(CONST.templates.attendance.name), 10, "testSheet");
+	generatePageFromTemplate(SpreadsheetApp.getActive(), SpreadsheetApp.getActive().getSheetByName(CONST.templates.attendance.name), 10, "testSheet");
 }
 
 
@@ -67,7 +35,6 @@ function deleteSheet(spreadsheet: GoogleAppsScript.Spreadsheet.Spreadsheet, shee
 		return false;
 }
 
-
 /**
  * Creates a sheet from a template and populates n row with correct formating, formula, and data validations
  *
@@ -78,7 +45,7 @@ function deleteSheet(spreadsheet: GoogleAppsScript.Spreadsheet.Spreadsheet, shee
  * @param sheetIndex the new sheet's index (optional)
  * @returns the generated sheet
  */
-function formatPageFromTemplate(spreadsheet: GoogleAppsScript.Spreadsheet.Spreadsheet, template: GoogleAppsScript.Spreadsheet.Sheet, rows: number, sheetName?: string, sheetIndex?: number)
+function generatePageFromTemplate(spreadsheet: GoogleAppsScript.Spreadsheet.Spreadsheet, template: GoogleAppsScript.Spreadsheet.Sheet, rows: number, sheetName?: string, sheetIndex?: number)
 {
 	let sheet: GoogleAppsScript.Spreadsheet.Sheet;
 	if (sheetName)
@@ -121,6 +88,7 @@ function formatPageFromTemplate(spreadsheet: GoogleAppsScript.Spreadsheet.Spread
 	}
 
 	sheet.showSheet();
+	sheet.addDeveloperMetadata("template", template.getSheetName());
 
 	return sheet;
 }
@@ -130,7 +98,7 @@ function formatPageFromTemplate(spreadsheet: GoogleAppsScript.Spreadsheet.Spread
  * 
  * @returns groups object, 
  */
-function GetGroupsObject()
+function getGroupsObject()
 {
 	let spreadsheet = SpreadsheetApp.getActive();
 	let data = spreadsheet.getSheetByName(CONST.pages.mainPage.name).getDataRange().getValues();
@@ -168,11 +136,16 @@ function GenerateAttendanceSheets(group?: string): void
 {
 	let spreadsheet = SpreadsheetApp.getActive();
 	let templateSheet = spreadsheet.getSheetByName(CONST.templates.attendance.name);
-	let groups = GetGroupsObject();
+	let groups = getGroupsObject();
 
 
-	//generates a group given a group's name
-	function makePage(groupName: string): void
+	/**
+	 * generate a group attendance page given its name
+	 * 
+	 * @param groupName the group's name
+	 * @returns The generated sheet
+	 */
+	function makePage(groupName: string): GoogleAppsScript.Spreadsheet.Sheet
 	{
 		let currentGroup = groups[groupName];
 		let sheetName = groupName[0].toUpperCase() + groupName.substring(1) + " attendance";
@@ -194,19 +167,30 @@ function GenerateAttendanceSheets(group?: string): void
 		}
 
 		//make the new sheet
-		let currentSheet = formatPageFromTemplate(spreadsheet, templateSheet, currentGroup.length, sheetName, 1);
+		let currentSheet = generatePageFromTemplate(spreadsheet, templateSheet, currentGroup.length, sheetName, 1);
 
 		let outputData: any[][] = [];
 		for (let i = 0; i < currentGroup.length; i++)
 		{
 			let currentPerson = currentGroup[i];
-			let name = currentPerson.name;
 
-			//follows ordering given by sheet, maybe set it so that it gets info from CONST object, for now will be fine
+			//smarter version of this
+			let newRow = [];
+
+			newRow[CONST.templates.attendance.columns.name] = currentPerson.name;
+			newRow[CONST.templates.attendance.columns.rating] = currentPerson.rating;
 			if (record[currentPerson.name])
-				outputData.push([name, currentPerson.rating, record[name].attendance, record[name].dontPair]);
+			{
+				newRow[CONST.templates.attendance.columns.attendance] = record[currentPerson.name].attendance;
+				newRow[CONST.templates.attendance.columns.dontPair] = record[currentPerson.name].dontPair;
+			}
 			else
-				outputData.push([name, currentPerson.rating, false, false]);
+			{
+				newRow[CONST.templates.attendance.columns.attendance] = false;
+				newRow[CONST.templates.attendance.columns.dontPair] = false;
+			}
+
+			outputData.push(newRow);
 		}
 		currentSheet.getRange(2, 1, outputData.length, outputData[0].length).setValues(outputData);
 
@@ -216,6 +200,8 @@ function GenerateAttendanceSheets(group?: string): void
 			currentSheet.setTabColor(groupName);
 		}
 		catch (er) { }
+
+		return currentSheet;
 	}
 
 

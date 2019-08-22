@@ -18,7 +18,7 @@ const CONST = {
         },
     },
     templates: {
-        attendance: {
+		attendance: {
             name: "Template-Attendance",
             columns: {
                 name: 0,
@@ -26,6 +26,20 @@ const CONST = {
                 attendance: 2,
                 dontPair: 3,
             },
-        },
+		},
+		pairing: {
+			name: "Template-Pairings",
+			columns: {
+				whiteResult: 0,
+				whitePlayer: 1,
+				blackResult: 2,
+				blackPlayer: 3,
+			},
+		},
+	},
+	menu: {
+		mainInterface: {
+			name: "RSI-Club",
+		},
 	},
 };
