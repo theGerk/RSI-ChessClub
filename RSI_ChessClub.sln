@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29215.179
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "RSI_ChessClub", "RSI_ChessClub.njsproj", "{E94D06F1-8267-4321-B9D4-18884E3055E8}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E94D06F1-8267-4321-B9D4-18884E3055E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E94D06F1-8267-4321-B9D4-18884E3055E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E94D06F1-8267-4321-B9D4-18884E3055E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E94D06F1-8267-4321-B9D4-18884E3055E8}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C96D32D1-EFC4-4EAC-83EA-F9D5A04F56DA}
+	EndGlobalSection
+EndGlobal

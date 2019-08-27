@@ -1,4 +1,7 @@
+/// <reference path="Constants.ts"/>
+
+
 function onOpen(e)
 {
-	SpreadsheetApp.getUi().createMenu(CONST.menu.mainInterface.name).addItem("test", test.name).addItem("refresh attendance", GenerateAttendanceSheets.name).addToUi();
+	SpreadsheetApp.getUi().createMenu(CONST.menu.mainInterface.name).addItem("test", (<any>test).name).addItem("refresh attendance", (<any>GenerateAttendanceSheets).name).addToUi();
 }

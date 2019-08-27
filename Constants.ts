@@ -1,4 +1,9 @@
-//Constants
+//references
+/// <reference path="node_modules/@types/google-apps-script/index.d.ts"/>
+/// <reference path="Code.ts"/>
+/// <reference path="Triggers.ts"/>
+
+//constants
 const CONST = {
     ratings: {
         initRating: 0,

@@ -1,3 +1,6 @@
+/// <reference path="Constants.ts"/>
+
+
 //describes a person in our club
 interface IPerson
 {
