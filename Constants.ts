@@ -2,7 +2,7 @@
 /// <reference path="node_modules/@types/google-apps-script/index.d.ts"/>
 /// <reference path="Code.ts"/>
 /// <reference path="Triggers.ts"/>
-
+/// <reference path="TemplatePages.ts"/>
 //constants
 const CONST = {
     ratings: {

@@ -1,0 +1,2 @@
+C:\Users\benji\source\repos\RSI-ChessClub\obj\Debug\RSI_ChessClub.njsprojAssemblyReference.cache
+C:\Users\benji\source\repos\RSI-ChessClub\obj\Debug\RSI_ChessClub.njsproj.CoreCompileInputs.cache

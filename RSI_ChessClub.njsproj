@@ -17,8 +17,8 @@
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'" />
   <PropertyGroup Condition="'$(Configuration)' == 'Release'" />
   <PropertyGroup>
-     <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
-</PropertyGroup>
+    <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
+  </PropertyGroup>
   <ItemGroup>
     <Content Include=".clasp.json" />
     <Content Include="appsscript.json" />
@@ -31,6 +31,9 @@
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="Constants.ts" />
+    <TypeScriptCompile Include="TemplatePages.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.Common.targets" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <Import Project="$(VSToolsPath)\Node.js Tools\Microsoft.NodejsToolsV2.targets" />
