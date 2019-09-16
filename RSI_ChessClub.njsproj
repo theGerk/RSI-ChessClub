@@ -22,7 +22,9 @@
   <ItemGroup>
     <Content Include=".clasp.json" />
     <Content Include="appsscript.json" />
+    <Content Include="package-lock.json" />
     <Content Include="package.json" />
+    <Content Include="tsconfig.json" />
     <None Include="Code.ts" />
     <None Include="Triggers.ts" />
   </ItemGroup>
@@ -31,6 +33,9 @@
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="Constants.ts" />
+    <TypeScriptCompile Include="General.ts" />
+    <TypeScriptCompile Include="GlickoRatings.ts" />
+    <TypeScriptCompile Include="LampertRatings.ts" />
     <TypeScriptCompile Include="TemplatePages.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>

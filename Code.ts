@@ -2,19 +2,19 @@
 
 
 //describes a person in our club
-interface IPerson
+interface IPlayer
 {
 	name: string;
-	rating: number;
-	ratingDeviation: number;
-	ratingVolatility: number;
+	glicko: Glicko.IRating;
+	group: string;
+	grade: number | string;
 };
 
 
 
 function test()
 {
-	TemplateSheets.generatePageFromTemplate(SpreadsheetApp.getActive(), SpreadsheetApp.getActive().getSheetByName(CONST.templates.attendance.name), 10, "testSheet");
+	TemplateSheets.generate(SpreadsheetApp.getActive(), SpreadsheetApp.getActive().getSheetByName(CONST.templates.attendance.name), 10, "testSheet");
 }
 
 
@@ -31,17 +31,21 @@ function getGroupsObject()
 
 
 	//create object maping group name to array of group members
-	let groups: { [groupName: string]: IPerson[] } = {};
+	let groups: { [groupName: string]: IPlayer[] } = {};
 	for (let i = 1; i < data.length; i++)
 	{
 		let group = data[i][CONST.pages.mainPage.columns.group].toLowerCase();
 
 		//may need to be edited when IPerson is edited
-		let person: IPerson = {
+		let person: IPlayer = {
 			name: data[i][CONST.pages.mainPage.columns.name],
-			rating: data[i][CONST.pages.mainPage.columns.rating],
-			ratingDeviation: data[i][CONST.pages.mainPage.columns.ratingDeviation],
-			ratingVolatility: data[i][CONST.pages.mainPage.columns.ratingVolatility]
+			glicko: {
+				rating: data[i][CONST.pages.mainPage.columns.rating],
+				deviation: data[i][CONST.pages.mainPage.columns.ratingDeviation],
+				volatility: data[i][CONST.pages.mainPage.columns.ratingVolatility]
+			},
+			grade: data[i][CONST.pages.mainPage.columns.grade],
+			group: data[i][CONST.pages.mainPage.columns.group]
 		};
 
 		if (group in groups)
@@ -93,7 +97,7 @@ function GenerateAttendanceSheets(group?: string): void
 		}
 
 		//make the new sheet
-		let currentSheet = TemplateSheets.generatePageFromTemplate(spreadsheet, templateSheet, currentGroup.length, sheetName, 1);
+		let currentSheet = TemplateSheets.generate(spreadsheet, templateSheet, currentGroup.length, sheetName, 1);
 
 		let outputData: any[][] = [];
 		for (let i = 0; i < currentGroup.length; i++)
@@ -104,7 +108,7 @@ function GenerateAttendanceSheets(group?: string): void
 			let newRow = [];
 
 			newRow[CONST.templates.attendance.columns.name] = currentPerson.name;
-			newRow[CONST.templates.attendance.columns.rating] = currentPerson.rating;
+			newRow[CONST.templates.attendance.columns.rating] = Math.round(currentPerson.glicko.rating);
 			if (record[currentPerson.name])
 			{
 				newRow[CONST.templates.attendance.columns.attendance] = record[currentPerson.name].attendance;
