@@ -1,16 +1,19 @@
 //references
 /// <reference path="node_modules/@types/google-apps-script/index.d.ts"/>
-/// <reference path="Code.ts"/>
-/// <reference path="Triggers.ts"/>
-/// <reference path="TemplatePages.ts"/>
 //constants
 const CONST = {
     ratings: {
         initRating: 0,
         initDeviation: 350 / 173.7178,
         initVolatility: 0.06,
-    },
-    pages: {
+	},
+	pages: {
+		gameLog: {
+			name: 'Game Log',
+			columns: {
+				data: 0,
+			},
+		},
         mainPage: {
             name: "Master List",
             columns: {
@@ -18,7 +21,8 @@ const CONST = {
                 group: 1,
                 rating: 2,
                 ratingDeviation: 3,
-                ratingVolatility: 4,
+				ratingVolatility: 4,
+				grade: 5,
             },
         },
     },
