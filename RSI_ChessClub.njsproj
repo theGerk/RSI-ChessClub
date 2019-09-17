@@ -42,7 +42,6 @@
     </TypeScriptCompile>
     <TypeScriptCompile Include="General.ts" />
     <TypeScriptCompile Include="GlickoRatings.ts" />
-    <TypeScriptCompile Include="LampertRatings.ts" />
     <TypeScriptCompile Include="TemplatePages.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
