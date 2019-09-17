@@ -62,7 +62,7 @@ ${er}`);
 				active: active,
 				grade: row[CONST.pages.mainPage.columns.grade],
 				group: row[CONST.pages.mainPage.columns.group],
-				pairingHistory: JSON.parse(row[CONST.pages.mainPage.columns.pairingHistory]),
+				pairingHistory: JSON.parse(row[CONST.pages.mainPage.columns.tournamentHistory]),
 			};
 			return ret;
 		});

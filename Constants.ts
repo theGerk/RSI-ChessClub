@@ -26,6 +26,7 @@ const CONST = {
 				ratingDeviation: 3,
 				ratingVolatility: 4,
 				grade: 5,
+				tournamentHistory: 6,
 			},
 		},
 		attendance: {

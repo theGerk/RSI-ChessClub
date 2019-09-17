@@ -30,6 +30,7 @@ namespace Pairings
 	 * Pairs everyone in players array
 	 * @param players array of players
 	 * @param dontCopy set to truthy value only if the ordering in players array does not mater.
+	 * @returns an array of pairings
 	 */
 	export function pair(players: IPlayer[], dontCopy?: boolean)
 	{
@@ -62,11 +63,13 @@ namespace Pairings
 			let opponent = costs[0].player;
 			usedSet[opponent.name] = true;
 
+			//randomly assign black and white
 			if(Math.random() > .5)
 				output.push({ white: player, black: opponent });
 			else
 				output.push({ black: player, white: opponent });
 		}
+		return output;
 	}
 
 	/**
