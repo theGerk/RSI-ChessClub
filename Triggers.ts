@@ -5,3 +5,6 @@ function onOpen(e)
 {
 	SpreadsheetApp.getUi().createMenu(CONST.menu.mainInterface.name).addItem("test", (<any>test).name).addItem("refresh attendance", (<any>GenerateAttendanceSheets).name).addToUi();
 }
+
+
+function GenerateAttendanceSheets() { FrontEnd.GenerateAttendanceSheets(); }

@@ -1,7 +1,5 @@
-﻿///<reference path="Constants.ts"/>
-
+﻿
 function test()
 {
-	TemplateSheets.generate(SpreadsheetApp.getActive(), SpreadsheetApp.getActive().getSheetByName(CONST.templates.attendance.name), 10, "testSheet");
+	TemplateSheets.generate(SpreadsheetApp.getActive(), SpreadsheetApp.getActive().getSheetByName(CONST.pages.attendance.template), 10, "testSheet");
 }
-
