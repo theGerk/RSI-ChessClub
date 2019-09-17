@@ -7,33 +7,18 @@
 	 */
 	export function getGroupsObject()
 	{
-		let spreadsheet = SpreadsheetApp.getActive();
-		let data = spreadsheet.getSheetByName(CONST.pages.mainPage.name).getDataRange().getValues();
-
 
 		//create object maping group name to array of group members
 		let groups: { [groupName: string]: IPlayer[] } = {};
-		for(let i = 1; i < data.length; i++)
+
+		let players = getActivePlayersArray();
+		for(var i = players.length - 1; i >= 0; i--)
 		{
-			let group = data[i][CONST.pages.mainPage.columns.group].toLowerCase();
-
-			//may need to be edited when IPerson is edited
-			let person: IPlayer = {
-				name: data[i][CONST.pages.mainPage.columns.name],
-				rating: {
-					rating: data[i][CONST.pages.mainPage.columns.rating],
-					deviation: data[i][CONST.pages.mainPage.columns.ratingDeviation],
-					volatility: data[i][CONST.pages.mainPage.columns.ratingVolatility]
-				},
-				grade: data[i][CONST.pages.mainPage.columns.grade],
-				group: data[i][CONST.pages.mainPage.columns.group],
-				active: true,
-			};
-
-			if(group in groups)
-				groups[group].push(person);
+			let player = players[i];
+			if(groups.hasOwnProperty(player.group))
+				groups[player.group].push(player);
 			else
-				groups[group] = [person];
+				groups[player.group] = [player];
 		}
 
 		return groups;
@@ -77,6 +62,7 @@ ${er}`);
 				active: active,
 				grade: row[CONST.pages.mainPage.columns.grade],
 				group: row[CONST.pages.mainPage.columns.group],
+				pairingHistory: JSON.parse(row[CONST.pages.mainPage.columns.pairingHistory]),
 			};
 			return ret;
 		});
