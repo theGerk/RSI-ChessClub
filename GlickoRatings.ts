@@ -87,7 +87,7 @@ namespace Glicko
 	 * @param ratingMap Function mapping from whatever games[i].white may be to a rating object\
 	 * @returns the array of objects that we want
 	 */
-	function makeOpponentArray(player: IRating, games: { white: any, black: any, result: number }[], ratingMap: (key: any) => IRating): { rating: number, deviation: number, score: number }[]
+	function makeOpponentArray<T>(player: IRating, games: { white: T, black: T, result: number }[], ratingMap: (key: T) => IRating): { rating: number, deviation: number, score: number }[]
 	{
 		/**
 		 * Makes an object for a match from one player's perspective.
