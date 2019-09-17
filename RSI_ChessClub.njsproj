@@ -34,6 +34,12 @@
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="Constants.ts" />
+    <TypeScriptCompile Include="Dev.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="FrontEnd.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="General.ts" />
     <TypeScriptCompile Include="GlickoRatings.ts" />
     <TypeScriptCompile Include="LampertRatings.ts" />
