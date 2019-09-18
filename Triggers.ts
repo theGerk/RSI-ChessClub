@@ -7,4 +7,4 @@ function onOpen(e)
 }
 
 
-function GenerateAttendanceSheets() { FrontEnd.GenerateAttendanceSheets(); }
+function GenerateAttendanceSheets() { FrontEnd.Attendance.GenerateAttendanceSheets(); }

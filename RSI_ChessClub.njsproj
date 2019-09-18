@@ -33,15 +33,16 @@
     <Folder Include="RSI_ChessClub" />
   </ItemGroup>
   <ItemGroup>
+    <TypeScriptCompile Include="AttendanceSheets.ts" />
     <TypeScriptCompile Include="Constants.ts" />
     <TypeScriptCompile Include="Dev.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="FrontEnd.ts">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
     <TypeScriptCompile Include="General.ts" />
     <TypeScriptCompile Include="GlickoRatings.ts" />
+    <TypeScriptCompile Include="MasterSheet.ts" />
+    <TypeScriptCompile Include="MetadataHandler.ts" />
+    <TypeScriptCompile Include="Pairings.ts" />
     <TypeScriptCompile Include="TemplatePages.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
