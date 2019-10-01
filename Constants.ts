@@ -49,7 +49,7 @@ const CONST = {
 			metadata: {
 				/** Identifies a paring sheet */
 				key: 'pairingSheet',
-				/** Has JSON array of group's included */
+				/** Has array of group's included (JSON format) */
 				groupName: 'name'
 			},
 			columns: {

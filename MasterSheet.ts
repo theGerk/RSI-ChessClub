@@ -26,16 +26,28 @@
 			return groups;
 		}
 
+		/** 
+		 * Get array of all active players
+		 * @returns array of all active players
+		 */
 		export function getActivePlayersArray(): IPlayer[]
 		{
 			return getPlayerArray(true);
 		}
 
+		/**
+		 * Get array of ALL players in the club (active and inactive)
+		 * @returns array of ALL players
+		 */
 		export function getAllPlayersArray(): IPlayer[]
 		{
 			return getPlayerArray(true).concat(getPlayerArray(false));
 		}
 
+		/**
+		 * Get club object representing entire club (active and inactive)
+		 * @returns Club object
+		 */
 		export function getClub(): IClub
 		{
 			try
@@ -48,6 +60,12 @@ ${er}`);
 			}
 		}
 
+
+		/**
+		 * Gets array of all players that are either active or inactive
+		 * @param active true => active players, false => inactive players
+		 * @returns array of players
+		 */
 		function getPlayerArray(active: boolean): IPlayer[]
 		{
 			let sheet = SpreadsheetApp.getActive().getSheetByName(active ? CONST.pages.mainPage.name : CONST.pages.mainPage.storage);
@@ -70,4 +88,10 @@ ${er}`);
 			});
 		}
 	}
+
+	/**
+	 * Gets the club object, representing entire club
+	 * @returns club object
+	 */
+	export var getClub = Master.getClub;
 }
