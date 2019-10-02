@@ -18,7 +18,9 @@
 
 		export function getData(): { [groupName: string]: IGroup }
 		{
-			return Benji.makeMap(SpreadsheetApp.getActive().getSheetByName(CONST.pages.groupTable.name).getDataRange().getValues().shift().map(mapping), g=>g.name,);
+			let data = SpreadsheetApp.getActive().getSheetByName(CONST.pages.groupTable.name).getDataRange().getValues();
+			data.shift();
+			return Benji.makeMap(data.map(mapping), g => g.name);
 		}
 	}
 }

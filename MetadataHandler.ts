@@ -24,7 +24,7 @@ namespace Benji
 
 		export function getMetadataOnSheet(sheet: GoogleAppsScript.Spreadsheet.Sheet): IReturn
 		{
-			return getMetaData(sheet.createDeveloperMetadataFinder().withLocationType(GoogleAppsScript.Spreadsheet.DeveloperMetadataLocationType.SHEET));
+			return getMetaData(sheet.createDeveloperMetadataFinder().withLocationType(SpreadsheetApp.DeveloperMetadataLocationType.SHEET));
 		}
 	}
 }

@@ -19,7 +19,7 @@
 		/**
 		 * gets an attendance sheet as a map from name to player data
 		 * @param sheet the sheet object to get data from
-		 * @returns object maping player names to player object
+		 * @returns object mapping player names to player object
 		 */
 		function getAttendanceSheetMap(sheet: GoogleAppsScript.Spreadsheet.Sheet): { [name: string]: IAttendanceData }
 		{
@@ -43,7 +43,7 @@
 			//continue on now that things are all hunky dory
 			let raw = sheet.getDataRange().getValues();
 			raw.shift();	//remove first row
-			//maps each row, effectivly returning my descired array
+			//maps each row, effectively returning my descried array
 			return raw.map(row =>
 			{
 				return {
@@ -75,6 +75,9 @@
 			 */
 			function makePage(groupName: string): GoogleAppsScript.Spreadsheet.Sheet
 			{
+				if(groupData.hasOwnProperty(groupName))
+					throw new Error(`Group ${groupName} does not exist in groups page`);
+
 				let currentGroup = groups[groupName];
 				if(!currentGroup || currentGroup.length === 0)
 					throw new Error(`${groupName} is not a group`);
@@ -92,8 +95,10 @@
 				//make the new sheet
 				let currentSheet = TemplateSheets.generate(spreadsheet, templateSheet, currentGroup.length, sheetName, 1);
 
+				//find default pairing setting
 				let defaultParingSetting = groupData[groupName].defaultPair;
 
+				//populate the data
 				let outputData: any[][] = [];
 				for(let i = 0; i < currentGroup.length; i++)
 				{
@@ -120,8 +125,8 @@
 				currentSheet.getRange(2, 1, outputData.length, outputData[0].length).setValues(outputData);
 
 				//add metadata
-				currentSheet.addDeveloperMetadata(CONST.pages.attendance.metadata.key, GoogleAppsScript.Spreadsheet.DeveloperMetadataVisibility.PROJECT);
-				currentSheet.addDeveloperMetadata(CONST.pages.attendance.metadata.groupName, groupName, GoogleAppsScript.Spreadsheet.DeveloperMetadataVisibility.PROJECT);
+				currentSheet.addDeveloperMetadata(CONST.pages.attendance.metadata.key, SpreadsheetApp.DeveloperMetadataVisibility.PROJECT);
+				currentSheet.addDeveloperMetadata(CONST.pages.attendance.metadata.groupName, groupName, SpreadsheetApp.DeveloperMetadataVisibility.PROJECT);
 
 				//set color
 				try

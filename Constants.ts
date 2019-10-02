@@ -39,7 +39,7 @@ const CONST = {
 		attendance: {
 			template: "Template-Attendance",
 			metadata: {
-				/** Identifies an attendence sheet */
+				/** Identifies an attendance sheet */
 				key: 'attendanceSheet',
 				/** Has the name of the group */
 				groupName: 'name',
