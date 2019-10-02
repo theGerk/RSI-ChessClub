@@ -4,7 +4,7 @@
 namespace Benji
 {
 	/**
-	 * Makes a deep clone (as opposed to shalow) will break on recursive references.
+	 * Makes a deep clone (as opposed to shallow) will break on recursive references.
 	 * @param input variable to be deep cloned
 	 */
 	export function deepClone<T>(input: T): T

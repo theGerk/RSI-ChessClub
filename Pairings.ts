@@ -8,7 +8,7 @@ namespace Pairings
 		black: IPlayer;
 	}
 
-	/** Muliplicitive constant, higher values disinsentivise playing recent opponents */
+	/** Multiplicative constant, higher values disincentivizes playing recent opponents */
 	const K = 100;  //just a guess, may need to adjust as we go.
 
 	/**

@@ -122,8 +122,6 @@ ${er}`);
 			//Attendance
 
 			//Games Log
-
-			//Other things TODO TODO
 		}
 	}
 }

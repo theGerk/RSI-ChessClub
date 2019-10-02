@@ -1,6 +1,6 @@
 ﻿///<reference path="Constants.ts"/>
 
-/** Works using GLICKO-2, but with some minor midifications to what the initial rating and deviations are. This doesn't actually change the algorithm, simply sifts the curve slightly */
+/** Works using GLICKO-2, but with some minor modifications to what the initial rating and deviations are. This doesn't actually change the algorithm, simply sifts the curve slightly */
 namespace Glicko
 {
 	/** The rating interface, describes what a glicko rating must have. */
@@ -82,7 +82,7 @@ namespace Glicko
 
 	/**
 	 * Makes an array of objects used in calculating the rating changes for each player. This is described at the end of step 2 in the glicko2.pdf
-	 * @param player Player whos opponents object we are making
+	 * @param player Player whose opponents object we are making
 	 * @param games Array of all games played
 	 * @param ratingMap Function mapping from whatever games[i].white may be to a rating object\
 	 * @returns the array of objects that we want
@@ -126,7 +126,7 @@ namespace Glicko
 	/**
 	 * Does a rating period of glicko ratings
 	 * @param ratingMap Takes in some identifier and returns a reference to a rating object.
-	 * @param games Has a white and black player and result from white's persective, white and black will be fed into the ratingMap to get their rating object
+	 * @param games Has a white and black player and result from white's perspective, white and black will be fed into the ratingMap to get their rating object
 	 * @param everyone A array of every rating object in the system.
 	 */
 	export function doRatingPeriod<T>(ratingMap: (key: T) => IRating, games: { white: T, black: T, result: number }[], everyone: IRating[])
@@ -181,7 +181,7 @@ namespace Glicko
 			estimatedVariance = 1 / estimatedVariance;
 
 
-			//Step 4: Compute the quantity $\Delta$, the estimated improvement in rating by comparing the pre-period rating the the preformace rating based only on game outcomes.
+			//Step 4: Compute the quantity $\Delta$, the estimated improvement in rating by comparing the pre-period rating the performance rating based only on game outcomes.
 			let estimatedImprovement = 0;
 			for(let j = 0; j < opponentArrays[i].length; j++)
 				estimatedImprovement += g(opponentArray[j].deviation) * (opponentArray[j].score - E(me.rating, opponentArray[j].rating, opponentArray[j].deviation));
