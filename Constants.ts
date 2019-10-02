@@ -10,6 +10,13 @@ const CONST = {
 		initVolatility: 0.06,
 	},
 	pages: {
+		groupTable: {
+			name: 'Groups',
+			columns: {
+				name: 0,
+				pair: 1,
+			}
+		},
 		gameLog: {
 			name: 'Game Log',
 			columns: {
