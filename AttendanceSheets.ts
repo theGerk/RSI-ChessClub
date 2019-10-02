@@ -12,7 +12,7 @@
 			/** If they are here today */
 			attending: boolean;
 			/** If they should be paired */
-			dontPair: boolean;
+			pair: boolean;
 		}
 
 
@@ -50,7 +50,7 @@
 					name: row[CONST.pages.attendance.columns.name],
 					group: groupName,
 					attending: row[CONST.pages.attendance.columns.attendance],
-					dontPair: row[CONST.pages.attendance.columns.dontPair]
+					pair: row[CONST.pages.attendance.columns.pair]
 				};
 			});
 		}
@@ -64,8 +64,8 @@
 		{
 			let spreadsheet = SpreadsheetApp.getActive();
 			let templateSheet = spreadsheet.getSheetByName(CONST.pages.attendance.template);
-			let groups = Master.getGroupsObject();
-
+			let groups = FrontEnd.Master.getGroupsObject();
+			let groupData = FrontEnd.Groups.getData();
 
 			/**
 			 * generate a group attendance page given its name
@@ -92,6 +92,8 @@
 				//make the new sheet
 				let currentSheet = TemplateSheets.generate(spreadsheet, templateSheet, currentGroup.length, sheetName, 1);
 
+				let defaultParingSetting = groupData[groupName].defaultPair;
+
 				let outputData: any[][] = [];
 				for(let i = 0; i < currentGroup.length; i++)
 				{
@@ -101,15 +103,16 @@
 
 					newRow[CONST.pages.attendance.columns.name] = currentPerson.name;
 					newRow[CONST.pages.attendance.columns.rating] = Math.round(currentPerson.rating.rating);
+
 					if(record[currentPerson.name])
 					{
 						newRow[CONST.pages.attendance.columns.attendance] = record[currentPerson.name].attending;
-						newRow[CONST.pages.attendance.columns.dontPair] = record[currentPerson.name].dontPair;
+						newRow[CONST.pages.attendance.columns.pair] = record[currentPerson.name].pair;
 					}
 					else
 					{
 						newRow[CONST.pages.attendance.columns.attendance] = false;
-						newRow[CONST.pages.attendance.columns.dontPair] = false;
+						newRow[CONST.pages.attendance.columns.pair] = defaultParingSetting;
 					}
 
 					outputData.push(newRow);

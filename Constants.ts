@@ -48,7 +48,7 @@ const CONST = {
 				name: 0,
 				rating: 1,
 				attendance: 2,
-				dontPair: 3,
+				pair: 3,
 			},
 		},
 		pairing: {
