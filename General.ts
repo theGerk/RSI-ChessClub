@@ -18,7 +18,7 @@ namespace Benji
 	 */
 	export function DayString(datetime: Date)
 	{
-		return `${datetime.getFullYear()}-${datetime.getMonth()}-${datetime.getDate()}`;
+		return `${datetime.getFullYear()}-${Benji.formatInteger(datetime.getMonth(), 2)}-${Benji.formatInteger(datetime.getDate(), 2)}`;
 	}
 
 	/**
@@ -27,7 +27,7 @@ namespace Benji
 	 */
 	export function UTCDayString(datetime: Date)
 	{
-		return `${datetime.getUTCFullYear()}-${datetime.getUTCMonth()}-${datetime.getUTCDate()}`;
+		return `${datetime.getUTCFullYear()}-${Benji.formatInteger(datetime.getUTCMonth(), 2)}-${Benji.formatInteger(datetime.getUTCDate(), 2)}`;
 	}
 
 	/**
