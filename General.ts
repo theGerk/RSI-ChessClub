@@ -3,6 +3,15 @@
 /** Things that I write that I use everywhere */
 namespace Benji
 {
+
+	export function formatInteger(num: number, digits: number): string
+	{
+		let str = num.toString();
+		while(str.length < digits)
+			str = '0' + str;
+		return str;
+	}
+
 	/**
 	 * Gets string version of a date
 	 * @param datetime the given time
