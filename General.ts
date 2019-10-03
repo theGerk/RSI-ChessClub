@@ -26,7 +26,7 @@ namespace Benji
 	 */
 	export function Today()
 	{
-		return Date.parse(DayString(new Date()));
+		return DayString(new Date());
 	}
 
 	/**
@@ -34,7 +34,7 @@ namespace Benji
 	 */
 	export function UTCToday()
 	{
-		return Date.parse(UTCDayString(new Date()));
+		return UTCDayString(new Date());
 	}
 
 

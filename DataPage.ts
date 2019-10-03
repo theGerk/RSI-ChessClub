@@ -4,7 +4,7 @@
 	{
 		export interface IData
 		{
-			date: number;
+			date: string;
 			//TODO change type of games
 			games: any[];
 			attendance: { [name: string]: FrontEnd.Attendance.IAttendanceData };
@@ -14,7 +14,7 @@
 		function mapping(row: any[]): IData
 		{
 			return {
-				date: Date.parse(row[CONST.pages.history.columns.date]),
+				date: row[CONST.pages.history.columns.date],
 				attendance: JSON.parse(row[CONST.pages.history.columns.attendance]),
 				games: JSON.parse(row[CONST.pages.history.columns.games]),
 			};
@@ -39,18 +39,18 @@
 				return { date: Benji.Today(), attendance: {}, games: [] };
 			else if(date instanceof Date)
 				return {
-					date: Date.parse(Benji.DayString(date)), attendance: {}, games: []
+					date: Benji.DayString(date), attendance: {}, games: []
 				};
 			else
 				return {
-					date: Date.parse(Benji.DayString(new Date(date))), attendance: {}, games: []
+					date: Benji.DayString(new Date(date)), attendance: {}, games: []
 				};
 		}
 
 		/** Gets all the data from the history page in order, with oldest first */
 		export function getData(): IData[]
 		{
-			return SpreadsheetApp.getActive().getSheetByName(CONST.pages.history.name).getDataRange().getValues().map(mapping).sort(d => d.date);
+			return SpreadsheetApp.getActive().getSheetByName(CONST.pages.history.name).getDataRange().getValues().map(mapping).sort((a,b) => );
 		}
 
 		/**

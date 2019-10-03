@@ -22,7 +22,7 @@
 		 */
 		function getAttendanceSheetMap(sheet: GoogleAppsScript.Spreadsheet.Sheet): { [name: string]: IAttendanceData }
 		{
-			return Benji.makeMap(getAttendanceSheetArray(sheet), (s) => s.name);
+			return Benji.makeMap(getAttendanceSheetArray(sheet).data, (s) => s.name);
 		}
 
 		/**
@@ -43,7 +43,7 @@
 		/**
 		 * gets all data from a single attendance sheet
 		 * @param sheet the sheet object to get data from
-		 * @returns array of all players in this group
+		 * @returns data: array of all players in this group, group: string name of the group
 		 */
 		function getAttendanceSheetArray(sheet: GoogleAppsScript.Spreadsheet.Sheet): { data: IAttendanceData[], group: string }
 		{
@@ -228,7 +228,7 @@
 
 			//if today has no entry yet
 			if(!today)
-				today = FrontEnd.Data.newData();
+				data.push(today = FrontEnd.Data.newData());
 
 			//add in all attendance data
 			for(let i = attendanceData.Array.length - 1; i >= 0; i--)

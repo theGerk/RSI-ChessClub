@@ -1,5 +1,5 @@
 ﻿
 function test()
 {
-	FrontEnd.Data.writeData([{ date: 0, attendance: {}, games: []}]);
+	SpreadsheetApp.getUi().alert(JSON.stringify(FrontEnd.Attendance.RecordAttendance()));
 }
