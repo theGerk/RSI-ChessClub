@@ -15,7 +15,6 @@
 			pair: boolean;
 		}
 
-
 		/**
 		 * gets an attendance sheet as a map from name to player data
 		 * @param sheet the sheet object to get data from
@@ -27,15 +26,31 @@
 		}
 
 		/**
+		 * Gets metadata from an attendance sheet, will return null if it is not an attendance sheet.
+		 * This is the accepted way to determine if a sheet is an attendance sheet.
+		 * @param sheet The sheet in question
+		 * @returns the metadata on the sheet as an map from key to metadata objects if this is an attendance sheet, otherwise returns null
+		 */
+		function getAttendanceSheetMetadata(sheet: GoogleAppsScript.Spreadsheet.Sheet): Benji.metadata.IReturn
+		{
+			let metadata = Benji.metadata.getMetadataOnSheet(sheet);
+			if(metadata.hasOwnProperty(CONST.pages.attendance.metadata.key))
+				return metadata;
+			else
+				return null;
+		}
+
+		/**
 		 * gets all data from a single attendance sheet
 		 * @param sheet the sheet object to get data from
 		 * @returns array of all players in this group
 		 */
-		function getAttendanceSheetArray(sheet: GoogleAppsScript.Spreadsheet.Sheet): IAttendanceData[]
+		function getAttendanceSheetArray(sheet: GoogleAppsScript.Spreadsheet.Sheet): { data: IAttendanceData[], group: string }
 		{
-			//first verify that this is an attendance sheet
-			let sheetMetadata = Benji.metadata.getMetadataOnSheet(sheet);
-			if(!sheetMetadata[CONST.pages.attendance.metadata.key])
+			let sheetMetadata = getAttendanceSheetMetadata(sheet);
+
+			//verify that this is an attendance sheet
+			if(sheetMetadata === null)
 				return null;
 
 			let groupName = sheetMetadata[CONST.pages.attendance.metadata.groupName].getValue();
@@ -44,15 +59,18 @@
 			let raw = sheet.getDataRange().getValues();
 			raw.shift();	//remove first row
 			//maps each row, effectively returning my descried array
-			return raw.map(row =>
-			{
-				return {
-					name: row[CONST.pages.attendance.columns.name],
-					group: groupName,
-					attending: row[CONST.pages.attendance.columns.attendance],
-					pair: row[CONST.pages.attendance.columns.pair]
-				};
-			});
+			return {
+				data: raw.map(row =>
+				{
+					return {
+						name: row[CONST.pages.attendance.columns.name],
+						group: groupName,
+						attending: row[CONST.pages.attendance.columns.attendance],
+						pair: row[CONST.pages.attendance.columns.pair]
+					};
+				}),
+				group: groupName
+			};
 		}
 
 		/**
@@ -75,7 +93,7 @@
 			 */
 			function makePage(groupName: string): GoogleAppsScript.Spreadsheet.Sheet
 			{
-				if(groupData.hasOwnProperty(groupName))
+				if(!groupData.hasOwnProperty(groupName))
 					throw new Error(`Group ${groupName} does not exist in groups page`);
 
 				let currentGroup = groups[groupName];
@@ -145,6 +163,81 @@
 			else
 				for(let groupName in groups)
 					makePage(groupName);
+		}
+
+		/**
+		 * Gets all data for attendance sheets
+		 * @returns Object with following properties. Array: An array of all the attendance data, Map: a map from a group name to an array with just that group's attendance data. 
+		 */
+		function getAllAttendanceData(): { Array: IAttendanceData[], Map: { [groupName: string]: IAttendanceData[] } }
+		{
+			let arr: IAttendanceData[] = [];
+			let map: { [groupName: string]: IAttendanceData[] } = {};
+
+			let sheets = SpreadsheetApp.getActive().getSheets();
+			for(let i = sheets.length - 1; i >= 0; i--)
+			{
+				let attendanceResult = getAttendanceSheetArray(sheets[i]);
+
+				//check to make sure it is actually a sheet
+				if(attendanceResult !== null)
+				{
+					arr.concat(attendanceResult.data);
+					map[attendanceResult.group] = attendanceResult.data;
+				}
+			}
+
+			return { Array: arr, Map: map };
+		}
+
+		/**
+		 * Removes all the attendance sheets, or a single sheet for given group
+		 * @param group the name of the group to be deleted, left blank to delete all sheets
+		 */
+		function RemoveAttendanceSheets(group?: string): void
+		{
+			//some weird voodoo here
+			//If the group is defined then matchGroupCheck checks for it being the right group, otherwise it just returns true
+			let matchGroupCheck: (metadata: Benji.metadata.IReturn) => boolean;
+			if(group)
+				matchGroupCheck = (metadata: Benji.metadata.IReturn) => metadata[CONST.pages.attendance.metadata.groupName].getValue() === group;
+			else
+				matchGroupCheck = () => true;
+
+			let spreadsheet = SpreadsheetApp.getActive();
+			let sheets = spreadsheet.getSheets();
+
+			//go ahead and delete some sheets
+			for(let i = sheets.length - 1; i >= 0; i--)
+			{
+				let metadata = getAttendanceSheetMetadata(sheets[i]);
+				if(metadata !== null && matchGroupCheck(metadata))
+					spreadsheet.deleteSheet(sheets[i]);
+			}
+		}
+
+		/**
+		 * Deletes the attendance pages and then records them on the data page
+		 */
+		export function RecordAttendance(): { Array: IAttendanceData[], Map: { [groupName: string]: IAttendanceData[] } }
+		{
+			let attendanceData = getAllAttendanceData();
+
+			let data = FrontEnd.Data.getData();
+			let today = FrontEnd.Data.getToday(data);	//today will be a reference into data. ie: when we change today we change data
+
+			//if today has no entry yet
+			if(!today)
+				today = FrontEnd.Data.newData();
+
+			//add in all attendance data
+			for(let i = attendanceData.Array.length - 1; i >= 0; i--)
+				today[attendanceData.Array[i].name] = attendanceData.Array[i];
+
+			//do writing and return
+			FrontEnd.Data.writeData(data);
+			RemoveAttendanceSheets();
+			return attendanceData;
 		}
 	}
 }

@@ -4,6 +4,41 @@
 namespace Benji
 {
 	/**
+	 * Gets string version of a date
+	 * @param datetime the given time
+	 */
+	export function DayString(datetime: Date)
+	{
+		return `${datetime.getFullYear()}-${datetime.getMonth()}-${datetime.getDate()}`;
+	}
+
+	/**
+	 * Get string version of the UTC date
+	 * @param datetime the given time
+	 */
+	export function UTCDayString(datetime: Date)
+	{
+		return `${datetime.getUTCFullYear()}-${datetime.getUTCMonth()}-${datetime.getUTCDate()}`;
+	}
+
+	/**
+	 * Get the time representing the beginning of the day
+	 */
+	export function Today()
+	{
+		return Date.parse(DayString(new Date()));
+	}
+
+	/**
+	 * Get the time representing the beginning of the UTC day
+	 */
+	export function UTCToday()
+	{
+		return Date.parse(UTCDayString(new Date()));
+	}
+
+
+	/**
 	 * Makes a deep clone (as opposed to shallow) will break on recursive references.
 	 * @param input variable to be deep cloned
 	 */

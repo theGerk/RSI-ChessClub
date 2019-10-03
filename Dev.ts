@@ -1,5 +1,5 @@
 ﻿
 function test()
 {
-	Logger.log(JSON.stringify(FrontEnd.Groups.getData()));
+	FrontEnd.Data.writeData([{ date: 0, attendance: {}, games: []}]);
 }

@@ -121,7 +121,9 @@ ${er}`);
 
 			//Attendance
 
-			//Games Log
+			//Pairings
+
+			//History
 		}
 	}
 }

@@ -66,6 +66,14 @@ const CONST = {
 				blackPlayer: 3,
 			},
 		},
+		history: {
+			name: 'Data',
+			columns: {
+				date: 0,
+				games: 1,
+				attendance: 2,
+			},
+		},
 	},
 	menu: {
 		mainInterface: {

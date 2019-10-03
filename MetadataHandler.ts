@@ -4,6 +4,7 @@ namespace Benji
 {
 	export namespace metadata
 	{
+		/** Maps keys to their developer metadata object */
 		export interface IReturn { [key: string]: GoogleAppsScript.Spreadsheet.DeveloperMetadata }
 
 		export function getMetaData(finder: GoogleAppsScript.Spreadsheet.DeveloperMetadataFinder): IReturn
