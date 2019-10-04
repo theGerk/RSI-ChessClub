@@ -2,7 +2,7 @@
 
 namespace Pairings
 {
-	interface IPairing
+	export interface IPairing
 	{
 		white: IPlayer;
 		black: IPlayer;

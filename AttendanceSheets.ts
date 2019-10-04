@@ -229,7 +229,7 @@
 			let todayData = getTodayData(data[todayKey]);
 
 			//make changes
-			FrontEnd.Games.TournamentPairings.GeneratePairings(todayData);
+			FrontEnd.Games.GeneratePairings(todayData);
 			FrontEnd.Data.writeData(data);
 			RemoveAttendanceSheets();
 		}
