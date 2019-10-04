@@ -1,6 +1,6 @@
 ﻿namespace FrontEnd
 {
-	export namespace Pairings
+	export namespace TournamentPairings
 	{
 		export function GeneratePairings()
 		{
@@ -19,7 +19,7 @@
 			}
 
 			//pair everyone
-			let pairings = globalThis.Pairings.pair(playersToPair, true);
+			let pairings = Pairings.pair(playersToPair, true);
 
 			//handle white and black players sperately as otherwise equations can get overwriten
 			let white: string[][];

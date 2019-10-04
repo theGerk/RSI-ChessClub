@@ -235,7 +235,7 @@
 			todayData.attendance = attendanceData.Array;
 
 			//make changes
-			FrontEnd.Pairings.GeneratePairings();
+			FrontEnd.TournamentPairings.GeneratePairings();
 			FrontEnd.Data.writeData(data);
 			RemoveAttendanceSheets();
 		}
@@ -246,9 +246,12 @@
 				date = Benji.makeDayString();
 
 			//get data from log page
-			let historicalData = FrontEnd.Data.getData()[date].attendance;
 			let currentData = getAllAttendanceData().Array;
-			return currentData.concat(historicalData);
+			let historicalData = FrontEnd.Data.getData()[date];
+			if(historicalData)
+				return currentData.concat(historicalData.attendance);
+			else
+				return currentData;
 		}
 	}
 }
