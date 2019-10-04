@@ -20,9 +20,10 @@
 		 * @param sheet the sheet object to get data from
 		 * @returns object mapping player names to player object
 		 */
-		function getAttendanceSheetMap(sheet: GoogleAppsScript.Spreadsheet.Sheet): { [name: string]: IAttendanceData }
+		function getAttendanceSheetMap(sheet: GoogleAppsScript.Spreadsheet.Sheet): { data: {[name: string]: IAttendanceData }, group: string }
 		{
-			return Benji.makeMap(getAttendanceSheetArray(sheet).data, (s) => s.name);
+			let data = getAttendanceSheetArray(sheet);
+			return { data: Benji.makeMap(data.data, (s) => s.name), group: data.group };
 		}
 
 		/**
@@ -106,7 +107,7 @@
 				let oldSheet = spreadsheet.getSheetByName(sheetName);
 				let record: { [name: string]: IAttendanceData };
 				if(oldSheet)
-					record = getAttendanceSheetMap(oldSheet);
+					record = getAttendanceSheetMap(oldSheet).data;
 				else
 					record = {};
 
@@ -167,12 +168,11 @@
 
 		/**
 		 * Gets all data for attendance sheets
-		 * @returns Object with following properties. Array: An array of all the attendance data, Map: a map from a group name to an array with just that group's attendance data. 
+		 * @returns A map from players to their attendance data
 		 */
-		function getAllAttendanceData(): { Array: IAttendanceData[], Map: { [groupName: string]: IAttendanceData[] } }
+		function getAllAttendanceData(): { [name: string]: IAttendanceData }
 		{
 			let arr: IAttendanceData[] = [];
-			let map: { [groupName: string]: IAttendanceData[] } = {};
 
 			let sheets = SpreadsheetApp.getActive().getSheets();
 			for(let i = sheets.length - 1; i >= 0; i--)
@@ -183,11 +183,10 @@
 				if(attendanceResult !== null)
 				{
 					arr.push(...attendanceResult.data);
-					map[attendanceResult.group] = attendanceResult.data;
 				}
 			}
 
-			return { Array: arr, Map: map };
+			return Benji.makeMap(arr, entry=>entry.name);
 		}
 
 		/**
@@ -221,35 +220,45 @@
 		 */
 		export function RecordAndPair()
 		{
-			let attendanceData = getAllAttendanceData();
-
 			let data = FrontEnd.Data.getData();
-			let today = Benji.makeDayString();
-			let todayData = data[today];
+			let todayKey = Benji.makeDayString();
+			if(!data[todayKey])
+				data[todayKey] = FrontEnd.Data.newData(todayKey);
 
-			//if today has no entry yet
-			if(!todayData)
-				todayData = data[today] = FrontEnd.Data.newData();
-
-			//add in all attendance data
-			todayData.attendance = attendanceData.Array;
+			//this mutates the data to update it with current attendance
+			let todayData = getTodayData(data[todayKey]);
 
 			//make changes
-			FrontEnd.TournamentPairings.GeneratePairings();
+			FrontEnd.Games.TournamentPairings.GeneratePairings(todayData);
 			FrontEnd.Data.writeData(data);
 			RemoveAttendanceSheets();
 		}
 
-		export function getTodayData(date?: string): IAttendanceData[]
+		/**
+		 * Changes value of input by updating with the current attendance data, will overwrite but will not delete entries that are not present
+		 * @param input Optional, if left out will use the current day's from the data page
+		 */
+		function getTodayData(input?: FrontEnd.Data.IData): { [name: string]: IAttendanceData }
 		{
-			if(!date)
-				date = Benji.makeDayString();
+			let historicalData: { [name: string]: IAttendanceData };
 
-			//get data from log page
-			let currentData = getAllAttendanceData().Array;
-			let historicalData = FrontEnd.Data.getData()[date];
+			//set historical data based on different input types
+			if(input === undefined)
+				historicalData = FrontEnd.Data.getData()[Benji.makeDayString()].attendance;
+			else
+				historicalData = input.attendance;
+
+			//get current data
+			let currentData = getAllAttendanceData();
+
+
 			if(historicalData)
-				return currentData.concat(historicalData.attendance);
+			{
+				//update historical data with current data
+				for(let player in currentData)
+					historicalData[player] = currentData[player];
+				return historicalData;
+			}
 			else
 				return currentData;
 		}

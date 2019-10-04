@@ -7,7 +7,7 @@
 			date: string;
 			//TODO change type of games
 			games: [];
-			attendance: FrontEnd.Attendance.IAttendanceData[];
+			attendance: { [name: string]: FrontEnd.Attendance.IAttendanceData };
 		}
 
 
@@ -36,15 +36,11 @@
 		export function newData(date?: number | Date | string): IData
 		{
 			if(date === undefined)
-				return { date: Benji.makeDayString(), attendance: [], games: [] };
+				return { date: Benji.makeDayString(), attendance: {}, games: [] };
 			else if(date instanceof Date)
-				return {
-					date: Benji.makeDayString(date), attendance: [], games: []
-				};
+				return { date: Benji.makeDayString(date), attendance: {}, games: [] };
 			else
-				return {
-					date: Benji.makeDayString(new Date(date)), attendance: [], games: []
-				};
+				return { date: Benji.makeDayString(new Date(date)), attendance: {}, games: [] };
 		}
 
 		/** Gets all the data from the history page in order, with oldest first */

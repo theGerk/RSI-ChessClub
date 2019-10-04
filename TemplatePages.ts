@@ -9,7 +9,7 @@ namespace TemplateSheets
 	 * @param sheetName Name of the sheet
 	 * @returns true if a sheet is deleted, false otherwise
 	 */
-	function deleteSheet(spreadsheet: GoogleAppsScript.Spreadsheet.Spreadsheet, sheetName: string): boolean
+	export function deleteSheet(spreadsheet: GoogleAppsScript.Spreadsheet.Spreadsheet, sheetName: string): boolean
 	{
 		let sheet = spreadsheet.getSheetByName(sheetName);
 		if(sheet)

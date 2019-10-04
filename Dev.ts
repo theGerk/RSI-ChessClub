@@ -2,7 +2,7 @@
 function test()
 {
 	let ss = SpreadsheetApp.getActive();
-	let sheet = ss.getSheetByName('Template-Pairings_Formula');
-	let rows = 10;
-	TemplateSheets.generate(ss, sheet, rows, 'test');
+	let sheet = ss.getSheetByName(CONST.pages.extraGames.name);
+	let vals = sheet.getDataRange().getValues();
+	SpreadsheetApp.getUi().alert(vals.length.toString());
 }

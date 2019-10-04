@@ -17,10 +17,12 @@ const CONST = {
 				pair: 1,
 			}
 		},
-		gameLog: {
-			name: 'Game Log',
+		extraGames: {
+			name: 'Other Games',
 			columns: {
-				data: 0,
+				white: 0,
+				black: 2,
+				result: 1,
 			},
 		},
 		mainPage: {
