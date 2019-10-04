@@ -182,7 +182,7 @@
 				//check to make sure it is actually a sheet
 				if(attendanceResult !== null)
 				{
-					arr.concat(attendanceResult.data);
+					arr.push(...attendanceResult.data);
 					map[attendanceResult.group] = attendanceResult.data;
 				}
 			}
@@ -226,6 +226,9 @@
 			let data = FrontEnd.Data.getData();
 			let today = Benji.makeDayString();
 			let todayData = data[today];
+			Logger.log(today);
+			Logger.log(JSON.stringify(data));
+			Logger.log(JSON.stringify(todayData));
 
 			//if today has no entry yet
 			if(!todayData)
@@ -233,7 +236,7 @@
 
 			//add in all attendance data
 			for(let i = attendanceData.Array.length - 1; i >= 0; i--)
-				todayData[attendanceData.Array[i].name] = attendanceData.Array[i];
+				todayData.attendance[attendanceData.Array[i].name] = attendanceData.Array[i];
 
 			//do writing and return
 			FrontEnd.Data.writeData(data);

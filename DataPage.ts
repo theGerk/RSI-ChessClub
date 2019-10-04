@@ -14,7 +14,7 @@
 		function mapping(row: any[]): IData
 		{
 			return {
-				date: row[CONST.pages.history.columns.date],
+				date: Benji.makeDayString(row[CONST.pages.history.columns.date]),
 				attendance: JSON.parse(row[CONST.pages.history.columns.attendance]),
 				games: JSON.parse(row[CONST.pages.history.columns.games]),
 			};
@@ -50,7 +50,9 @@
 		/** Gets all the data from the history page in order, with oldest first */
 		export function getData(): { [date: string]: IData }
 		{
-			return Benji.makeMap(SpreadsheetApp.getActive().getSheetByName(CONST.pages.history.name).getDataRange().getValues().map(mapping), data => data.date);
+			let data = SpreadsheetApp.getActive().getSheetByName(CONST.pages.history.name).getDataRange().getValues();
+			data.shift();
+			return Benji.makeMap(data.map(mapping), data => data.date);
 		}
 
 
@@ -58,8 +60,8 @@
 		{
 			let output = Benji.objToArray_dropKey(data).map(reverseMapping);
 			let sheet = SpreadsheetApp.getActive().getSheetByName(CONST.pages.history.name);
-			sheet.clear({ contentsOnly: true });
-			sheet.getRange(1, 1, output.length, output[0].length).setValues(output);
+			sheet.getDataRange().offset(1, 0).clearContent();
+			sheet.getRange(2, 1, output.length, output[0].length).setValues(output);
 		}
 	}
 }
