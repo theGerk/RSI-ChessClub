@@ -224,15 +224,16 @@
 			let attendanceData = getAllAttendanceData();
 
 			let data = FrontEnd.Data.getData();
-			let today = FrontEnd.Data.getToday(data);	//today will be a reference into data. ie: when we change today we change data
+			let today = Benji.makeDayString();
+			let todayData = data[today];
 
 			//if today has no entry yet
-			if(!today)
-				data.push(today = FrontEnd.Data.newData());
+			if(!todayData)
+				todayData = data[today] = FrontEnd.Data.newData();
 
 			//add in all attendance data
 			for(let i = attendanceData.Array.length - 1; i >= 0; i--)
-				today[attendanceData.Array[i].name] = attendanceData.Array[i];
+				todayData[attendanceData.Array[i].name] = attendanceData.Array[i];
 
 			//do writing and return
 			FrontEnd.Data.writeData(data);

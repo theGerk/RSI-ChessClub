@@ -3,7 +3,11 @@
 /** Things that I write that I use everywhere */
 namespace Benji
 {
-
+	/**
+	 * Formats a number with a specified number of digits by prefixing '0's.
+	 * @param num The number to be printed
+	 * @param digits The least number of digits to be printed
+	 */
 	export function formatInteger(num: number, digits: number): string
 	{
 		let str = num.toString();
@@ -13,39 +17,51 @@ namespace Benji
 	}
 
 	/**
+	 * get the gmt offset as an object with all 
+	 * @param datetime date object to get the offset of, if left blank simply uses local time
+	 */
+	export function getGMTOffset(datetime?: Date)
+	{
+		if(!datetime)
+			datetime = new Date();
+		let offset = datetime.getTimezoneOffset();
+		let sign;
+		if(offset < 0)
+		{
+			sign = '+';
+			offset *= -1;
+		}
+		let hour = Math.floor(offset / 60);
+		let min = offset % 60;
+		return {
+			sign: sign,
+			hour: hour,
+			min: min,
+		}
+	}
+
+	/**
+	 * Gets string version of a date
+	 * @param datetime the given time, if left blank uses current time
+	 */
+	export function makeDayString(datetime?: Date)
+	{
+		if(!datetime)
+			datetime = new Date();
+		let offset = getGMTOffset(datetime);
+		return Utilities.formatDate(datetime, `GMT${offset.sign}${offset.hour}:${offset.min}`, `yyyy-MM-dd`);
+	}
+
+	/**
 	 * Gets string version of a date
 	 * @param datetime the given time
 	 */
-	export function DayString(datetime: Date)
+	export function makeDayStringGMT(datetime?: Date)
 	{
-		return `${datetime.getFullYear()}-${Benji.formatInteger(datetime.getMonth(), 2)}-${Benji.formatInteger(datetime.getDate(), 2)}`;
+		if(!datetime)
+			datetime = new Date();
+		return Utilities.formatDate(datetime, 'GMT', 'yyyy-MM-dd');
 	}
-
-	/**
-	 * Get string version of the UTC date
-	 * @param datetime the given time
-	 */
-	export function UTCDayString(datetime: Date)
-	{
-		return `${datetime.getUTCFullYear()}-${Benji.formatInteger(datetime.getUTCMonth(), 2)}-${Benji.formatInteger(datetime.getUTCDate(), 2)}`;
-	}
-
-	/**
-	 * Get the time representing the beginning of the day
-	 */
-	export function Today()
-	{
-		return DayString(new Date());
-	}
-
-	/**
-	 * Get the time representing the beginning of the UTC day
-	 */
-	export function UTCToday()
-	{
-		return UTCDayString(new Date());
-	}
-
 
 	/**
 	 * Makes a deep clone (as opposed to shallow) will break on recursive references.
@@ -60,6 +76,22 @@ namespace Benji
 	export function shalowCloneArray<T>(input: T[]): T[]
 	{
 		return [...input];
+	}
+
+	export function objToArray_dropKey<T>(input: { [key: string]: T }): T[]
+	{
+		let output: T[] = [];
+		for(let key in input)
+			output.push(input[key]);
+		return output;
+	}
+
+	export function objToArray<T>(input: { [key: string]: T }): { key: string, value: T }[]
+	{
+		let output: { key: string, value: T }[] = [];
+		for(let key in input)
+			output.push({ key: key, value: input[key] });
+		return output;
 	}
 
 	export function makeMap<T>(input: T[], getKey: (input: T) => string): { [key: string]: T }
