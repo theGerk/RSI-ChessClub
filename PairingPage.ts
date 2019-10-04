@@ -21,9 +21,9 @@
 			//pair everyone
 			let pairings = Pairings.pair(playersToPair, true);
 
-			//handle white and black players sperately as otherwise equations can get overwriten
-			let white: string[][];
-			let black: string[][];
+			//handle white and black players separately as otherwise equations can get overwritten
+			let white: string[][] = [];
+			let black: string[][] = [];
 			for(let i = pairings.length - 1; i >= 0; i--)
 			{
 				let current = pairings[i];

@@ -41,7 +41,7 @@ namespace Pairings
 		Benji.shuffle(players);
 
 		let output: IPairing[] = [];
-		let usedSet: { [name: string]: boolean };
+		let usedSet: { [name: string]: boolean } = {};
 
 		for(var i = players.length - 1; i >= 0; i--)
 		{

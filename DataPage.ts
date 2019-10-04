@@ -55,7 +55,10 @@
 			return Benji.makeMap(data.map(mapping), data => data.date);
 		}
 
-
+		/**
+		 * writes all the data on the spreadsheet
+		 * @param data the data the write
+		 */
 		export function writeData(data: { [date: string]: IData })
 		{
 			let output = Benji.objToArray_dropKey(data).map(reverseMapping);
