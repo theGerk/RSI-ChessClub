@@ -219,29 +219,36 @@
 		/**
 		 * Deletes the attendance pages and then records them on the data page
 		 */
-		export function RecordAttendance(): { Array: IAttendanceData[], Map: { [groupName: string]: IAttendanceData[] } }
+		export function RecordAndPair()
 		{
 			let attendanceData = getAllAttendanceData();
 
 			let data = FrontEnd.Data.getData();
 			let today = Benji.makeDayString();
 			let todayData = data[today];
-			Logger.log(today);
-			Logger.log(JSON.stringify(data));
-			Logger.log(JSON.stringify(todayData));
 
 			//if today has no entry yet
 			if(!todayData)
 				todayData = data[today] = FrontEnd.Data.newData();
 
 			//add in all attendance data
-			for(let i = attendanceData.Array.length - 1; i >= 0; i--)
-				todayData.attendance[attendanceData.Array[i].name] = attendanceData.Array[i];
+			todayData.attendance = attendanceData.Array;
 
-			//do writing and return
+			//make changes
+			FrontEnd.Pairings.GeneratePairings();
 			FrontEnd.Data.writeData(data);
 			RemoveAttendanceSheets();
-			return attendanceData;
+		}
+
+		export function getTodayData(date?: string): IAttendanceData[]
+		{
+			if(!date)
+				date = Benji.makeDayString();
+
+			//get data from log page
+			let historicalData = FrontEnd.Data.getData()[date].attendance;
+			let currentData = getAllAttendanceData().Array;
+			return currentData.concat(historicalData);
 		}
 	}
 }

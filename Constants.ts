@@ -52,6 +52,7 @@ const CONST = {
 			},
 		},
 		pairing: {
+			name: 'Tournament Pairings',
 			template: "Template-Pairings",
 			metadata: {
 				/** Identifies a paring sheet */
