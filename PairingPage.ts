@@ -32,6 +32,11 @@
 			 */
 			export function generate(pairings: Pairings.IPairing[])
 			{
+				if(pairings.length === 0)
+				{
+					deletePage();
+					return;
+				}
 				//handle white and black players separately as otherwise equations can get overwritten
 				let white: string[][] = [];
 				let black: string[][] = [];

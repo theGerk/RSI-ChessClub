@@ -1,8 +1,9 @@
 ﻿
 function test()
 {
-	let day = new Date();
-	Logger.log(day.getDate());
-	Logger.log(day.getDay());
-	Logger.log(Benji.getWeekString(day));
+	for(let i = 0; i < 20; i++)
+	{
+		GenerateAttendanceSheets();
+		CreatePairingSheets();
+	}
 }

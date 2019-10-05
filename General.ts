@@ -25,7 +25,7 @@ namespace Benji
 		if(!datetime)
 			datetime = new Date();
 		let offset = datetime.getTimezoneOffset();
-		let sign;
+		let sign = '-';
 		if(offset < 0)
 		{
 			sign = '+';
@@ -33,24 +33,41 @@ namespace Benji
 		}
 		let hour = Math.floor(offset / 60);
 		let min = offset % 60;
-		return {
-			sign: sign,
-			hour: hour,
-			min: min,
-		}
+		return `GMT${sign}${formatInteger(hour, 2)}:${formatInteger(min, 2)}`;
 	}
 
 	/**
 	 * Gets string version of a date for the sunday of this week
 	 * @param datetime the given time, if left blank uses current time
 	 */
-	export function getWeekString(datetime?: Date)
+	export function getWeekString(datetime?: Date): string
 	{
+		//TODO remove debuggin code
+		//-----------DEBUGGING CODE--------------
+		let boolmap = (x: boolean) => x ? 'inputed' : 'current';
+		let set = !!datetime;
+		//-----------DEBUGGING CODE--------------
+
+
 		if(!datetime)
 			datetime = new Date();
-		let offset = getGMTOffset(datetime);
+		let gmtOffsetString = getGMTOffset(datetime);
+		let output: string;
+
+		//-----------DEBUGGING CODE--------------
+		output = Utilities.formatDate(datetime, gmtOffsetString, `yyyy-MM-dd-`);
+		Logger.log(`Today:  ${boolmap(set)}	:	${datetime}	:	${output}`);
+		//-----------DEBUGGING CODE--------------
+
+
 		datetime.setDate(datetime.getDate() - datetime.getDay());
-		return Utilities.formatDate(datetime, `GMT${offset.sign}${offset.hour}:${offset.min}`, `yyyy-MM-dd`);
+		output = Utilities.formatDate(datetime, gmtOffsetString, `yyyy-MM-dd`);
+
+		//-----------DEBUGGING CODE--------------
+		Logger.log(`Sunday: ${boolmap(set)}	:	${datetime}	:	${output}`);
+		//-----------DEBUGGING CODE--------------
+
+		return output;
 	}
 
 	/**
