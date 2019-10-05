@@ -50,6 +50,7 @@ namespace Benji
 			datetime = new Date();
 		let offset = getGMTOffset(datetime);
 		datetime.setDate(datetime.getDate() - datetime.getDay());
+		return Utilities.formatDate(datetime, `GMT${offset.sign}${offset.hour}:${offset.min}`, `yyyy-MM-dd`);
 	}
 
 	/**

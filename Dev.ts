@@ -1,5 +1,8 @@
 ﻿
 function test()
 {
-	SpreadsheetApp.getActive().getSheetByName(CONST.pages.extraGames.name).getRange(2, 1, 10, 3).setValue();
+	let day = new Date();
+	Logger.log(day.getDate());
+	Logger.log(day.getDay());
+	Logger.log(Benji.getWeekString(day));
 }

@@ -151,8 +151,7 @@
 					let newRow = [];
 
 					newRow[CONST.pages.attendance.columns.name] = currentPerson.name;
-					newRow[CONST.pages.attendance.columns.rating] = Math.round(currentPerson.rating.rating);
-
+					newRow[CONST.pages.attendance.columns.rating] = (typeof (currentPerson.rating.rating) === 'number' && isFinite(currentPerson.rating.rating)) ? Math.round(currentPerson.rating.rating) : Glicko.INITIAL_RATING;
 					if(record[currentPerson.name])
 					{
 						newRow[CONST.pages.attendance.columns.attendance] = record[currentPerson.name].attending;

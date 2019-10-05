@@ -28,7 +28,7 @@ namespace Glicko
 	 * Checks if a rating is for an unrated player
 	 * @param rating the player's rating
 	 */
-	function israted(rating: IRating)
+	export function israted(rating: IRating)
 	{
 		return !!rating.deviation;
 	}
