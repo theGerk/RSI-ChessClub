@@ -76,7 +76,7 @@ ${er}`);
 				},
 				active: active,
 				grade: row[CONST.pages.mainPage.columns.grade],
-				pairingHistory: row[CONST.pages.mainPage.columns.tournamentHistory] ? JSON.parse(row[CONST.pages.mainPage.columns.tournamentHistory]) : {},	//TODO maybe make this line more readable
+				pairingHistory: row[CONST.pages.mainPage.columns.tournamentHistory] ? JSON.parse(row[CONST.pages.mainPage.columns.tournamentHistory]) : [],	//TODO maybe make this line more readable
 				group: row[CONST.pages.mainPage.columns.group],
 			};
 		}
@@ -158,8 +158,8 @@ ${er}`);
 				let player = club[name];
 
 				for(let i = player.pairingHistory.length; i >= 0; i--)
-					if(nameMap.hasOwnProperty(player.pairingHistory[i]))
-						player.pairingHistory[i] = nameMap[player.pairingHistory[i]];
+					if(nameMap.hasOwnProperty(player.pairingHistory[i].opponent))
+						player.pairingHistory[i].opponent = nameMap[player.pairingHistory[i].opponent];
 			}
 		}
 

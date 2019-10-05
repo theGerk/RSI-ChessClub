@@ -99,7 +99,7 @@ interface IPlayer
 	group: string;
 	grade: number | string;
 	active: boolean;
-	pairingHistory: string[];
+	pairingHistory: { opponent: string, white: boolean }[];
 };
 
 

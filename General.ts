@@ -41,15 +41,15 @@ namespace Benji
 	}
 
 	/**
-	 * Gets string version of a date
+	 * Gets string version of a date for the sunday of this week
 	 * @param datetime the given time, if left blank uses current time
 	 */
-	export function makeDayString(datetime?: Date)
+	export function getWeekString(datetime?: Date)
 	{
 		if(!datetime)
 			datetime = new Date();
 		let offset = getGMTOffset(datetime);
-		return Utilities.formatDate(datetime, `GMT${offset.sign}${offset.hour}:${offset.min}`, `yyyy-MM-dd`);
+		datetime.setDate(datetime.getDate() - datetime.getDay());
 	}
 
 	/**

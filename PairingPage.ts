@@ -74,6 +74,11 @@
 				return TemplateSheets.deleteSheet(SpreadsheetApp.getActive(), CONST.pages.pairing.name);
 			}
 
+			export function getResults(): IGame[]
+			{
+				return getData().filter(x => typeof (x.result) === 'number' && x.result >= 0 && x.result <= 1);
+			}
+
 			/** Gets the data from pairings page */
 			export function getData(): IGame[]
 			{
@@ -203,7 +208,7 @@
 		export function getResults(): { Tournament: IGame[], Other: IGame[] }
 		{
 			return {
-				Tournament: TournamentPairings.getData(),
+				Tournament: TournamentPairings.getResults(),
 				Other: ExtraGames.getData(),
 			};
 		}
@@ -213,7 +218,7 @@
 		{
 			let output = getResults();
 			let data = FrontEnd.Data.getData();
-			data[Benji.makeDayString()].games = output;
+			data[Benji.getWeekString()].games = output;
 			FrontEnd.Data.writeData(data);
 			ExtraGames.clear();
 			TournamentPairings.deletePage();

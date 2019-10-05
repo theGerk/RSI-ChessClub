@@ -14,7 +14,7 @@
 		function mapping(row: any[]): IData
 		{
 			return {
-				date: Benji.makeDayString(row[CONST.pages.history.columns.date]),
+				date: Benji.getWeekString(row[CONST.pages.history.columns.date]),
 				attendance: JSON.parse(row[CONST.pages.history.columns.attendance]),
 				games: JSON.parse(row[CONST.pages.history.columns.games]),
 			};
@@ -36,11 +36,11 @@
 		export function newData(date?: number | Date | string): IData
 		{
 			if(date === undefined)
-				return { date: Benji.makeDayString(), attendance: {}, games: null };
+				return { date: Benji.getWeekString(), attendance: {}, games: null };
 			else if(date instanceof Date)
-				return { date: Benji.makeDayString(date), attendance: {}, games: null };
+				return { date: Benji.getWeekString(date), attendance: {}, games: null };
 			else
-				return { date: Benji.makeDayString(new Date(date)), attendance: {}, games: null };
+				return { date: Benji.getWeekString(new Date(date)), attendance: {}, games: null };
 		}
 
 		/** Gets all the data from the history page in order, with oldest first */

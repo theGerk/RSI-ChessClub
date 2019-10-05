@@ -41,8 +41,8 @@ function WeeklyUpdate()
 	for(let i = tourny.length - 1; i >= 0; i--)
 	{
 		let currentGame = tourny[i];
-		club[currentGame.white].pairingHistory.push(currentGame.black);
-		club[currentGame.black].pairingHistory.push(currentGame.white);
+		club[currentGame.white].pairingHistory.push({ opponent: currentGame.black, white: true });
+		club[currentGame.black].pairingHistory.push({ opponent: currentGame.white, white: false });
 	}
 
 

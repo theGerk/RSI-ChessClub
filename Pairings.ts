@@ -21,9 +21,14 @@ namespace Pairings
 		let ratingDif = Math.abs(player.rating.rating - opponent.rating.rating);
 		let gameHistoryCost = 0;
 		for(var i = 0; i < player.pairingHistory.length; i++)
-			if(player.pairingHistory[i] === opponent.name)
+			if(player.pairingHistory[i].opponent === opponent.name)
 				gameHistoryCost += 1 / (i + 1);
 		return ratingDif * Math.pow(K, gameHistoryCost);
+	}
+
+	function whiteFraction(history: { white: boolean }[])
+	{
+		return history.filter(x => x.white).length / history.length;
 	}
 
 	/**
@@ -63,11 +68,20 @@ namespace Pairings
 			let opponent = costs[0].player;
 			usedSet[opponent.name] = true;
 
-			//randomly assign black and white
-			if(Math.random() > .5)
+			//assign black and white based on who has a lower ratio of black to white, otherwise simply do random
+			let playerRatio = whiteFraction(player.pairingHistory);
+			let opponentRatio = whiteFraction(opponent.pairingHistory);
+
+			//do the push
+			if(playerRatio < opponentRatio)
 				output.push({ white: player, black: opponent });
-			else
+			else if(playerRatio > opponentRatio)
 				output.push({ black: player, white: opponent });
+			else
+				if(Math.random() > .5)
+					output.push({ white: player, black: opponent });
+				else
+					output.push({ black: player, white: opponent });
 		}
 		return output;
 	}

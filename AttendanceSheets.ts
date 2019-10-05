@@ -246,7 +246,7 @@
 		export function RecordAndPair()
 		{
 			let data = FrontEnd.Data.getData();
-			let todayKey = Benji.makeDayString();
+			let todayKey = Benji.getWeekString();
 			if(!data[todayKey])
 				data[todayKey] = FrontEnd.Data.newData(todayKey);
 
@@ -269,7 +269,7 @@
 
 			//set historical data based on different input types
 			if(input === undefined)
-				historicalData = FrontEnd.Data.getData()[Benji.makeDayString()].attendance;
+				historicalData = FrontEnd.Data.getData()[Benji.getWeekString()].attendance;
 			else
 				historicalData = input.attendance;
 
