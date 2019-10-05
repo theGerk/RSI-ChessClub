@@ -13,6 +13,8 @@
 			attending: boolean;
 			/** If they should be paired */
 			pair: boolean;
+			/** Their rating (rounded) */
+			rating: number;
 		}
 
 		/**
@@ -20,9 +22,11 @@
 		 * @param sheet the sheet object to get data from
 		 * @returns object mapping player names to player object
 		 */
-		function getAttendanceSheetMap(sheet: GoogleAppsScript.Spreadsheet.Sheet): { data: {[name: string]: IAttendanceData }, group: string }
+		function getAttendanceSheetMap(sheet: GoogleAppsScript.Spreadsheet.Sheet): { data: { [name: string]: IAttendanceData }, group: string }
 		{
 			let data = getAttendanceSheetArray(sheet);
+			if(data === null)
+				return null;
 			return { data: Benji.makeMap(data.data, (s) => s.name), group: data.group };
 		}
 
@@ -61,19 +65,40 @@
 			raw.shift();	//remove first row
 			//maps each row, effectively returning my descried array
 			return {
-				data: raw.map(row =>
-				{
-					return {
-						name: row[CONST.pages.attendance.columns.name],
-						group: groupName,
-						attending: row[CONST.pages.attendance.columns.attendance],
-						pair: row[CONST.pages.attendance.columns.pair]
-					};
-				}),
+				data: raw.map(mapping(groupName)),
 				group: groupName
 			};
 		}
 
+		function mapping(groupName: string): (row: any[]) => IAttendanceData
+		{
+			return function(row: any[])
+			{
+				return {
+					name: row[CONST.pages.attendance.columns.name],
+					group: groupName,
+					attending: row[CONST.pages.attendance.columns.attendance],
+					pair: row[CONST.pages.attendance.columns.pair],
+					rating: row[CONST.pages.attendance.columns.rating],
+				};
+			}
+		}
+
+		function reverseMapping(row: IAttendanceData): any[]
+		{
+			let output = [];
+			output[CONST.pages.attendance.columns.attendance] = row.attending;
+			output[CONST.pages.attendance.columns.name] = row.name;
+			output[CONST.pages.attendance.columns.pair] = row.pair;
+			output[CONST.pages.attendance.columns.rating] = row.rating;
+			return output;
+		}
+
+
+		function getSheetName(groupName: string) { return groupName[0].toUpperCase() + groupName.substring(1) + " attendance"; }
+
+
+		//TODO redo this... Wow it was clever but boy is it stupid.
 		/**
 		 * Creates an attendance sheet for the given group (TEST version, will be replaced?)
 		 * 
@@ -101,7 +126,7 @@
 				if(!currentGroup || currentGroup.length === 0)
 					throw new Error(`${groupName} is not a group`);
 
-				let sheetName = groupName[0].toUpperCase() + groupName.substring(1) + " attendance";
+				let sheetName = getSheetName(groupName);
 
 				//if the attendance sheet already exists, keep the checked boxes checked.
 				let oldSheet = spreadsheet.getSheetByName(sheetName);
@@ -186,7 +211,7 @@
 				}
 			}
 
-			return Benji.makeMap(arr, entry=>entry.name);
+			return Benji.makeMap(arr, entry => entry.name);
 		}
 
 		/**
@@ -261,6 +286,78 @@
 			}
 			else
 				return currentData;
+		}
+
+
+		export function modifyNames(nameMap: { [oldName: string]: string })
+		{
+			let data = getAllAttendanceData();
+
+			for(let name in nameMap)
+				if(data.hasOwnProperty(name))
+					data[name].name = name;
+
+			updateAttendance(data);
+		}
+
+
+		function updateAttendance(input: { [name: string]: IAttendanceData })
+		{
+			//split into groups
+			let groups: { [groupName: string]: IAttendanceData[] } = {};
+			for(let name in input)
+			{
+				let current = input[name];
+				if(groups[current.group])
+					groups[current.group].push(current);
+				else
+					groups[current.group] = [current];
+			}
+
+			for(let groupName in groups)
+			{
+				writeAttendance(groups[groupName], groupName);
+			}
+		}
+
+
+		function writeAttendance(input: IAttendanceData[], groupName: string)
+		{
+			RemoveAttendanceSheets(groupName);
+			if(input.length === 0)
+				return;
+
+			let spreadsheet = SpreadsheetApp.getActive();
+			let sheetName = getSheetName(groupName);
+
+			//make the new sheet
+			let currentSheet = TemplateSheets.generate(spreadsheet, spreadsheet.getSheetByName(CONST.pages.attendance.template), input.length, sheetName, 1);
+
+			//populate the data
+			let outputData: any[][] = input.sort((a, b) =>
+				{
+					let nameA = a.name.toLowerCase();
+					let nameB = b.name.toLowerCase();
+					if(nameA > nameB)
+						return 1;
+					else if(nameA < nameB)
+						return -1;
+					else
+						return 0;
+			}).map(reverseMapping);
+
+			currentSheet.getRange(2, 1, outputData.length, outputData[0].length).setValues(outputData);
+
+			//add metadata
+			currentSheet.addDeveloperMetadata(CONST.pages.attendance.metadata.key, SpreadsheetApp.DeveloperMetadataVisibility.PROJECT);
+			currentSheet.addDeveloperMetadata(CONST.pages.attendance.metadata.groupName, groupName, SpreadsheetApp.DeveloperMetadataVisibility.PROJECT);
+
+			//set color
+			try
+			{
+				currentSheet.setTabColor(groupName);
+			}
+			catch(er) { }
 		}
 	}
 }

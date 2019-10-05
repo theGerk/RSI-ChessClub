@@ -1,8 +1,5 @@
 ﻿
 function test()
 {
-	let ss = SpreadsheetApp.getActive();
-	let sheet = ss.getSheetByName(CONST.pages.extraGames.name);
-	let vals = sheet.getDataRange().getValues();
-	SpreadsheetApp.getUi().alert(vals.length.toString());
+	SpreadsheetApp.getActive().getSheetByName(CONST.pages.extraGames.name).getRange(2, 1, 10, 3).setValue();
 }

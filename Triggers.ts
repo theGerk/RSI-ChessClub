@@ -24,7 +24,7 @@ function CreatePairingSheets() { FrontEnd.Attendance.RecordAndPair(); }
  */
 function WeeklyUpdate()
 {
-	let games = FrontEnd.Games.getResults();
+	let gamesResults = FrontEnd.Games.getResults();
 	let club = FrontEnd.Master.getClub();
 
 
@@ -33,7 +33,17 @@ function WeeklyUpdate()
 	for(let name in club)
 		everyoneRatings.push(club[name].rating);
 
-	Glicko.doRatingPeriod(name => club[name].rating, games, everyoneRatings);
+	Glicko.doRatingPeriod(name => club[name].rating, gamesResults.Tournament.concat(gamesResults.Other), everyoneRatings);
+
+
+	//add games to history
+	let tourny = gamesResults.Tournament;
+	for(let i = tourny.length - 1; i >= 0; i--)
+	{
+		let currentGame = tourny[i];
+		club[currentGame.white].pairingHistory.push(currentGame.black);
+		club[currentGame.black].pairingHistory.push(currentGame.white);
+	}
 
 
 	//write data

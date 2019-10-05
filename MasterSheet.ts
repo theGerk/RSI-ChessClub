@@ -81,6 +81,21 @@ ${er}`);
 			};
 		}
 
+		function reverseMapping(row: IPlayer): any[]
+		{
+			let output = [];
+			output[CONST.pages.mainPage.columns.grade] = row.grade;
+			output[CONST.pages.mainPage.columns.group] = row.group;
+			output[CONST.pages.mainPage.columns.name] = row.name;
+			output[CONST.pages.mainPage.columns.rating] = row.rating.rating;
+			output[CONST.pages.mainPage.columns.ratingDeviation] = row.rating.deviation;
+			output[CONST.pages.mainPage.columns.ratingVolatility] = row.rating.volatility;
+			output[CONST.pages.mainPage.columns.tournamentHistory] = JSON.stringify(row.pairingHistory);
+			return output;
+		}
+
+		function getSheet(active: boolean) { return SpreadsheetApp.getActive().getSheetByName(active ? CONST.pages.mainPage.name : CONST.pages.mainPage.storage); }
+
 		/**
 		 * Gets array of all players that are either active or inactive
 		 * @param active true => active players, false => inactive players
@@ -88,16 +103,33 @@ ${er}`);
 		 */
 		function getPlayerArray(active: boolean): IPlayer[]
 		{
-			let sheet = SpreadsheetApp.getActive().getSheetByName(active ? CONST.pages.mainPage.name : CONST.pages.mainPage.storage);
+			let sheet = getSheet(active);
 			let data = sheet.getDataRange().getValues();
 			data.shift();
 			return data.map((row) => mapping(row, active));
 		}
 
-		export function updateNames(nameMap: { [oldName: string]: string })
+		function writePlayerArray(input: IPlayer[], active: boolean)
 		{
-			let club = getClub();
+			let sheet = getSheet(active);
+			let raw = input.map(reverseMapping);
+			sheet.getDataRange().offset(1, 0).clearContent();
+			if(input.length !== 0)
+				sheet.getRange(2, 1, raw.length, raw[0].length).setValues(raw);
+		}
 
+		function getNameMap(club: IClub): { [oldName: string]: string }
+		{
+			let nameMap: { [oldName: string]: string } = {};
+			for(let name in club)
+				if(club[name].name !== name)
+					nameMap[club[name].name] = name;
+			return nameMap;
+		}
+
+		function validateNameChanges(club: IClub): { [oldName: string]: string }
+		{
+			let nameMap = getNameMap(club);
 
 			//do checks to make sure everything is okay
 			//a new name can only appear in the club if it is being changed
@@ -115,15 +147,48 @@ ${er}`);
 					throw new Error(`Invalid name error: the name "${newName}" already exists in the club, "${oldName}" can to be changed.`)
 			}
 
+			return nameMap;
+		}
 
-			//TODO fill in all the places where names are used as a UID
-			//Master list
+		function modifyNames(club: IClub, nameMap: { [oldName: string]: string})
+		{
+			//change pair history, do not have to change names as that is how we know what is new
+			for(let name in club)
+			{
+				let player = club[name];
 
-			//Attendance
+				for(let i = player.pairingHistory.length; i >= 0; i--)
+					if(nameMap.hasOwnProperty(player.pairingHistory[i]))
+						player.pairingHistory[i] = nameMap[player.pairingHistory[i]];
+			}
+		}
 
-			//Pairings
+		export function setClub(club: IClub)
+		{
+			let nameMap = validateNameChanges(club);
 
-			//History
+			if(Object.keys(nameMap).length !== 0)
+			{
+				//Modify names
+				modifyNames(club, nameMap);
+				FrontEnd.Data.modifyNames(nameMap);
+				FrontEnd.Attendance.modifyNames(nameMap);
+				FrontEnd.Games.modifyNames(nameMap);
+			}
+
+			let active: IPlayer[] = [];
+			let inactive: IPlayer[] = [];
+			for(let name in club)
+			{
+				let player = club[name]
+				if(player.active)
+					active.push(player);
+				else
+					inactive.push(player);
+			}
+
+			writePlayerArray(active, true);
+			writePlayerArray(inactive, false);
 		}
 	}
 }

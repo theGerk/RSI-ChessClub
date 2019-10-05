@@ -17,12 +17,13 @@
 		{
 			/** The result map */
 			let resultMap = {
-				'Win': 1,
-				'Loss': 0,
-				'Draw': .5,
-				.5: 'Draw',
-				0: 'Loss',
-				1: 'Win',
+				'W': 1,
+				'L': 0,
+				'D': .5,
+				.5: 'D',
+				0: 'L',
+				1: 'W',
+				'': '',
 			}
 
 			/**
@@ -57,7 +58,7 @@
 			 * Maps a row of data to a IGame
 			 * @param row a row from Pairings page
 			 */
-			function mapping(row: any[]):IGame
+			function mapping(row: any[]): IGame
 			{
 				return {
 					white: row[CONST.pages.pairing.columns.whitePlayer],
@@ -81,18 +82,33 @@
 				data.shift();
 				return data.map(mapping);
 			}
+
+			export function modifyNames(nameMap: { [oldName: string]: string })
+			{
+				let sheet = SpreadsheetApp.getActive().getSheetByName(CONST.pages.pairing.name);
+				let data = getData();
+				for(let i = data.length - 1; i >= 0; i--)
+				{
+					let row = data[i];
+					if(nameMap.hasOwnProperty(row.white))
+						sheet.getRange(i + 2, CONST.pages.pairing.columns.whitePlayer + 1).setValue(nameMap[row.white]);
+					if(nameMap.hasOwnProperty(row.black))
+						sheet.getRange(i + 2, CONST.pages.pairing.columns.blackPlayer + 1).setValue(nameMap[row.black]);
+				}
+			}
 		}
 
 		namespace ExtraGames
 		{
 			/** The result map */
 			let resultMap = {
-				'W': 1,
-				'L': 0,
-				'D': .5,
-				.5: 'D',
-				0: 'L',
-				1: 'W',
+				'Win': 1,
+				'Loss': 0,
+				'Draw': .5,
+				.5: 'Draw',
+				0: 'Loss',
+				1: 'Win',
+				'': '',
 			}
 
 
@@ -109,6 +125,15 @@
 				};
 			}
 
+			function reverseMapping(row: IGame): any[]
+			{
+				let output = [];
+				output[CONST.pages.extraGames.columns.black] = row.black;
+				output[CONST.pages.extraGames.columns.white] = row.white;
+				output[CONST.pages.extraGames.columns.result] = resultMap[row.result];
+				return output;
+			}
+
 
 			/** Resets the games played page */
 			export function clear()
@@ -120,6 +145,17 @@
 			}
 
 
+			export function setData(games: IGame[])
+			{
+				clear();
+
+				if(games.length === 0)
+					return;
+
+				let data = games.map(reverseMapping);
+				SpreadsheetApp.getActive().getSheetByName(CONST.pages.extraGames.name).getRange(2, 1, data.length, data[0].length).setValues(data);
+			}
+
 			/**
 			 * Gets all the data stored in the games list as a single array
 			 * 
@@ -130,6 +166,12 @@
 				let data = SpreadsheetApp.getActive().getSheetByName(CONST.pages.extraGames.name).getDataRange().getValues();
 				data.shift();
 				return data.map(mapping);
+			}
+
+
+			export function modifyNames(nameMap: { [oldName: string]: string })
+			{
+				let data = getData();
 			}
 		}
 
@@ -158,23 +200,30 @@
 			TournamentPairings.generate(pairings);
 		}
 
-		export function getResults(): IGame[]
+		export function getResults(): { Tournament: IGame[], Other: IGame[] }
 		{
-			return TournamentPairings.getData().concat(...ExtraGames.getData());
+			return {
+				Tournament: TournamentPairings.getData(),
+				Other: ExtraGames.getData(),
+			};
 		}
 
 		/** Record the games played in the data file and then clears all active records */
 		export function recordAndRemove(): void
 		{
-			let output = {
-				Tournament: TournamentPairings.getData(),
-				Other: ExtraGames.getData(),
-			};
+			let output = getResults();
 			let data = FrontEnd.Data.getData();
 			data[Benji.makeDayString()].games = output;
 			FrontEnd.Data.writeData(data);
 			ExtraGames.clear();
 			TournamentPairings.deletePage();
+		}
+
+
+		export function modifyNames(nameMap: { [oldName: string]: string })
+		{
+			TournamentPairings.modifyNames(nameMap);
+			ExtraGames.modifyNames(nameMap);
 		}
 	}
 }
