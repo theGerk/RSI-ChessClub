@@ -70,6 +70,7 @@
 			};
 		}
 
+
 		function mapping(groupName: string): (row: any[]) => IAttendanceData
 		{
 			return function(row: any[])
@@ -84,6 +85,7 @@
 			}
 		}
 
+
 		function reverseMapping(row: IAttendanceData): any[]
 		{
 			let output = [];
@@ -97,7 +99,6 @@
 
 		function getSheetName(groupName: string) { return groupName[0].toUpperCase() + groupName.substring(1) + " attendance"; }
 
-
 		//TODO redo this... Wow it was clever but boy is it stupid.
 		/**
 		 * Creates an attendance sheet for the given group (TEST version, will be replaced?)
@@ -110,6 +111,7 @@
 			let templateSheet = spreadsheet.getSheetByName(CONST.pages.attendance.template);
 			let groups = FrontEnd.Master.getGroupsObject();
 			let groupData = FrontEnd.Groups.getData();
+			let historyData = FrontEnd.Data.getData()[Benji.getWeekString()];
 
 			/**
 			 * generate a group attendance page given its name
@@ -162,6 +164,11 @@
 					{
 						newRow[CONST.pages.attendance.columns.attendance] = record[currentPerson.name].attending;
 						newRow[CONST.pages.attendance.columns.pair] = record[currentPerson.name].pair;
+					}
+					else if(historyData && historyData.attendance[currentPerson.name])
+					{
+						newRow[CONST.pages.attendance.columns.attendance] = historyData.attendance[currentPerson.name].attending;
+						newRow[CONST.pages.attendance.columns.pair] = historyData.attendance[currentPerson.name].pair;
 					}
 					else
 					{

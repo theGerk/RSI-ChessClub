@@ -108,4 +108,13 @@ namespace Pairings
 		}
 		return output.sort(x => x.cost);
 	}
+
+
+	export function totalCost(pairings: IPairing[]): number
+	{
+		let sum = 0;
+		for(let i = pairings.length - 1; i >= 0; i--)
+			sum += cost(pairings[i].white, pairings[i].black) + cost(pairings[i].black, pairings[i].white);
+		return sum;
+	}
 }

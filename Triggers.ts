@@ -7,9 +7,11 @@ function onOpen(e)
 	let x = SpreadsheetApp.getUi()
 		.createMenu(CONST.menu.mainInterface.name)
 		.addItem("refresh attendance", (<any>GenerateAttendanceSheets).name)
-		.addItem('generate pairings', (<any>CreatePairingSheets).name);
+		.addItem('generate pairings', (<any>CreatePairingSheets).name)
+		.addItem('cement results', (<any>WeeklyUpdate).name);
 	if(Session.getActiveUser().getEmail().toLowerCase() === 'benji@altmansoftwaredesign.com')
-		x.addItem("test", (<any>test).name)
+		x.addSeparator()
+			.addItem("test", (<any>test).name)
 	x.addToUi();
 }
 
