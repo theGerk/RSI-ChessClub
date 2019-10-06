@@ -111,7 +111,7 @@
 			let templateSheet = spreadsheet.getSheetByName(CONST.pages.attendance.template);
 			let groups = FrontEnd.Master.getGroupsObject();
 			let groupData = FrontEnd.Groups.getData();
-			let historyData = FrontEnd.Data.getData()[Benji.getWeekString()];
+			let historyData = FrontEnd.Data.getData()[Benji.friday()];
 
 			/**
 			 * generate a group attendance page given its name
@@ -258,7 +258,7 @@
 		export function RecordAndPair()
 		{
 			let data = FrontEnd.Data.getData();
-			let todayKey = Benji.getWeekString();
+			let todayKey = Benji.friday();
 			if(!data[todayKey])
 				data[todayKey] = FrontEnd.Data.newData(todayKey);
 
@@ -281,7 +281,7 @@
 
 			//set historical data based on different input types
 			if(input === undefined)
-				historicalData = FrontEnd.Data.getData()[Benji.getWeekString()].attendance;
+				historicalData = FrontEnd.Data.getData()[Benji.friday()].attendance;
 			else
 				historicalData = input.attendance;
 

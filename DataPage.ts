@@ -36,7 +36,7 @@
 		export function newData(date?: string): IData
 		{
 			if(date === undefined)
-				return { date: Benji.getWeekString(), attendance: {}, games: null };
+				return { date: Benji.friday(), attendance: {}, games: null };
 			else
 				if(date.match(/\d\d\d\d-\d\d-\d\d/))
 					return { date: date, attendance: {}, games: null };

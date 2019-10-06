@@ -223,7 +223,7 @@
 		{
 			let output = getResults();
 			let data = FrontEnd.Data.getData();
-			data[Benji.getWeekString()].games = output;
+			data[Benji.friday()].games = output;
 			FrontEnd.Data.writeData(data);
 			ExtraGames.clear();
 			TournamentPairings.deletePage();

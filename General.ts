@@ -43,15 +43,17 @@ namespace Benji
 
 	/**
 	 * Gets string version of a date for the Sunday of this week
-	 * @param datetime the given time, if left blank uses current time
+	 * @param day An integer [0, 6] for which day of the week to use.
 	 */
-	export function getWeekString(): string
+	export function getWeekString(day?: number): string
 	{
+		if(day === undefined)
+			day = 0;
 		let datetime = new Date();
 		let gmtOffsetString = getGMTOffset(datetime);
 		let output: string;
 
-		datetime.setDate(datetime.getDate() - datetime.getDay());
+		datetime.setDate(datetime.getDate() - datetime.getDay() + day);
 
 		return getDayString(datetime);
 	}
