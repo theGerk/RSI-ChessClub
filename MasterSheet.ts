@@ -65,19 +65,22 @@ ${er}`);
 		 * @param row the row coming in
 		 * @param active Is the player active [defaults to undefined]
 		 */
-		function mapping(row: any[], active?: boolean): IPlayer
+		function mapping(active: boolean): (row: any[]) => IPlayer
 		{
-			return {
-				name: row[CONST.pages.mainPage.columns.name],
-				rating: {
-					rating: row[CONST.pages.mainPage.columns.rating],
-					deviation: row[CONST.pages.mainPage.columns.ratingDeviation],
-					volatility: row[CONST.pages.mainPage.columns.ratingVolatility],
-				},
-				active: active,
-				grade: row[CONST.pages.mainPage.columns.grade],
-				pairingHistory: row[CONST.pages.mainPage.columns.tournamentHistory] ? JSON.parse(row[CONST.pages.mainPage.columns.tournamentHistory]) : [],	//TODO maybe make this line more readable
-				group: row[CONST.pages.mainPage.columns.group],
+			return function(row: any[])
+			{
+				return {
+					name: row[CONST.pages.mainPage.columns.name],
+					rating: {
+						rating: row[CONST.pages.mainPage.columns.rating],
+						deviation: row[CONST.pages.mainPage.columns.ratingDeviation],
+						volatility: row[CONST.pages.mainPage.columns.ratingVolatility],
+					},
+					active: active,
+					grade: row[CONST.pages.mainPage.columns.grade],
+					pairingHistory: row[CONST.pages.mainPage.columns.tournamentHistory] ? JSON.parse(row[CONST.pages.mainPage.columns.tournamentHistory]) : [],	//TODO maybe make this line more readable
+					group: row[CONST.pages.mainPage.columns.group],
+				};
 			};
 		}
 
@@ -106,7 +109,7 @@ ${er}`);
 			let sheet = getSheet(active);
 			let data = sheet.getDataRange().getValues();
 			data.shift();
-			return data.map((row) => mapping(row, active));
+			return data.map(mapping(active));
 		}
 
 		function writePlayerArray(input: IPlayer[], active: boolean)

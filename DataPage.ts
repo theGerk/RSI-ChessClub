@@ -14,7 +14,7 @@
 		function mapping(row: any[]): IData
 		{
 			return {
-				date: Benji.getWeekString(row[CONST.pages.history.columns.date]),
+				date: Benji.getDayString(row[CONST.pages.history.columns.date]),
 				attendance: JSON.parse(row[CONST.pages.history.columns.attendance]),
 				games: JSON.parse(row[CONST.pages.history.columns.games]),
 			};
@@ -33,14 +33,15 @@
 		 * Creates a blank data, if no date is passed in the assumed date is today.
 		 * @param date the date as either a date object or anything that can be passed to the Date constructor (only as a single argument);
 		 */
-		export function newData(date?: number | Date | string): IData
+		export function newData(date?: string): IData
 		{
 			if(date === undefined)
 				return { date: Benji.getWeekString(), attendance: {}, games: null };
-			else if(date instanceof Date)
-				return { date: Benji.getWeekString(date), attendance: {}, games: null };
 			else
-				return { date: Benji.getWeekString(new Date(date)), attendance: {}, games: null };
+				if(date.match(/\d\d\d\d-\d\d-\d\d/))
+					return { date: date, attendance: {}, games: null };
+				else
+					throw new Error(`Error creating new data entry, date: ${date} is invalid.`);
 		}
 
 		/** Gets all the data from the history page in order, with oldest first */

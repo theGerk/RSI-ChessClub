@@ -3,6 +3,11 @@
 /** Things that I write that I use everywhere */
 namespace Benji
 {
+	export function getDayString(date: Date)
+	{
+		return Utilities.formatDate(date, getGMTOffset(date), 'yyyy-MM-dd');
+	}
+
 	/**
 	 * Formats a number with a specified number of digits by prefixing '0's.
 	 * @param num The number to be printed
@@ -17,7 +22,7 @@ namespace Benji
 	}
 
 	/**
-	 * get the gmt offset as an object with all 
+	 * get the GMT offset as an object with all 
 	 * @param datetime date object to get the offset of, if left blank simply uses local time
 	 */
 	export function getGMTOffset(datetime?: Date)
@@ -37,37 +42,18 @@ namespace Benji
 	}
 
 	/**
-	 * Gets string version of a date for the sunday of this week
+	 * Gets string version of a date for the Sunday of this week
 	 * @param datetime the given time, if left blank uses current time
 	 */
-	export function getWeekString(datetime?: Date): string
+	export function getWeekString(): string
 	{
-		//TODO remove debuggin code
-		//-----------DEBUGGING CODE--------------
-		let boolmap = (x: boolean) => x ? 'inputed' : 'current';
-		let set = !!datetime;
-		//-----------DEBUGGING CODE--------------
-
-
-		if(!datetime)
-			datetime = new Date();
+		let datetime = new Date();
 		let gmtOffsetString = getGMTOffset(datetime);
 		let output: string;
 
-		//-----------DEBUGGING CODE--------------
-		output = Utilities.formatDate(datetime, gmtOffsetString, `yyyy-MM-dd-`);
-		Logger.log(`Today:  ${boolmap(set)}	:	${datetime}	:	${output}`);
-		//-----------DEBUGGING CODE--------------
-
-
 		datetime.setDate(datetime.getDate() - datetime.getDay());
-		output = Utilities.formatDate(datetime, gmtOffsetString, `yyyy-MM-dd`);
 
-		//-----------DEBUGGING CODE--------------
-		Logger.log(`Sunday: ${boolmap(set)}	:	${datetime}	:	${output}`);
-		//-----------DEBUGGING CODE--------------
-
-		return output;
+		return getDayString(datetime);
 	}
 
 	/**

@@ -132,7 +132,13 @@
 				let oldSheet = spreadsheet.getSheetByName(sheetName);
 				let record: { [name: string]: IAttendanceData };
 				if(oldSheet)
-					record = getAttendanceSheetMap(oldSheet).data;
+				{
+					let tmp = getAttendanceSheetMap(oldSheet);
+					if(tmp === null)
+						record = {};
+					else
+						record = tmp.data;
+				}
 				else
 					record = {};
 
