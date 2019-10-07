@@ -31,11 +31,12 @@ const CONST = {
 			columns: {
 				name: 0,
 				group: 1,
-				rating: 2,
-				ratingDeviation: 3,
-				ratingVolatility: 4,
-				grade: 5,
-				tournamentHistory: 6,
+				points: 2,
+				rating: 3,
+				ratingDeviation: 4,
+				ratingVolatility: 5,
+				grade: 6,
+				tournamentHistory: 7,
 			},
 		},
 		attendance: {
@@ -95,6 +96,7 @@ interface IClub
 interface IPlayer
 {
 	name: string;
+	points: number;
 	rating: Glicko.IRating;
 	group: string;
 	grade: number | string;

@@ -88,6 +88,8 @@
 			export function getData(): IGame[]
 			{
 				let sheet = SpreadsheetApp.getActive().getSheetByName(CONST.pages.pairing.name);
+				if(sheet === null)
+					return [];
 				let data = sheet.getDataRange().getValues();
 				data.shift();
 				return data.map(mapping);
@@ -151,7 +153,8 @@
 				let spreadsheet = SpreadsheetApp.getActive();
 				let sheet = spreadsheet.getSheetByName(CONST.pages.extraGames.name);
 				let range = sheet.getDataRange();
-				range.offset(1, 1, range.getLastRow() - 1, range.getLastColumn() - 1).clearContent();
+				if(range.getNumRows() > 1)
+					range.offset(1, 0).clearContent();
 			}
 
 

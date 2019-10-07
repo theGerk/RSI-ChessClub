@@ -71,6 +71,7 @@ ${er}`);
 			{
 				return {
 					name: row[CONST.pages.mainPage.columns.name],
+					points: row[CONST.pages.mainPage.columns.points],
 					rating: {
 						rating: row[CONST.pages.mainPage.columns.rating],
 						deviation: row[CONST.pages.mainPage.columns.ratingDeviation],
@@ -87,6 +88,7 @@ ${er}`);
 		function reverseMapping(row: IPlayer): any[]
 		{
 			let output = [];
+			output[CONST.pages.mainPage.columns.points] = row.points;
 			output[CONST.pages.mainPage.columns.grade] = row.grade;
 			output[CONST.pages.mainPage.columns.group] = row.group;
 			output[CONST.pages.mainPage.columns.name] = row.name;
