@@ -98,6 +98,10 @@ ${er}`);
 			output[CONST.pages.mainPage.columns.ratingDeviation] = row.rating.deviation;
 			output[CONST.pages.mainPage.columns.ratingVolatility] = row.rating.volatility;
 			output[CONST.pages.mainPage.columns.tournamentHistory] = JSON.stringify(row.pairingHistory);
+			output[CONST.pages.mainPage.columns.chesskid] = row.chesskid;
+			output[CONST.pages.mainPage.columns.gender] = row.gender;
+			output[CONST.pages.mainPage.columns.level] = row.level;
+			output[CONST.pages.mainPage.columns.teacher] = row.teacher;
 			return output;
 		}
 
