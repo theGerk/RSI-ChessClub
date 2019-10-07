@@ -18,6 +18,11 @@ namespace Pairings
 	 */
 	function cost(player: IPlayer, opponent: IPlayer): number
 	{
+		//unrated players have to played any games, and have no rating so the cost of pairing them is free. No need to worry about history as they have never played
+		if(!Glicko.israted(player.rating) || !Glicko.israted(opponent.rating))
+			return 0;
+
+		//if the player is not unrated then 
 		let ratingDif = Math.abs(player.rating.rating - opponent.rating.rating);
 		let gameHistoryCost = 0;
 		for(var i = 0; i < player.pairingHistory.length; i++)
