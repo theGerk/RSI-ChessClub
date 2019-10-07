@@ -27,7 +27,7 @@ const CONST = {
 		},
 		mainPage: {
 			name: "Master List",
-			storage: "Deep Storage",
+			storage: "Inactive Players",
 			columns: {
 				name: 0,
 				group: 1,
