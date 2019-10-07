@@ -5,7 +5,6 @@
 		export interface IData
 		{
 			date: string;
-			//TODO change type of games
 			games: { Tournament: FrontEnd.Games.IGame[], Other: FrontEnd.Games.IGame[] };
 			attendance: { [name: string]: FrontEnd.Attendance.IAttendanceData };
 		}
@@ -15,8 +14,8 @@
 		{
 			return {
 				date: Benji.getDayString(row[CONST.pages.history.columns.date]),
-				attendance: JSON.parse(row[CONST.pages.history.columns.attendance]),
-				games: JSON.parse(row[CONST.pages.history.columns.games]),
+				attendance: row[CONST.pages.history.columns.attendance] ? JSON.parse(row[CONST.pages.history.columns.attendance]) : {},
+				games: row[CONST.pages.history.columns.games] ? JSON.parse(row[CONST.pages.history.columns.games]) : { Tournament: [], Other: [] },
 			};
 		}
 

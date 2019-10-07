@@ -71,7 +71,6 @@ ${er}`);
 			{
 				return {
 					name: row[CONST.pages.mainPage.columns.name],
-					points: row[CONST.pages.mainPage.columns.points],
 					rating: {
 						rating: row[CONST.pages.mainPage.columns.rating],
 						deviation: row[CONST.pages.mainPage.columns.ratingDeviation],
@@ -81,6 +80,10 @@ ${er}`);
 					grade: row[CONST.pages.mainPage.columns.grade],
 					pairingHistory: row[CONST.pages.mainPage.columns.tournamentHistory] ? JSON.parse(row[CONST.pages.mainPage.columns.tournamentHistory]) : [],	//TODO maybe make this line more readable
 					group: row[CONST.pages.mainPage.columns.group],
+					chesskid: row[CONST.pages.mainPage.columns.chesskid],
+					gender: row[CONST.pages.mainPage.columns.gender],
+					level: row[CONST.pages.mainPage.columns.level],
+					teacher: row[CONST.pages.mainPage.columns.teacher],
 				};
 			};
 		}
@@ -88,7 +91,6 @@ ${er}`);
 		function reverseMapping(row: IPlayer): any[]
 		{
 			let output = [];
-			output[CONST.pages.mainPage.columns.points] = row.points;
 			output[CONST.pages.mainPage.columns.grade] = row.grade;
 			output[CONST.pages.mainPage.columns.group] = row.group;
 			output[CONST.pages.mainPage.columns.name] = row.name;

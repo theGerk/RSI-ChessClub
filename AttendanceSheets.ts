@@ -144,45 +144,38 @@
 				else
 					record = {};
 
-				//make the new sheet
-				let currentSheet = TemplateSheets.generate(spreadsheet, templateSheet, currentGroup.length, sheetName, 1);
-
-				//find default pairing setting
+				//create data
 				let defaultParingSetting = groupData[groupName].defaultPair;
-
-				//populate the data
 				let outputData: any[][] = [];
 				for(let i = 0; i < currentGroup.length; i++)
 				{
 					let currentPerson = currentGroup[i];
+					let currentPersonName = currentPerson.name;
 
-					let newRow = [];
-
-					newRow[CONST.pages.attendance.columns.name] = currentPerson.name;
-					newRow[CONST.pages.attendance.columns.rating] = (typeof (currentPerson.rating.rating) === 'number' && isFinite(currentPerson.rating.rating)) ? Math.round(currentPerson.rating.rating) : Glicko.INITIAL_RATING;
-					if(record[currentPerson.name])
-					{
-						newRow[CONST.pages.attendance.columns.attendance] = record[currentPerson.name].attending;
-						newRow[CONST.pages.attendance.columns.pair] = record[currentPerson.name].pair;
-					}
-					else if(historyData && historyData.attendance[currentPerson.name])
-					{
-						newRow[CONST.pages.attendance.columns.attendance] = historyData.attendance[currentPerson.name].attending;
-						newRow[CONST.pages.attendance.columns.pair] = historyData.attendance[currentPerson.name].pair;
-					}
+					if(record[currentPersonName])
+						outputData.push(reverseMapping(record[currentPersonName]));
+					else if(historyData && historyData.attendance[currentPersonName])
+						outputData.push(reverseMapping(historyData.attendance[currentPersonName]));
 					else
-					{
-						newRow[CONST.pages.attendance.columns.attendance] = false;
-						newRow[CONST.pages.attendance.columns.pair] = defaultParingSetting;
-					}
-
-					outputData.push(newRow);
+						outputData.push(reverseMapping({
+							attending: false,
+							group: groupName,
+							name: currentPersonName,
+							pair: defaultParingSetting,
+							rating: (typeof (currentPerson.rating.rating) === 'number' && isFinite(currentPerson.rating.rating)) ? Math.round(currentPerson.rating.rating) : Glicko.INITIAL_RATING,
+						}));
 				}
-				currentSheet.getRange(2, 1, outputData.length, outputData[0].length).setValues(outputData);
+
+				//make the new sheet
+				let currentSheet = TemplateSheets.generate(spreadsheet, templateSheet, currentGroup.length, sheetName, 1);
 
 				//add metadata
 				currentSheet.addDeveloperMetadata(CONST.pages.attendance.metadata.key, SpreadsheetApp.DeveloperMetadataVisibility.PROJECT);
 				currentSheet.addDeveloperMetadata(CONST.pages.attendance.metadata.groupName, groupName, SpreadsheetApp.DeveloperMetadataVisibility.PROJECT);
+
+				//populate the data
+
+				currentSheet.getRange(2, 1, outputData.length, outputData[0].length).setValues(outputData);
 
 				//set color
 				try
