@@ -226,7 +226,10 @@
 		{
 			let output = getResults();
 			let data = FrontEnd.Data.getData();
-			data[Benji.friday()].games = output;
+			let today = Benji.friday();
+			if(!data[today])
+				data[today] = FrontEnd.Data.newData(today);
+			data[today].games = output;
 			FrontEnd.Data.writeData(data);
 			ExtraGames.clear();
 			TournamentPairings.deletePage();
