@@ -1,4 +1,5 @@
 ﻿/// <reference path="Constants.ts"/>
+/// <reference path="SimulatedAnnealing.ts"/>
 
 namespace Pairings
 {
@@ -115,11 +116,22 @@ namespace Pairings
 	}
 
 
-	export function totalCost(pairings: IPairing[]): number
+	function totalCost(pairings: IPairing[]): number
 	{
 		let sum = 0;
 		for(let i = pairings.length - 1; i >= 0; i--)
 			sum += cost(pairings[i].white, pairings[i].black) + cost(pairings[i].black, pairings[i].white);
 		return sum;
+	}
+
+	function swapRandomPlayers(pairings: IPairing[]): IPairing[]
+	{
+		let length = pairings.length;
+		let output = [];
+		output.length = length;
+		let x = (Math.random() * length) | 0;
+		let xColor = Math.random();
+		let y = (Math.random() * length) | 0;
+		let yColor = Math.random();
 	}
 }
