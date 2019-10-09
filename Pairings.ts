@@ -124,14 +124,42 @@ namespace Pairings
 		return sum;
 	}
 
-	function swapRandomPlayers(pairings: IPairing[]): IPairing[]
+
+	const _colors = function(pairing: IPairing) { return Object.keys(pairing) }({ black: null, white: null });
+
+	function swapRandomPlayers(input: IPairing[]): IPairing[]
 	{
-		let length = pairings.length;
-		let output = [];
-		output.length = length;
-		let x = (Math.random() * length) | 0;
-		let xColor = Math.random();
-		let y = (Math.random() * length) | 0;
-		let yColor = Math.random();
+		let length = input.length;
+
+		//nothing to do if it has no length
+		if(length === 0)
+			return input;
+
+		let output: IPairing[] = [...input];
+
+
+		let xPairing = (Math.random() * length) | 0;
+		let xColor = _colors[(Math.random() * 2) | 0];
+		let yPairing = (Math.random() * (length - 1)) | 0;
+		let yColor = _colors[(Math.random() * 2) | 0];
+
+		if(yPairing >= xPairing)
+			yPairing++; //yPairing should never equal xPairing using this.
+
+
+		//now swap x and y
+		let xPair = input[xPairing];
+		xPair = { white: xPair.white, black: xPair.black };
+		let yPair = input[yPairing];
+		yPair = { white: yPair.white, black: yPair.black };
+
+		let tmp = xPair[xColor];
+		xPair[xColor] = yPair[yColor];
+		yPair[yColor] = tmp;
+
+		output[xPairing] = xPair;
+		output[yPairing] = yPair;
+
+		return output;
 	}
 }
