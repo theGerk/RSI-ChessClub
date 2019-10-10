@@ -1,0 +1,2 @@
+C:\Users\Benji Altman\source\repos\localTesting\obj\Debug\localTesting.njsproj.CoreCompileInputs.cache
+C:\Users\Benji Altman\source\repos\localTesting\bin\Microsoft.NodejsTools.WebRole.dll

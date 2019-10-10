@@ -1,3 +1,0 @@
-C:\Users\Benji Altman\source\repos\RSI-ChessClub\obj\Debug\RSI_ChessClub.njsprojAssemblyReference.cache
-C:\Users\Benji Altman\source\repos\RSI-ChessClub\obj\Debug\RSI_ChessClub.njsproj.CoreCompileInputs.cache
-C:\Users\Benji Altman\source\repos\RSI-ChessClub\bin\Microsoft.NodejsTools.WebRole.dll

@@ -1,0 +1,14 @@
+{
+  "name": "RSI_ChessClub",
+  "version": "0.0.0",
+  "description": "RSI_ChessClub",
+  "author": {
+    "name": ""
+  },
+  "dependencies": {
+    "@types/google-apps-script": "0.0.56"
+  },
+  "devDependencies": {
+    "typescript": "^3.6.4"
+  }
+}
