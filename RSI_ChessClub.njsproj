@@ -31,6 +31,7 @@
     <None Include="Triggers.ts" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="localTesting\" />
     <Folder Include="RSI_ChessClub" />
   </ItemGroup>
   <ItemGroup>

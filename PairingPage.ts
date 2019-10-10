@@ -43,8 +43,11 @@
 				for(let i = pairings.length - 1; i >= 0; i--)
 				{
 					let current = pairings[i];
-					white.push([current.white.name]);
-					black.push([current.black.name]);
+					if(current.white !== null && current.black !== null)
+					{
+						white.push([current.white.name]);
+						black.push([current.black.name]);
+					}
 				}
 
 
