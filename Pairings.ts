@@ -95,6 +95,7 @@ namespace Pairings
 	function stupidGreedy(players: IPlayer[]): IPairing[]
 	{
 		//shuffle for randomness
+		players = players.filter(p => p !== null);
 		Benji.shuffle(players);
 
 		let output: IPairing[] = [];
@@ -103,6 +104,7 @@ namespace Pairings
 		for(var i = players.length - 1; i >= 0; i--)
 		{
 			let player = players[i];
+				
 
 			//don't do someone who has already been paired
 			if(usedSet.hasOwnProperty(player.name))
@@ -113,6 +115,13 @@ namespace Pairings
 
 			//get costs array
 			let costs = getCosts(player, players.filter(p => !usedSet.hasOwnProperty(p.name)));
+
+			if(costs.length === 0)
+			{
+				output.push({ white: player, black: null });
+				break;
+			}
+
 
 			let opponent = costs[0].player;
 			usedSet[opponent.name] = true;

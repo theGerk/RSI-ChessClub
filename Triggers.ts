@@ -11,7 +11,7 @@ function onOpen(e)
 		.addItem('cement results', (<any>WeeklyUpdate).name);
 	if(Session.getActiveUser().getEmail().toLowerCase() === 'benji@altmansoftwaredesign.com')
 		x.addSeparator()
-			.addItem("test", (<any>test).name)
+			.addItem("test", (<any>setup).name)
 	x.addToUi();
 }
 

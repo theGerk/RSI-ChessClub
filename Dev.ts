@@ -1,18 +1,35 @@
 ﻿
 function test()
 {
+	let n = 10;
+	let players = FrontEnd.Master.getActivePlayersArray();
+	let output = Pairings.Testing.ComparePairingMethods(players, n);
+	for(let i in output)
+	{
+		let o = output[i];
+		Logger.log(`${i}: running ${n} times
+averageCost: ${o.costs.reduce((a, b) => a + b) / o.costs.length}
+totalTime  : ${o.totalTime}`);
+	}
+	return output;
+}
+
+function setup(weeks: number = 20)
+{
 	let clubArray = FrontEnd.Master.getActivePlayersArray();
 	let playerCount = clubArray.length;
 	let clubMap = Benji.makeMap(clubArray, (p) => p.name);
-	for(let i = 0; i < 20; i++)
+	for(let c = 0; c < weeks; c++)
 	{
 		let pairings = Pairings.pair(clubArray);
 
 		let gamesResults: { Tournament: FrontEnd.Games.IGame[], Other: FrontEnd.Games.IGame[] } = { Tournament: [], Other: [] }
 
 		//put in tournament games
-		for(let j = 0; j < pairings.length; j++)
+		for(let i = 0; i < pairings.length; i++)
 		{
+			if(pairings[i].white === null || pairings[i].black === null)
+				continue;
 			let random = Math.random();
 			if(random < .2)
 				continue;
@@ -24,7 +41,7 @@ function test()
 				gamesResults.Tournament.push({ white: pairings[i].white.name, black: pairings[i].black.name, result: .5 });
 		}
 
-		while(Math.random() < .92)
+		while(Math.random() < .85)
 		{
 			let index1 = Math.floor(Math.random() * playerCount);
 			let index2 = Math.floor(Math.random() * (playerCount - 1));
@@ -59,4 +76,6 @@ function test()
 			clubMap[currentGame.black].pairingHistory.push({ opponent: currentGame.white, white: false });
 		}
 	}
+
+	FrontEnd.Master.setClub(clubMap);
 }
