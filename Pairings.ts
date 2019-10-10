@@ -19,6 +19,10 @@ namespace Pairings
 	 */
 	function cost(player: IPlayer, opponent: IPlayer): number
 	{
+		//null player refers to a bye, that has cost of 0 always
+		if(player === null || opponent === null)
+			return 0;
+
 		//unrated players have to played any games, and have no rating so the cost of pairing them is free. No need to worry about history as they have never played
 		if(!Glicko.israted(player.rating) || !Glicko.israted(opponent.rating))
 			return 0;
@@ -124,8 +128,34 @@ namespace Pairings
 		return sum;
 	}
 
-
 	const _colors = function(pairing: IPairing) { return Object.keys(pairing) }({ black: null, white: null });
+
+	function duplicatePairing(pairing: IPairing): IPairing
+	{
+		return { white: pairing.white, black: pairing.black };
+	}
+
+	function getBestNeighboor(input: IPairing[]): IPairing[]
+	{
+		let best = input;
+		let bestCost = totalCost(input);
+		let length = input.length;
+
+		for(let i = 1; i < length; i++)
+			for(let j = 0; j < i; j++)
+				for(let colorIndex = 0; colorIndex < 2; colorIndex++)	//only two possible colors, white and black in chess. Should not be a problem to hardcode this 2.
+				{
+					let current = [...input];
+
+					let iPair = current[i] = duplicatePairing(current[i]);
+					let jPair = current[j] = duplicatePairing(current[j]);
+
+					let color = _colors[colorIndex];
+					let tmp = iPair.white;
+					iPair.white = jPair[_colors[colorIndex]]
+					jPair[_colors[colorIndex]]
+				}
+	}
 
 	/**
 	 * The neighbor function
@@ -152,10 +182,8 @@ namespace Pairings
 
 
 		//now swap x and y
-		let xPair = input[xPairing];
-		xPair = { white: xPair.white, black: xPair.black };
-		let yPair = input[yPairing];
-		yPair = { white: yPair.white, black: yPair.black };
+		let xPair = duplicatePairing(input[xPairing]);
+		let yPair = duplicatePairing(input[yPairing]);
 
 		let tmp = xPair[xColor];
 		xPair[xColor] = yPair[yColor];
