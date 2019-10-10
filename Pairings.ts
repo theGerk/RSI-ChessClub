@@ -127,6 +127,10 @@ namespace Pairings
 
 	const _colors = function(pairing: IPairing) { return Object.keys(pairing) }({ black: null, white: null });
 
+	/**
+	 * The neighbor function
+	 * @param input
+	 */
 	function swapRandomPlayers(input: IPairing[]): IPairing[]
 	{
 		let length = input.length;
