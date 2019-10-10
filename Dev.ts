@@ -2,7 +2,7 @@
 function test()
 {
 	let n = 10;
-	let players = FrontEnd.Master.getActivePlayersArray();
+	let players = Benji.objToArray_dropKey(club);
 	let output = Pairings.Testing.ComparePairingMethods(players, n);
 	for(let i in output)
 	{
@@ -79,3 +79,6 @@ function setup(weeks: number = 20)
 
 	FrontEnd.Master.setClub(clubMap);
 }
+
+
+test();
