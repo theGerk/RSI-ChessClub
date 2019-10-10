@@ -127,11 +127,15 @@ namespace Pairings
 	function swapRandomPlayers(pairings: IPairing[]): IPairing[]
 	{
 		let length = pairings.length;
+		if(length === 0)
+			return pairings;
 		let output = [];
 		output.length = length;
 		let x = (Math.random() * length) | 0;
-		let xColor = Math.random();
+		let xColor = (Math.random() < .5) ? pairings;
 		let y = (Math.random() * length) | 0;
 		let yColor = Math.random();
+
+
 	}
 }
