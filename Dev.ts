@@ -1,13 +1,8 @@
 ﻿
 function test()
 {
-	let players = FrontEnd.Master.getActivePlayersArray();
-	for(let i = 0; i < 100; i++)
-	{
-		Logger.log(Pairings.totalCost(Pairings.pair(players, true)));
-	}
-
-	FrontEnd.Master.setClub(clubMap);
+	let players = Benji.objToArray_dropKey(club);
+	let output = Pairings.Testing.ComparePairingMethods(players, 1);
 }
 
 
