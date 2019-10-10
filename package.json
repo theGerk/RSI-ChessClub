@@ -7,8 +7,5 @@
   },
   "dependencies": {
     "@types/google-apps-script": "0.0.56"
-  },
-  "devDependencies": {
-    "typescript": "^3.6.4"
   }
 }
