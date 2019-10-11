@@ -13,6 +13,8 @@
     <EnableTypeScript>true</EnableTypeScript>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">16.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+    <StartWebBrowser>True</StartWebBrowser>
+    <SaveNodeJsSettingsInProjectFile>True</SaveNodeJsSettingsInProjectFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'" />
   <PropertyGroup Condition="'$(Configuration)' == 'Release'" />
@@ -23,6 +25,7 @@
     <Content Include=".clasp.json" />
     <Content Include=".gitignore" />
     <Content Include="appsscript.json" />
+    <Content Include="clubTest.json" />
     <Content Include="package-lock.json" />
     <Content Include="package.json" />
     <Content Include="tsconfig.json" />
@@ -46,6 +49,7 @@
     <TypeScriptCompile Include="MetadataHandler.ts" />
     <TypeScriptCompile Include="PairingPage.ts" />
     <TypeScriptCompile Include="Pairings.ts" />
+    <TypeScriptCompile Include="SimulatedAnnealing.ts" />
     <TypeScriptCompile Include="TemplatePages.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
