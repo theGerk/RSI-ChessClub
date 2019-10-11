@@ -1,4 +1,27 @@
-﻿interface IClub
+﻿
+
+
+
+
+//let fs = require('fs');
+//let club: IPlayer[] = Benji.objToArray_dropKey(JSON.parse(fs.readFileSync('club.json', 'utf8')));
+
+for(let i = 0; i < 10; i++)
+	console.log('hello world');
+
+
+
+
+
+
+
+
+
+
+
+
+
+interface IClub
 {
 	[name: string]: IPlayer
 }
@@ -18,8 +41,6 @@ interface IPlayer
 	active: boolean;
 };
 
-
-/// <reference path="Constants.ts"/>
 
 /** Things that I write that I use everywhere */
 namespace Benji
@@ -153,8 +174,6 @@ namespace Benji
 		return array;
 	}
 }
-
-///<reference path="Constants.ts"/>
 
 /** Works using GLICKO-2, but with some minor modifications to what the initial rating and deviations are. This doesn't actually change the algorithm, simply sifts the curve slightly */
 namespace Glicko
@@ -420,7 +439,6 @@ namespace Glicko
 }
 
 
-/// <reference path="Constants.ts"/>
 namespace Pairings
 {
 	export namespace Testing
@@ -734,13 +752,3 @@ namespace Pairings
 		return output;
 	}
 }
-
-
-
-
-
-
-let fs = require('fs');
-let club: IPlayer[] = Benji.objToArray_dropKey(JSON.parse(fs.readFileSync('club.json', 'utf8')));
-
-console.log('hello world');
