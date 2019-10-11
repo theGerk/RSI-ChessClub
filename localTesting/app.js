@@ -1,3 +1,3 @@
-for (let i = 0; i < 10; i++)
-    console.log(i);
+let club = require('club.json');
+console.log(JSON.stringify(club));
 //# sourceMappingURL=app.js.map
