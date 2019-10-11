@@ -1,6 +1,4 @@
 ﻿/// <reference path="Constants.ts"/>
-/// <reference path="SimulatedAnnealing.ts"/>
-
 namespace Pairings
 {
 	export namespace Testing

@@ -1,2 +1,5 @@
 C:\Users\Benji Altman\source\repos\localTesting\obj\Debug\localTesting.njsproj.CoreCompileInputs.cache
 C:\Users\Benji Altman\source\repos\localTesting\bin\Microsoft.NodejsTools.WebRole.dll
+C:\Users\Benji Altman\source\repos\RSI-ChessClub\localTesting\obj\Debug\localTesting.njsprojAssemblyReference.cache
+C:\Users\Benji Altman\source\repos\RSI-ChessClub\localTesting\obj\Debug\localTesting.njsproj.CoreCompileInputs.cache
+C:\Users\Benji Altman\source\repos\RSI-ChessClub\localTesting\bin\Microsoft.NodejsTools.WebRole.dll

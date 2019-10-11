@@ -21,9 +21,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Content Include=".clasp.json" />
-    <Content Include=".gitignore" />
     <Content Include="appsscript.json" />
-    <Content Include="clubTestJSON.ts" />
     <Content Include="package-lock.json" />
     <Content Include="package.json" />
     <Content Include="tsconfig.json" />
