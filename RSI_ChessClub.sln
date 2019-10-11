@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29215.179
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "RSI_ChessClub", "RSI_ChessClub.njsproj", "{E94D06F1-8267-4321-B9D4-18884E3055E8}"
+Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "RSI_ChessClub", "Standard\RSI_ChessClub.njsproj", "{E94D06F1-8267-4321-B9D4-18884E3055E8}"
 EndProject
-Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "localTesting", "..\localTesting\localTesting.njsproj", "{FBB70B01-A523-41A3-B051-4B317C088DBB}"
+Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "localTesting", "localTesting\localTesting.njsproj", "{FBB70B01-A523-41A3-B051-4B317C088DBB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
