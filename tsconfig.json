@@ -1,3 +1,6 @@
 ﻿{
-	"compileOnSave": false
+	"compileOnSave": false,
+	"include": [
+		"*.ts"
+	]
 }

@@ -9,7 +9,7 @@ namespace TemplateSheets
 	 * @param sheetName Name of the sheet
 	 * @returns true if a sheet is deleted, false otherwise
 	 */
-	function deleteSheet(spreadsheet: GoogleAppsScript.Spreadsheet.Spreadsheet, sheetName: string): boolean
+	export function deleteSheet(spreadsheet: GoogleAppsScript.Spreadsheet.Spreadsheet, sheetName: string): boolean
 	{
 		let sheet = spreadsheet.getSheetByName(sheetName);
 		if(sheet)
@@ -34,8 +34,9 @@ namespace TemplateSheets
 	 * @param sheetIndex the new sheet's index (optional)
 	 * @returns the generated sheet
 	 */
-	export function generatePageFromTemplate(spreadsheet: GoogleAppsScript.Spreadsheet.Spreadsheet, template: GoogleAppsScript.Spreadsheet.Sheet, rows: number, sheetName?: string, sheetIndex?: number)
+	export function generate(spreadsheet: GoogleAppsScript.Spreadsheet.Spreadsheet, template: GoogleAppsScript.Spreadsheet.Sheet, rows: number, sheetName?: string, sheetIndex?: number)
 	{
+		//Logger.log(`${template.getName()} - ${rows} on ${sheetName}.`);
 		let sheet: GoogleAppsScript.Spreadsheet.Sheet;
 		if(sheetName)
 		{
@@ -59,14 +60,16 @@ namespace TemplateSheets
 		let columns = range.getNumColumns();
 		let validations = range.getDataValidations()[0];
 		let formulas = range.getFormulasR1C1()[0];
+		range.setDataValidation(null);
+
+		//adds rows
+		if(rows > 1)
+			sheet.insertRowsAfter(2, rows - 1);
 
 		for(let col = 0; col < columns; col++)
 		{
 			let target = sheet.getRange(2, col + 1, rows);
-
-			//data validation
-			target.setDataValidation(validations[col]);
-
+			
 			//formating
 			range.getCell(1, col + 1).copyFormatToRange(sheet, col + 1, col + 1, 2, rows + 1);
 
@@ -74,6 +77,9 @@ namespace TemplateSheets
 			let currentFormula = formulas[col];
 			if(currentFormula)
 				target.setFormulaR1C1(currentFormula);
+
+			//data validation
+			target.setDataValidation(validations[col]);
 		}
 
 		sheet.showSheet();
