@@ -106,7 +106,7 @@ namespace Pairings
 				});
 			}
 		}
-		return output.sort(x => x.cost);
+		return output.sort((x,y) => (x.cost - y.cost));
 	}
 
 
