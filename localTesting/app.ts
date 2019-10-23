@@ -3,21 +3,6 @@
 
 
 
-//let fs = require('fs');
-//let club: IPlayer[] = Benji.objToArray_dropKey(JSON.parse(fs.readFileSync('club.json', 'utf8')));
-
-for(let i = 0; i < 10; i++)
-	console.log('hello world');
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -661,7 +646,7 @@ namespace Pairings
 				});
 			}
 		}
-		return output.sort(x => x.cost);
+		return output.sort((x,y) => x.cost - y.cost);
 	}
 
 
@@ -752,3 +737,47 @@ namespace Pairings
 		return output;
 	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+let fs = require('fs');
+let text = fs.readFileSync('club.json', 'utf8');
+let club: IPlayer[] = Benji.objToArray_dropKey(JSON.parse(text));
+
+let output = Pairings.Testing.comparePreformance(club, 1000);
+
+for(let test in output)
+{
+	output[test].costs.sort((a,b)=>a-b);
+	let min = output[test].costs[0];
+	let max = output[test].costs[output[test].costs.length - 1];
+	let mean = output[test].costs.reduce((a, b) => a + b, 0) / output[test].costs.length;
+	let median = (output[test].costs.length % 2 === 0)
+		? ((output[test].costs[output[test].costs.length / 2] + output[test].costs[output[test].costs.length / 2 - 1]) / 2)
+		: (output[test].costs[(output[test].costs.length - 1) / 2]);
+
+	console.log(`${test}:
+After ${output[test].runs} tests run in ${output[test].totalTime} milliseconds we find the following costs:
+min: ${min}
+max: ${max}
+mean: ${mean}
+median: ${median}
+`);
+}
+
+console.log('hello world');
+
+
