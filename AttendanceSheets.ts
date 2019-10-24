@@ -166,6 +166,19 @@
 						}));
 				}
 
+				//sort output data
+				outputData = outputData.sort((a, b) =>
+				{
+					let nameA = (<string>a[CONST.pages.mainPage.columns.name]).toLowerCase();
+					let nameB = (<string>b[CONST.pages.mainPage.columns.name]).toLowerCase();
+					if(nameA === nameB)
+						return 0;
+					else if(nameA < nameB)
+						return -1;
+					else
+						return 1;
+				});
+
 				//make the new sheet
 				let currentSheet = TemplateSheets.generate(spreadsheet, templateSheet, currentGroup.length, sheetName, 1);
 
@@ -174,7 +187,6 @@
 				currentSheet.addDeveloperMetadata(CONST.pages.attendance.metadata.groupName, groupName, SpreadsheetApp.DeveloperMetadataVisibility.PROJECT);
 
 				//populate the data
-
 				currentSheet.getRange(2, 1, outputData.length, outputData[0].length).setValues(outputData);
 
 				//set color

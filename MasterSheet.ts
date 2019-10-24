@@ -117,7 +117,7 @@ ${er}`);
 			let sheet = getSheet(active);
 			let data = sheet.getDataRange().getValues();
 			data.shift();
-			return data.map(mapping(active));
+			return data.map(mapping(active)).filter(player => player.name !== '');	//only include rows with a name
 		}
 
 		function writePlayerArray(input: IPlayer[], active: boolean)
