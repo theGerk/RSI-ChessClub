@@ -280,13 +280,19 @@
 		 * Changes value of input by updating with the current attendance data, will overwrite but will not delete entries that are not present
 		 * @param input Optional, if left out will use the current day's from the data page
 		 */
-		function getTodayData(input?: FrontEnd.Data.IData): { [name: string]: IAttendanceData }
+		export function getTodayData(input?: FrontEnd.Data.IData): { [name: string]: IAttendanceData }
 		{
 			let historicalData: { [name: string]: IAttendanceData };
 
 			//set historical data based on different input types
 			if(input === undefined)
-				historicalData = FrontEnd.Data.getData()[Benji.friday()].attendance;
+			{
+				let tmp = FrontEnd.Data.getData()[Benji.friday()];
+				if(tmp)
+					historicalData = tmp.attendance;
+				else
+					historicalData = {};
+			}
 			else
 				historicalData = input.attendance;
 

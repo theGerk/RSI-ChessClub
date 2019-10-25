@@ -15,6 +15,7 @@ const CONST = {
 			columns: {
 				name: 0,
 				pair: 1,
+				room: 2,
 			}
 		},
 		extraGames: {
@@ -80,6 +81,18 @@ const CONST = {
 				games: 1,
 				attendance: 2,
 			},
+		},
+		signout_printout: {
+			template: 'Template-Print',
+			metadata: {
+				key: 'printSheet',
+			},
+			columns: {
+				name: 0,
+				group: 1,
+				room: 2,
+			},
+			name: 'Signout Printoff',
 		},
 	},
 	menu: {

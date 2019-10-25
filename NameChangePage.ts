@@ -1,0 +1,7 @@
+namespace FrontEnd
+{
+	namespace NameChange
+	{
+
+	}
+}

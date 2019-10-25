@@ -9,6 +9,7 @@
 			name: string;
 			/** Weather or not this group's players are paired by default */
 			defaultPair: boolean;
+			room: string;
 		}
 
 		/**
@@ -21,6 +22,7 @@
 			return {
 				name: row[CONST.pages.groupTable.columns.name],
 				defaultPair: row[CONST.pages.groupTable.columns.pair],
+				room: row[CONST.pages.groupTable.columns.room],
 			}
 		}
 

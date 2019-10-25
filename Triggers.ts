@@ -7,7 +7,8 @@ function onOpen(e)
 	let x = SpreadsheetApp.getUi()
 		.createMenu(CONST.menu.mainInterface.name)
 		.addItem("refresh attendance", (<any>GenerateAttendanceSheets).name)
-		.addItem('generate pairings', (<any>CreatePairingSheets).name);
+		.addItem('generate pairings', (<any>CreatePairingSheets).name)
+		.addItem('generate signout sheet', (<any>GenerateSignoutSheet).name);
 	if(Session.getActiveUser().getEmail().toLowerCase() === 'benji@altmansoftwaredesign.com')
 		x.addSeparator()
 			.addItem("check duplicate names", (<any>checkDuplicateNames).name)
@@ -15,9 +16,43 @@ function onOpen(e)
 }
 
 
-function GenerateAttendanceSheets() { FrontEnd.Attendance.GenerateAttendanceSheets(); }
+function GenerateAttendanceSheets()
+{
+	FrontEnd.Attendance.GenerateAttendanceSheets();
+}
 
-function CreatePairingSheets() { FrontEnd.Attendance.RecordAndPair(); }
+function CreatePairingSheets()
+{
+	FrontEnd.Attendance.RecordAndPair();
+}
+
+function GenerateSignoutSheet()
+{
+	let groupData = FrontEnd.Groups.getData();
+	let attendance = FrontEnd.Attendance.getTodayData();
+	let people: string[] = [];
+	let signoutData: FrontEnd.SignoutSheet.data[] = [];
+	for(let person in attendance)
+	{
+		let a = attendance[person];
+		if(a.attending)
+		{
+			people.push(person);
+		}
+	}
+	people.sort();
+	for(let i = 0; i < people.length; i++)
+	{
+		let name = people[i];
+		let person = attendance[name];
+		signoutData.push({
+			name: name,
+			room: groupData[person.group].room,
+			group: person.group,
+		});
+	}
+	FrontEnd.SignoutSheet.write(signoutData);
+}
 
 /**
  * Consumes and commits to storage the games played
