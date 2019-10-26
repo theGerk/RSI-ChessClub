@@ -1,6 +1,6 @@
 namespace FrontEnd
 {
-	namespace NameChange
+	namespace NameUpdate
 	{
 
 	}

@@ -30,20 +30,9 @@ function GenerateSignoutSheet()
 {
 	let groupData = FrontEnd.Groups.getData();
 	let attendance = FrontEnd.Attendance.getTodayData();
-	let people: string[] = [];
 	let signoutData: FrontEnd.SignoutSheet.data[] = [];
-	for(let person in attendance)
+	for(let name in attendance)
 	{
-		let a = attendance[person];
-		if(a.attending)
-		{
-			people.push(person);
-		}
-	}
-	people.sort();
-	for(let i = 0; i < people.length; i++)
-	{
-		let name = people[i];
 		let person = attendance[name];
 		signoutData.push({
 			name: name,
@@ -51,6 +40,16 @@ function GenerateSignoutSheet()
 			group: person.group,
 		});
 	}
+	signoutData.sort((a, b) =>
+	{
+		let getNameString = function(s: string)
+		{
+			let split = s.split(' ');
+			let lastName = (split.length > 1) ? split.pop() : '';
+			return lastName + ' ' + split.join(' ');
+		}
+		return getNameString(a.name).localeCompare(getNameString(b.name));
+	});
 	FrontEnd.SignoutSheet.write(signoutData);
 }
 
