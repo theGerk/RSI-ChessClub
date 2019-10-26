@@ -258,22 +258,24 @@
 		}
 
 		/**
-		 * Deletes the attendance pages and then records them on the data page
+		 * Gets data from attendance sheets and submits it to the data page
+		 * @param hard Should the data on the history page be rewriten or ammended (True => rewrite, False => ammend)
 		 */
-		export function RecordAndPair()
+		export function SubmitAttendance(hard?: boolean)
 		{
 			let data = FrontEnd.Data.getData();
 			let todayKey = Benji.friday();
-			if(!data[todayKey])
+
+			//if we need to create new data
+			if(hard || !data[todayKey])
 				data[todayKey] = FrontEnd.Data.newData(todayKey);
 
 			//this mutates the data to update it with current attendance
 			let todayData = getTodayData(data[todayKey]);
 
-			//make changes
-			FrontEnd.Games.GeneratePairings(todayData);
 			FrontEnd.Data.writeData(data);
 			RemoveAttendanceSheets();
+			return todayData;
 		}
 
 		/**

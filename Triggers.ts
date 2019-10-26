@@ -21,9 +21,20 @@ function GenerateAttendanceSheets()
 	FrontEnd.Attendance.GenerateAttendanceSheets();
 }
 
+function SubmitAttendance()
+{
+	FrontEnd.Attendance.SubmitAttendance(true);
+}
+
+function AmmendAttendance()
+{
+	FrontEnd.Attendance.SubmitAttendance(false);
+}
+
 function CreatePairingSheets()
 {
-	FrontEnd.Attendance.RecordAndPair();
+	let attendance = FrontEnd.Attendance.getTodayData();
+	FrontEnd.Games.GeneratePairings(attendance);
 }
 
 function GenerateSignoutSheet()
@@ -51,6 +62,11 @@ function GenerateSignoutSheet()
 		return getNameString(a.name).localeCompare(getNameString(b.name));
 	});
 	FrontEnd.SignoutSheet.write(signoutData);
+}
+
+function UpdatePlayers()
+{
+
 }
 
 /**
