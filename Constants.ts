@@ -100,6 +100,12 @@ const CONST = {
 			name: "RSI-Club",
 		},
 	},
+	emails: {
+		Benji: 'benji@altmansoftwaredesign.com',
+		Robin: 'robin@altmansoftwaredesign.com',
+		BenjiAlt: 'baltman01@hamline.edu',
+	},
+
 };
 
 

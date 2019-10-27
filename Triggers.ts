@@ -3,7 +3,6 @@
 
 function onOpen(e)
 {
-
 	let x = SpreadsheetApp.getUi()
 		.createMenu(CONST.menu.mainInterface.name)
 		.addItem("refresh attendance", (<any>GenerateAttendanceSheets).name)

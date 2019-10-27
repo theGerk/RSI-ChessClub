@@ -17,3 +17,8 @@ function checkDuplicateNames()
 			delete count[d];
 	SpreadsheetApp.getUi().alert(JSON.stringify(count));
 }
+
+function getUsers()
+{
+	SpreadsheetApp.getActive().getEditors().forEach(x => Logger.log(x.getUserLoginId() + '\t:\t' + x.getEmail()));
+}

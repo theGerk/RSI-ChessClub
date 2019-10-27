@@ -189,6 +189,9 @@
 				//populate the data
 				currentSheet.getRange(2, 1, outputData.length, outputData[0].length).setValues(outputData);
 
+				//resize columns
+				currentSheet.autoResizeColumns(1, outputData[0].length);
+
 				//set color
 				try
 				{
