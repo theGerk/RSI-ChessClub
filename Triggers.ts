@@ -3,15 +3,17 @@
 
 function onOpen(e)
 {
-	let x = SpreadsheetApp.getUi()
+	let mainMenu = SpreadsheetApp.getUi()
 		.createMenu(CONST.menu.mainInterface.name)
 		.addItem("refresh attendance", (<any>GenerateAttendanceSheets).name)
 		.addItem('generate pairings', (<any>CreatePairingSheets).name)
 		.addItem('generate signout sheet', (<any>GenerateSignoutSheet).name);
 	if(Session.getActiveUser().getEmail().toLowerCase() === 'benji@altmansoftwaredesign.com')
-		x.addSeparator()
-			.addItem("check duplicate names", (<any>checkDuplicateNames).name)
-	x.addToUi();
+		mainMenu
+			.addItem('generate pairings', (<any>CreatePairingSheets).name)
+			.addSeparator()
+			.addItem("check duplicate names", (<any>checkDuplicateNames).name);
+	mainMenu.addToUi();
 }
 
 

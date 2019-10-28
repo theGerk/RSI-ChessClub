@@ -1,8 +1,8 @@
 //references
 /// <reference path="node_modules/@types/google-apps-script/index.d.ts"/>
+
+
 //constants
-
-
 const CONST = {
 	ratings: {
 		initRating: 0,
@@ -94,18 +94,20 @@ const CONST = {
 			},
 			name: 'Signout Printoff',
 		},
+		permisions: {
+			name: "INSERT PERMISIONS' PAGE'S NAME HERE",
+			columns: {
+				humanName: 0,
+				email: 1,
+				permisions: 2,
+			},
+		},
 	},
 	menu: {
 		mainInterface: {
 			name: "RSI-Club",
 		},
 	},
-	emails: {
-		Benji: 'benji@altmansoftwaredesign.com',
-		Robin: 'robin@altmansoftwaredesign.com',
-		BenjiAlt: 'baltman01@hamline.edu',
-	},
-
 };
 
 
