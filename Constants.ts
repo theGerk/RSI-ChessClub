@@ -102,6 +102,13 @@ const CONST = {
 				permisions: 2,
 			},
 		},
+		updatePlayer: {
+			name: "INSERT UPDATE PLAYER PAGE NAME HERE",
+			columns: {
+				name: 0,
+				newName: 1,
+			},
+		},
 	},
 	menu: {
 		mainInterface: {
