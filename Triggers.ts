@@ -3,15 +3,17 @@
 
 function onOpen(e)
 {
-	let mainMenu = SpreadsheetApp.getUi()
-		.createMenu(CONST.menu.mainInterface.name)
-		.addItem("refresh attendance", (<any>GenerateAttendanceSheets).name)
+	let mainMenu = SpreadsheetApp.getUi().createMenu(CONST.menu.mainInterface.name);
+	mainMenu
+		.addItem('refresh attendance', (<any>GenerateAttendanceSheets).name)
+		.addItem('submit attendance', (<any>AmmendAttendance).name)
 		.addItem('generate pairings', (<any>CreatePairingSheets).name)
 		.addItem('generate signout sheet', (<any>GenerateSignoutSheet).name);
 	if(Session.getActiveUser().getEmail().toLowerCase() === 'benji@altmansoftwaredesign.com')
 		mainMenu
 			.addItem('generate pairings', (<any>CreatePairingSheets).name)
 			.addSeparator()
+			.addItem('set attendance', (<any>SubmitAttendance).name)
 			.addItem("check duplicate names", (<any>checkDuplicateNames).name);
 	mainMenu.addToUi();
 }
@@ -101,4 +103,7 @@ function WeeklyUpdate()
 	//write data
 	FrontEnd.Games.recordAndRemove();
 	FrontEnd.Master.setClub(club);
+
+	//Also write data for attendance if that has not been done
+	AmmendAttendance();
 }

@@ -181,7 +181,7 @@
 			{
 				let data = SpreadsheetApp.getActive().getSheetByName(CONST.pages.extraGames.name).getDataRange().getValues();
 				data.shift();
-				return data.map(mapping);
+				return data.filter(x => x[CONST.pages.extraGames.columns.result]).map(mapping);
 			}
 
 
