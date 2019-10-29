@@ -37,6 +37,8 @@ function recalculateGamesPlayed()
 		for(let i = today.Tournament.length - 1; i >= 0; i--)
 			countGame(today.Tournament[i]);
 	}
+
+	FrontEnd.Master.setClub(club);
 }
 
 function getUsers()
