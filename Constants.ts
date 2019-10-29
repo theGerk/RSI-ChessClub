@@ -37,10 +37,11 @@ const CONST = {
 				level: 4,
 				gender: 5,
 				chesskid: 6,
-				rating: 7,
-				ratingDeviation: 8,
-				ratingVolatility: 9,
-				tournamentHistory: 10,
+				gamesPlayed: 7,
+				rating: 8,
+				ratingDeviation: 9,
+				ratingVolatility: 10,
+				tournamentHistory: 11,
 			},
 		},
 		attendance: {
@@ -136,6 +137,7 @@ interface IPlayer
 	rating: Glicko.IRating;
 	pairingHistory: { opponent: string, white: boolean }[];
 	active: boolean;
+	gamesPlayed: number;
 };
 
 

@@ -18,6 +18,27 @@ function checkDuplicateNames()
 	SpreadsheetApp.getUi().alert(JSON.stringify(count));
 }
 
+function recalculateGamesPlayed()
+{
+	let history = FrontEnd.Data.getData();
+	let club = FrontEnd.Master.getClub();
+
+	function countGame(game: FrontEnd.Games.IGame)
+	{
+		club[game.white].gamesPlayed++;
+		club[game.black].gamesPlayed++;
+	}
+
+	for(let day in history)
+	{
+		let today = history[day].games;
+		for(let i = today.Other.length - 1; i >= 0; i--)
+			countGame(today.Other[i]);
+		for(let i = today.Tournament.length - 1; i >= 0; i--)
+			countGame(today.Tournament[i]);
+	}
+}
+
 function getUsers()
 {
 	SpreadsheetApp.getActive().getEditors().forEach(x => Logger.log(x.getUserLoginId() + '\t:\t' + x.getEmail()));

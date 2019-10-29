@@ -99,6 +99,18 @@ function WeeklyUpdate()
 		club[currentGame.black].pairingHistory.push({ opponent: currentGame.white, white: false });
 	}
 
+	function countGame(game: FrontEnd.Games.IGame)
+	{
+		club[game.white].gamesPlayed++;
+		club[game.black].gamesPlayed++;
+	}
+
+	//add to games played count
+	for(let i = 0; i < gamesResults.Tournament.length; i++)
+		countGame(gamesResults.Tournament[i]);
+	for(let i = 0; i < gamesResults.Other.length; i++)
+		countGame(gamesResults.Other[i]);
+
 
 	//write data
 	FrontEnd.Games.recordAndRemove();

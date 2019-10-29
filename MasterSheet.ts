@@ -84,6 +84,7 @@ ${er}`);
 					gender: row[CONST.pages.mainPage.columns.gender],
 					level: row[CONST.pages.mainPage.columns.level],
 					teacher: row[CONST.pages.mainPage.columns.teacher],
+					gamesPlayed: row[CONST.pages.mainPage.columns.gamesPlayed] || 0,
 				};
 			};
 		}
@@ -102,6 +103,7 @@ ${er}`);
 			output[CONST.pages.mainPage.columns.gender] = row.gender;
 			output[CONST.pages.mainPage.columns.level] = row.level;
 			output[CONST.pages.mainPage.columns.teacher] = row.teacher;
+			output[CONST.pages.mainPage.columns.gamesPlayed] = row.gamesPlayed;
 			return output;
 		}
 
