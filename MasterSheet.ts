@@ -121,7 +121,7 @@ ${er}`);
 			}
 			let ss = SpreadsheetApp.getActive();
 			subWrite(input.filter(x => x.active).map(reverseMapping), ss.getSheetByName(CONST.pages.mainPage.active));
-			subWrite(input.map(reverseMapping), ss.getSheetByName(CONST.pages.mainPage.master));
+			subWrite(input.sort((a, b) => a.name.localeCompare(b.name)).map(reverseMapping), ss.getSheetByName(CONST.pages.mainPage.master));
 		}
 
 		function getNameMap(club: IClub): { [oldName: string]: string }
