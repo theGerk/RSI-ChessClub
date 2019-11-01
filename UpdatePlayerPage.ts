@@ -37,10 +37,8 @@ namespace FrontEnd
 			sheet.shift();
 			let output = sheet.filter(r => r[CONST.pages.updatePlayer.columns.name]).map(mapping);
 			for(var i = output.length - 1; i >= 0; i--)
-			{
 				if(!output[i].group)
 					throw new Error(`On row ${i + 2} of ${CONST.pages.updatePlayer.name} the entry does not have a group.`);
-			}
 			return output;
 		}
 
