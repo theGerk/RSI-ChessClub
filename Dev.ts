@@ -1,7 +1,7 @@
 ﻿
 function checkDuplicateNames()
 {
-	let data = SpreadsheetApp.getActive().getSheetByName(CONST.pages.mainPage.name).getDataRange().getValues();
+	let data = SpreadsheetApp.getActive().getSheetByName(CONST.pages.mainPage.active).getDataRange().getValues();
 	data.shift();
 	let count: { [name: string]: number } = {};
 	for(let c = 0; c < data.length; c++)

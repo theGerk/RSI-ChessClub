@@ -27,8 +27,8 @@ const CONST = {
 			},
 		},
 		mainPage: {
-			name: "Master List",
-			storage: "Inactive Players",
+			active: "Active Players",
+			master: "Inactive Players",
 			columns: {
 				name: 0,
 				group: 1,
@@ -42,6 +42,7 @@ const CONST = {
 				ratingDeviation: 9,
 				ratingVolatility: 10,
 				tournamentHistory: 11,
+				active: 12,
 			},
 		},
 		attendance: {

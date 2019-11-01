@@ -32,7 +32,7 @@
 		 */
 		export function getActivePlayersArray(): IPlayer[]
 		{
-			return getPlayerArray(true);
+			return readSheet(SpreadsheetApp.getActive().getSheetByName(CONST.pages.mainPage.active));
 		}
 
 		/**
@@ -41,7 +41,14 @@
 		 */
 		export function getAllPlayersArray(): IPlayer[]
 		{
-			return getPlayerArray(true).concat(getPlayerArray(false));
+			return readSheet(SpreadsheetApp.getActive().getSheetByName(CONST.pages.mainPage.master));
+		}
+
+		function readSheet(sheet: GoogleAppsScript.Spreadsheet.Sheet)
+		{
+			let data = sheet.getDataRange().getValues();
+			data.shift();
+			return data.map(mapping);
 		}
 
 		/**
@@ -63,29 +70,25 @@ ${er}`);
 		/**
 		 * Takes in a row from master table and returns an IPlayer
 		 * @param row the row coming in
-		 * @param active Is the player active [defaults to undefined]
 		 */
-		function mapping(active: boolean): (row: any[]) => IPlayer
+		function mapping(row: any[])
 		{
-			return function(row: any[])
-			{
-				return {
-					name: row[CONST.pages.mainPage.columns.name],
-					rating: {
-						rating: row[CONST.pages.mainPage.columns.rating],
-						deviation: row[CONST.pages.mainPage.columns.ratingDeviation],
-						volatility: row[CONST.pages.mainPage.columns.ratingVolatility],
-					},
-					active: active,
-					grade: row[CONST.pages.mainPage.columns.grade],
-					pairingHistory: row[CONST.pages.mainPage.columns.tournamentHistory] ? JSON.parse(row[CONST.pages.mainPage.columns.tournamentHistory]) : [],	//TODO maybe make this line more readable
-					group: row[CONST.pages.mainPage.columns.group],
-					chesskid: row[CONST.pages.mainPage.columns.chesskid],
-					gender: row[CONST.pages.mainPage.columns.gender],
-					level: row[CONST.pages.mainPage.columns.level],
-					teacher: row[CONST.pages.mainPage.columns.teacher],
-					gamesPlayed: row[CONST.pages.mainPage.columns.gamesPlayed] || 0,
-				};
+			return {
+				name: row[CONST.pages.mainPage.columns.name],
+				rating: {
+					rating: row[CONST.pages.mainPage.columns.rating],
+					deviation: row[CONST.pages.mainPage.columns.ratingDeviation],
+					volatility: row[CONST.pages.mainPage.columns.ratingVolatility],
+				},
+				active: row[CONST.pages.mainPage.columns.active],
+				grade: row[CONST.pages.mainPage.columns.grade],
+				pairingHistory: row[CONST.pages.mainPage.columns.tournamentHistory] ? JSON.parse(row[CONST.pages.mainPage.columns.tournamentHistory]) : [],	//TODO maybe make this line more readable
+				group: row[CONST.pages.mainPage.columns.group],
+				chesskid: row[CONST.pages.mainPage.columns.chesskid],
+				gender: row[CONST.pages.mainPage.columns.gender],
+				level: row[CONST.pages.mainPage.columns.level],
+				teacher: row[CONST.pages.mainPage.columns.teacher],
+				gamesPlayed: row[CONST.pages.mainPage.columns.gamesPlayed] || 0,
 			};
 		}
 
@@ -104,34 +107,21 @@ ${er}`);
 			output[CONST.pages.mainPage.columns.level] = row.level;
 			output[CONST.pages.mainPage.columns.teacher] = row.teacher;
 			output[CONST.pages.mainPage.columns.gamesPlayed] = row.gamesPlayed;
+			output[CONST.pages.mainPage.columns.active] = row.active;
 			return output;
 		}
 
-		function getSheet(active: boolean)
+		function writePlayerArray(input: IPlayer[])
 		{
-			return SpreadsheetApp.getActive().getSheetByName(active ? CONST.pages.mainPage.name : CONST.pages.mainPage.storage);
-		}
-
-		/**
-		 * Gets array of all players that are either active or inactive
-		 * @param active true => active players, false => inactive players
-		 * @returns array of players
-		 */
-		function getPlayerArray(active: boolean): IPlayer[]
-		{
-			let sheet = getSheet(active);
-			let data = sheet.getDataRange().getValues();
-			data.shift();
-			return data.map(mapping(active)).filter(player => player.name !== '');	//only include rows with a name
-		}
-
-		function writePlayerArray(input: IPlayer[], active: boolean)
-		{
-			let sheet = getSheet(active);
-			let raw = input.map(reverseMapping);
-			sheet.getDataRange().offset(1, 0).clearContent();
-			if(input.length !== 0)
-				sheet.getRange(2, 1, raw.length, raw[0].length).setValues(raw);
+			function subWrite(data: any[], sheet: GoogleAppsScript.Spreadsheet.Sheet)
+			{
+				sheet.getDataRange().offset(1, 0).clearContent();
+				if(data.length !== 0)
+					sheet.getRange(2, 1, data.length, data[0].length).setValues(data);
+			}
+			let ss = SpreadsheetApp.getActive();
+			subWrite(input.filter(x => x.active).map(reverseMapping), ss.getSheetByName(CONST.pages.mainPage.active));
+			subWrite(input.map(reverseMapping), ss.getSheetByName(CONST.pages.mainPage.master));
 		}
 
 		function getNameMap(club: IClub): { [oldName: string]: string }
@@ -166,7 +156,7 @@ ${er}`);
 			return nameMap;
 		}
 
-		function modifyNames(club: IClub, nameMap: { [oldName: string]: string})
+		function modifyNames(club: IClub, nameMap: { [oldName: string]: string })
 		{
 			//change pair history, do not have to change names as that is how we know what is new
 			for(let name in club)
@@ -192,19 +182,7 @@ ${er}`);
 				FrontEnd.Games.modifyNames(nameMap);
 			}
 
-			let active: IPlayer[] = [];
-			let inactive: IPlayer[] = [];
-			for(let name in club)
-			{
-				let player = club[name]
-				if(player.active)
-					active.push(player);
-				else
-					inactive.push(player);
-			}
-
-			writePlayerArray(active, true);
-			writePlayerArray(inactive, false);
+			writePlayerArray(Benji.objToArray_dropKey(club));
 		}
 	}
 }

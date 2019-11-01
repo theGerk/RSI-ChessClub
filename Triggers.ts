@@ -69,11 +69,18 @@ function GenerateSignoutSheet()
 
 function UpdatePlayers()
 {
+	/**
+	 * Sets player with changes
+	 * @param player
+	 * @param change
+	 */
 	function set(player: IPlayer, change: FrontEnd.NameUpdate.IRow)
 	{
-		//TODO change 
 		player.name = change.name;
 	}
+
+
+
 	let changes = FrontEnd.NameUpdate.getData();
 	let club = FrontEnd.Master.getClub();
 
