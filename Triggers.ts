@@ -69,7 +69,25 @@ function GenerateSignoutSheet()
 
 function UpdatePlayers()
 {
+	function set(player: IPlayer, change: FrontEnd.NameUpdate.IRow)
+	{
+		//TODO change 
+		player.name = change.name;
+	}
+	let changes = FrontEnd.NameUpdate.getData();
+	let club = FrontEnd.Master.getClub();
 
+	for(let i = 0; i < changes.length; i++)
+	{
+		let change = changes[i];
+		let me = club[change.name];
+		if(me.name !== change.name)
+			throw new Error(`Duplicate in name change, ${change.name} appears in multiple rows`);
+		
+		//TODO add more changes here
+		set(me, change);
+
+	}
 }
 
 /**

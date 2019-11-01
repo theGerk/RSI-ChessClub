@@ -104,7 +104,8 @@ const CONST = {
 			},
 		},
 		updatePlayer: {
-			name: "INSERT UPDATE PLAYER PAGE NAME HERE",
+			name: "Add and Update Players",
+			template: 'Template-Add and Update Players',
 			columns: {
 				name: 0,
 				newName: 1,

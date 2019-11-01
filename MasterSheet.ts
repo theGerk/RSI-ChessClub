@@ -107,7 +107,10 @@ ${er}`);
 			return output;
 		}
 
-		function getSheet(active: boolean) { return SpreadsheetApp.getActive().getSheetByName(active ? CONST.pages.mainPage.name : CONST.pages.mainPage.storage); }
+		function getSheet(active: boolean)
+		{
+			return SpreadsheetApp.getActive().getSheetByName(active ? CONST.pages.mainPage.name : CONST.pages.mainPage.storage);
+		}
 
 		/**
 		 * Gets array of all players that are either active or inactive
