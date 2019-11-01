@@ -74,9 +74,17 @@ function UpdatePlayers()
 	 * @param player
 	 * @param change
 	 */
-	function set(player: IPlayer, change: FrontEnd.NameUpdate.IRow)
+	function set(player: IPlayer, change: FrontEnd.NameUpdate.IPlayerUpdate)
 	{
-		player.name = change.name;
+		if(change.newName)
+			player.name = change.name;
+		player.active = change.active;
+		player.chesskid = change.chessKid;
+		player.group = change.group;
+		player.level = change.level;
+		player.gender = change.gender;
+		player.grade = change.grade;
+		player.teacher = change.teacher;
 	}
 
 
@@ -86,15 +94,39 @@ function UpdatePlayers()
 
 	for(let i = 0; i < changes.length; i++)
 	{
-		let change = changes[i];
-		let me = club[change.name];
-		if(me.name !== change.name)
-			throw new Error(`Duplicate in name change, ${change.name} appears in multiple rows`);
-		
-		//TODO add more changes here
-		set(me, change);
+		let currentRow = changes[i];
+		let me = club[currentRow.name];
+		if(me)
+		{
+			if(me.name !== currentRow.name)
+				throw new Error(`Duplicate in name change, ${currentRow.name} appears in multiple rows`);
 
+			//TODO add more changes here
+			set(me, currentRow);
+		}
+		else
+		{
+			club[currentRow.name] = {
+				active: currentRow.active || true,
+				chesskid: currentRow.chessKid,
+				gamesPlayed: 0,
+				gender: currentRow.gender,
+				grade: currentRow.grade,
+				group: currentRow.group,
+				level: currentRow.level,
+				name: currentRow.newName || currentRow.name,
+				pairingHistory: [],
+				rating: {
+					rating: undefined,
+					deviation: undefined,
+					volatility: undefined,
+				},
+				teacher: currentRow.teacher,
+			};
+		}
 	}
+
+	FrontEnd.Master.setClub(club);
 }
 
 /**

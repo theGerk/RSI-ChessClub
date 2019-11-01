@@ -110,6 +110,13 @@ const CONST = {
 			columns: {
 				name: 0,
 				newName: 1,
+				group: 2,
+				grade: 3,
+				teacher: 4,
+				level: 5,
+				gender: 6,
+				chessKid: 7,
+				active: 8,
 			},
 		},
 	},
