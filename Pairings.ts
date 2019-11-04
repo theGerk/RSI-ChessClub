@@ -265,7 +265,8 @@ namespace Pairings
 					iPair.white = jPair[color]
 					jPair[color] = tmp;
 
-					let cost = totalCost(input);
+					//swap if we find better solution
+					let cost = totalCost(current);
 					if(cost < bestCost)
 					{
 						bestCost = cost;
