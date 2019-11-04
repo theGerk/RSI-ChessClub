@@ -442,9 +442,10 @@ namespace Pairings
 			if(input.length % 2 !== 0)
 				input.push(null);
 			return {
+				"Pure Random": doTest(input, randomPairing, runs),
 				"Stupid Greedy (first used method)": doTest(input, stupidGreedy, runs),
 				"Pure Hill climb": doTest(input, hillClimb, runs),
-				"Pure Random": doTest(input, randomPairing, runs),
+				"Greedy Hill Climb": doTest(input, greedyInitClimb, runs),
 			};
 		}
 
@@ -557,6 +558,30 @@ namespace Pairings
 	function hillClimb(players: IPlayer[]): IPairing[]
 	{
 		let state = randomPairing(players);
+		let cost = totalCost(state);
+
+		while(true)
+		{
+			let newState = getBestNeighboor(state);
+			let newCost = totalCost(newState);
+
+
+			if(cost <= newCost)
+			{
+				return state;
+			}
+			else
+			{
+				state = newState;
+				cost = newCost;
+			}
+		}
+	}
+
+
+	function greedyInitClimb(players: IPlayer[]): IPairing[]
+	{
+		let state = stupidGreedy(players);
 		let cost = totalCost(state);
 
 		while(true)
@@ -757,7 +782,7 @@ let fs = require('fs');
 let text = fs.readFileSync('club.json', 'utf8');
 let club: IPlayer[] = Benji.objToArray_dropKey(JSON.parse(text));
 
-let output = Pairings.Testing.comparePreformance(club, 1000);
+let output = Pairings.Testing.comparePreformance(club, 10);
 
 for(let test in output)
 {
