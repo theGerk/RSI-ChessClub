@@ -757,7 +757,7 @@ let fs = require('fs');
 let text = fs.readFileSync('club.json', 'utf8');
 let club: IPlayer[] = Benji.objToArray_dropKey(JSON.parse(text));
 
-let output = Pairings.Testing.comparePreformance(club, 1000);
+let output = Pairings.Testing.comparePreformance(club, 5000);
 
 for(let test in output)
 {
