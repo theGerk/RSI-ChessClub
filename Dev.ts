@@ -45,3 +45,15 @@ function getUsers()
 {
 	SpreadsheetApp.getActive().getEditors().forEach(x => Logger.log(x.getUserLoginId() + '\t:\t' + x.getEmail()));
 }
+
+
+function devfuc()
+{
+	FrontEnd.NameUpdate.make();
+}
+
+
+function testy()
+{
+	Logger.log(JSON.stringify(FrontEnd.Data.getData()));
+}

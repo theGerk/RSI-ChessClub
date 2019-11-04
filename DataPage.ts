@@ -13,7 +13,7 @@
 		function mapping(row: any[]): IData
 		{
 			return {
-				date: Benji.getDayString(row[CONST.pages.history.columns.date]),
+				date: (<string>row[CONST.pages.history.columns.date]).slice(0, -1),
 				attendance: row[CONST.pages.history.columns.attendance] ? JSON.parse(row[CONST.pages.history.columns.attendance]) : {},
 				games: row[CONST.pages.history.columns.games] ? JSON.parse(row[CONST.pages.history.columns.games]) : { Tournament: [], Other: [] },
 			};
@@ -23,7 +23,7 @@
 		{
 			let output = [];
 			output[CONST.pages.history.columns.attendance] = JSON.stringify(row.attendance);
-			output[CONST.pages.history.columns.date] = row.date;
+			output[CONST.pages.history.columns.date] = row.date + '.';
 			output[CONST.pages.history.columns.games] = JSON.stringify(row.games);
 			return output;
 		}

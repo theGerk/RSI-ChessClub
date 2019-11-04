@@ -12,6 +12,7 @@ function onOpen(e)
 	if(Session.getActiveUser().getEmail().toLowerCase() === 'benji@altmansoftwaredesign.com')
 		mainMenu
 			.addItem('generate pairings', (<any>CreatePairingSheets).name)
+			.addItem('submit name changes', (<any>UpdatePlayers).name)
 			.addSeparator()
 			.addItem('set attendance', (<any>SubmitAttendance).name)
 			.addItem("check duplicate names", (<any>checkDuplicateNames).name);
@@ -127,6 +128,8 @@ function UpdatePlayers()
 	}
 
 	FrontEnd.Master.setClub(club);
+	FrontEnd.NameUpdate.remove();
+	FrontEnd.NameUpdate.make();
 }
 
 /**
