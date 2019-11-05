@@ -133,7 +133,7 @@ namespace Pairings
 
 	function hillClimb(players: IPlayer[]): IPairing[]
 	{
-		let state = randomPairing(players);
+		let state = stupidGreedy(players);
 		let cost = totalCost(state);
 
 		while(true)
@@ -153,12 +153,6 @@ namespace Pairings
 			}
 		}
 	}
-
-
-	//function simulatedAnnealing(players: IPlayer[]): IPairing[]
-	//{
-
-	//}
 
 	function randomPairing(players: IPlayer[]): IPairing[]
 	{
