@@ -1,43 +1,7 @@
 ﻿/// <reference path="Constants.ts"/>
-/// <reference path="SimulatedAnnealing.ts"/>
 
 namespace Pairings
 {
-	export namespace Testing
-	{
-		export interface ITestReturn
-		{
-			runs: number;
-			totalTime: number;
-			costs: number[];
-		}
-
-
-		export function ComparePairingMethods(input: IPlayer[], runs: number = 1000): { [testName: string]: ITestReturn }
-		{
-			input = [...input];
-			if(input.length % 2 !== 0)
-				input.push(null);
-			return {
-				"Stupid Greedy (first used method)": doTest(input, stupidGreedy, runs),
-				"Pure Hill climb": doTest(input, hillClimb, runs),
-				"Pure Random": doTest(input, randomPairing, runs),
-			};
-		}
-
-		function doTest(players: IPlayer[], func: (input: IPlayer[]) => IPairing[], runs: number): ITestReturn
-		{
-			let costs: number[] = [];
-			let start = Date.now();
-			for(let i = 0; i < runs; i++)
-				costs.push(totalCost(func(players)));
-			let end = Date.now();
-			return { runs: runs, totalTime: end - start, costs: costs };
-		}
-	}
-
-
-
 	export interface IPairing
 	{
 		white: IPlayer;
@@ -154,19 +118,6 @@ namespace Pairings
 		}
 	}
 
-	function randomPairing(players: IPlayer[]): IPairing[]
-	{
-		Benji.shuffle(players);
-
-		let output: IPairing[] = [];
-
-		for(let i = players.length - 1; i >= 0; i -= 2)
-			output.push({ white: players[i], black: players[i - 1] });
-
-		return output;
-	}
-
-
 	/**
 	 * Assigns colors to both an already created pairings
 	 * @param pairing
@@ -269,43 +220,5 @@ namespace Pairings
 				}
 
 		return best;
-	}
-
-	/**
-	 * The neighbor function
-	 * @param input
-	 */
-	function swapRandomPlayers(input: IPairing[]): IPairing[]
-	{
-		let length = input.length;
-
-		//nothing to do if it has no length
-		if(length === 0)
-			return input;
-
-		let output: IPairing[] = [...input];
-
-
-		let xPairing = (Math.random() * length) | 0;
-		let xColor = _colors[(Math.random() * 2) | 0];
-		let yPairing = (Math.random() * (length - 1)) | 0;
-		let yColor = _colors[(Math.random() * 2) | 0];
-
-		if(yPairing >= xPairing)
-			yPairing++; //yPairing should never equal xPairing using this.
-
-
-		//now swap x and y
-		let xPair = duplicatePairing(input[xPairing]);
-		let yPair = duplicatePairing(input[yPairing]);
-
-		let tmp = xPair[xColor];
-		xPair[xColor] = yPair[yColor];
-		yPair[yColor] = tmp;
-
-		output[xPairing] = xPair;
-		output[yPairing] = yPair;
-
-		return output;
 	}
 }
