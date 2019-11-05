@@ -211,7 +211,7 @@
 			}
 
 			//pair everyone
-			let pairings = Pairings.pair(playersToPair, true);
+			let pairings = Pairings.pair(playersToPair);
 
 			TournamentPairings.generate(pairings);
 		}
