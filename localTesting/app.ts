@@ -444,8 +444,10 @@ namespace Pairings
 			return {
 				"Pure Random": doTest(input, randomPairing, runs),
 				"Stupid Greedy (first used method)": doTest(input, stupidGreedy, runs),
-				"Pure Hill climb": doTest(input, hillClimb, runs),
+				"Pure Hill Climb": doTest(input, hillClimb, runs),
 				"Greedy Hill Climb": doTest(input, greedyInitClimb, runs),
+				"Quick Hill Climb (Pure)": doTest(input, quickClimb(randomPairing), runs),
+				"Quick Hill Climb (Greedy)": doTest(input, quickClimb(stupidGreedy), runs),
 			};
 		}
 
@@ -761,6 +763,9 @@ namespace Pairings
 
 		return output;
 	}
+
+
+	function quickClimb(init: (IPlayer[]) => IPairing[])
 }
 
 
@@ -782,7 +787,7 @@ let fs = require('fs');
 let text = fs.readFileSync('club.json', 'utf8');
 let club: IPlayer[] = Benji.objToArray_dropKey(JSON.parse(text));
 
-let output = Pairings.Testing.comparePreformance(club, 10);
+let output = Pairings.Testing.comparePreformance(club, 100);
 
 for(let test in output)
 {
