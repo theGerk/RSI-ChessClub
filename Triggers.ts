@@ -4,15 +4,16 @@
 function onOpen(e)
 {
 	let mainMenu = SpreadsheetApp.getUi().createMenu(CONST.menu.mainInterface.name);
-	if(Permision.doIHavePermsion(p => p.pairRounds))
+	//if(Permision.doIHavePermsion(p => p.pairRounds))
 		mainMenu
 			.addItem('Submit attendance and pair', (<any>Pair).name)
 			.addItem('Rever pairing', (<any>RevertPair).name);
-	if(Permision.doIHavePermsion(p => p.editPlayers))
+	//if(Permision.doIHavePermsion(p => p.editPlayers))
 		mainMenu
 			.addItem('Update players', (<any>UpdatePlayers).name);
 	if(Session.getActiveUser().getEmail().toLowerCase() === 'benji@altmansoftwaredesign.com')
 		mainMenu
+			.addSeparator()
 			.addItem('force weekly update', (<any>WeeklyUpdate).name)
 			.addItem("check duplicate names", (<any>checkDuplicateNames).name);
 	mainMenu.addToUi();
