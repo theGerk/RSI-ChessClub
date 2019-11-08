@@ -28,7 +28,7 @@ const CONST = {
 		},
 		mainPage: {
 			active: "Active Players",
-			master: "Inactive Players",
+			master: "Master Sheet",
 			columns: {
 				name: 0,
 				group: 1,
