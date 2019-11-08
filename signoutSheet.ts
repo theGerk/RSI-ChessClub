@@ -9,6 +9,10 @@ namespace FrontEnd
 			room: string;
 		}
 
+		/**
+		 * Takes a data object and turns it into a raw row
+		 * @param d
+		 */
 		function reverse_mapping(d: data)
 		{
 			let output = [];
@@ -18,6 +22,10 @@ namespace FrontEnd
 			return output;
 		}
 
+		/**
+		 * Takes an array of data and generates a signout sheet from it
+		 * @param people array of data to write
+		 */
 		export function write(people: data[])
 		{
 			if(people.length === 0)

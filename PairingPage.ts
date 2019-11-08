@@ -192,7 +192,7 @@
 		}
 
 		/**
-		 * Makes pairings based on given attendance data
+		 * Makes pairings based on given attendance data, then writes the pairings to the page
 		 * @param attendance the attendance object
 		 */
 		export function GeneratePairings(attendance: { [name: string]: FrontEnd.Attendance.IAttendanceData })
@@ -216,6 +216,7 @@
 			TournamentPairings.generate(pairings);
 		}
 
+		/** Gets the results of all games played */
 		export function getResults(): { Tournament: IGame[], Other: IGame[] }
 		{
 			return {
@@ -239,6 +240,10 @@
 		}
 
 
+		/**
+		 * Modifies names when names are changed
+		 * @param nameMap A name map from old names to new names
+		 */
 		export function modifyNames(nameMap: { [oldName: string]: string })
 		{
 			TournamentPairings.modifyNames(nameMap);

@@ -84,6 +84,11 @@ namespace Benji
 		return [...input];
 	}
 
+	/**
+	 * An inverse of makeMap function, this takes an object and returns the data it holds as an array ignoring what the keys were.
+	 * @param input An object mapping from strings to T.
+	 * @returns An array of T
+	 */
 	export function objToArray_dropKey<T>(input: { [key: string]: T }): T[]
 	{
 		let output: T[] = [];
@@ -92,6 +97,11 @@ namespace Benji
 		return output;
 	}
 
+	/**
+	 * A function that takes an object and turns it into an array of key value pairs.
+	 * @param input An object mapping from strings to T.
+	 * @returns An array of {key: string, value: T}.
+	 */
 	export function objToArray<T>(input: { [key: string]: T }): { key: string, value: T }[]
 	{
 		let output: { key: string, value: T }[] = [];
@@ -100,13 +110,18 @@ namespace Benji
 		return output;
 	}
 
-	export function makeMap<T>(input: T[], getKey: (input: T) => string): { [key: string]: T }
+	/**
+	 * Creates an object that maps from a key to each element of the array. The keys around found by a function that is passed in.
+	 * @param input The array to be converted
+	 * @param getKey A function that takes in a element from the array, the index it is at (optional), and the entire array (optional) and returns a key for that row.
+	 */
+	export function makeMap<T>(input: T[], getKey: (input: T, index?: number, array?: T[]) => string): { [key: string]: T }
 	{
 		let output: { [key: string]: T } = {};
 		for(let i = 0; i < input.length; i++)
 		{
 			let val = input[i];
-			let key = getKey(val);
+			let key = getKey(val, i, input);
 			if(output.hasOwnProperty(key))
 				throw new Error(`Array ${input.toString()} has a duplicate value at ${i}.`);
 			output[key] = val;

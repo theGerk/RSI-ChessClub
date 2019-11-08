@@ -44,6 +44,12 @@
 			return readSheet(SpreadsheetApp.getActive().getSheetByName(CONST.pages.mainPage.master));
 		}
 
+		/**
+		 * Reads a page treating as if its formated like a master sheet.
+		 * In practice this is either the Active Players page or the Master Sheet, this may be outdated but any sheet with this format that contains player data.
+		 * @param sheet The sheet to be read.
+		 * @returns Array of Player objects
+		 */
 		function readSheet(sheet: GoogleAppsScript.Spreadsheet.Sheet)
 		{
 			let data = sheet.getDataRange().getValues();
@@ -92,6 +98,11 @@ ${er}`);
 			};
 		}
 
+		/**
+		 * Maps a player into a raw row to be written to a sheet
+		 * @param row a player object
+		 * @returns an array to be written to a sheet
+		 */
 		function reverseMapping(row: IPlayer): any[]
 		{
 			let output = [];
@@ -111,6 +122,10 @@ ${er}`);
 			return output;
 		}
 
+		/**
+		 * Takes an array of player objects and writes them to the correct sheets
+		 * @param input array of players to be written
+		 */
 		function writePlayerArray(input: IPlayer[])
 		{
 			function subWrite(data: any[], sheet: GoogleAppsScript.Spreadsheet.Sheet)
@@ -124,17 +139,30 @@ ${er}`);
 			subWrite(input.sort((a, b) => a.name.localeCompare(b.name)).map(reverseMapping), ss.getSheetByName(CONST.pages.mainPage.master));
 		}
 
-		function getNameMap(club: IClub): { [oldName: string]: string }
-		{
-			let nameMap: { [oldName: string]: string } = {};
-			for(let name in club)
-				if(club[name].name !== name)
-					nameMap[club[name].name] = name;
-			return nameMap;
-		}
-
+		/**
+		 * Checks to make sure all name changes and new names are valid, ie: no name conflicts. Will throw an error if there is a conflict
+		 * @param club a club object
+		 * @returns a map from old names to new names for anyone whos name chagnes
+		 */
 		function validateNameChanges(club: IClub): { [oldName: string]: string }
 		{
+			/**
+			 * Takes a club object and find where names have changed creating a map
+			 * @param club a club object
+			 * @returns a map from old names to new names for anyone whos name changes
+			 */
+			function getNameMap(club: IClub): { [oldName: string]: string }
+			{
+				let nameMap: { [oldName: string]: string } = {};
+				for(let name in club)
+					if(club[name].name !== name)
+						nameMap[club[name].name] = name;
+				return nameMap;
+			}
+
+
+
+
 			let nameMap = getNameMap(club);
 
 			//do checks to make sure everything is okay
@@ -156,6 +184,11 @@ ${er}`);
 			return nameMap;
 		}
 
+		/**
+		 * Takes a set of name changes and a club and preforms all the required step to make the changes everywhere that it is needed
+		 * @param club the club object
+		 * @param nameMap a map from old names to new names
+		 */
 		function modifyNames(club: IClub, nameMap: { [oldName: string]: string })
 		{
 			//change pair history, do not have to change names as that is how we know what is new
@@ -169,6 +202,10 @@ ${er}`);
 			}
 		}
 
+		/**
+		 * takes a club object and writes it to the sheets, handles name changes smartlyish
+		 * @param club A club object to get written
+		 */
 		export function setClub(club: IClub)
 		{
 			let nameMap = validateNameChanges(club);

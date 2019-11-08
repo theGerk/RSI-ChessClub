@@ -96,8 +96,12 @@
 			return output;
 		}
 
-
-		function getSheetName(groupName: string) { return groupName[0].toUpperCase() + groupName.substring(1) + " attendance"; }
+		/**
+		 * Gets what the sheet name is expected to be for a specific group's attendance page
+		 * @param groupName The name of the group, should not be case sensitive, but why tempt fate?
+		 * @returns the expected name for the attendance page for this group
+		 */
+		function getSheetName(groupName: string) { return groupName[0].toUpperCase() + groupName.substring(1).toLowerCase() + " attendance"; }
 
 		//TODO redo this... Wow it was clever but boy is it stupid.
 		/**
@@ -317,6 +321,10 @@
 		}
 
 
+		/**
+		 * Changes names as needed given a set of name changes
+		 * @param nameMap A set of name changes, maps from old names to new names. Must be valid, this is not checked.
+		 */
 		export function modifyNames(nameMap: { [oldName: string]: string })
 		{
 			let data = getAllAttendanceData();
@@ -325,11 +333,15 @@
 				if(data.hasOwnProperty(name))
 					data[name].name = name;
 
-			updateAttendance(data);
+			setAttendancePages(data);
 		}
 
 
-		function updateAttendance(input: { [name: string]: IAttendanceData })
+		/**
+		 * Sets all the attendance pages
+		 * @param input a map from names to attendance data.
+		 */
+		function setAttendancePages(input: { [name: string]: IAttendanceData })
 		{
 			//split into groups
 			let groups: { [groupName: string]: IAttendanceData[] } = {};
@@ -348,7 +360,11 @@
 			}
 		}
 
-
+		/**
+		 * Writes an array of attendance data to a page for a given group
+		 * @param input Array of attendance data
+		 * @param groupName The group that these data belong to
+		 */
 		function writeAttendance(input: IAttendanceData[], groupName: string)
 		{
 			RemoveAttendanceSheets(groupName);

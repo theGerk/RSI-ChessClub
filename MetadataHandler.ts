@@ -7,6 +7,10 @@ namespace Benji
 		/** Maps keys to their developer metadata object */
 		export interface IReturn { [key: string]: GoogleAppsScript.Spreadsheet.DeveloperMetadata }
 
+		/**
+		 * Gets the metadata as a map from keys to the metadata
+		 * @param finder
+		 */
 		export function getMetaData(finder: GoogleAppsScript.Spreadsheet.DeveloperMetadataFinder): IReturn
 		{
 			let arr = finder.find();
@@ -23,6 +27,11 @@ namespace Benji
 			return obj;
 		}
 
+
+		/**
+		 * Gets all metadata that is on a sheet, not incuding metadata in the sheet.
+		 * @param sheet The sheet who's metadata we are retriving
+		 */
 		export function getMetadataOnSheet(sheet: GoogleAppsScript.Spreadsheet.Sheet): IReturn
 		{
 			return getMetaData(sheet.createDeveloperMetadataFinder().withLocationType(SpreadsheetApp.DeveloperMetadataLocationType.SHEET));

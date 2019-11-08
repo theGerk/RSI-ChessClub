@@ -56,6 +56,10 @@ namespace Pairings
 		return assignColor(hillClimb(players));
 	}
 
+	/**
+	 * The initial pairing function that uses a greedy algorithm. This just goes through the players finding their best opponent until there are not players left.
+	 * @param players
+	 */
 	function stupidGreedy(players: IPlayer[]): IPairing[]
 	{
 		//shuffle for randomness
@@ -95,6 +99,10 @@ namespace Pairings
 		return output;
 	}
 
+	/**
+	 * This function takes in the players, pairs them using the inital stupidGreedy function and then does a pure hill climb algorithm from there.
+	 * @param players An array of players to be paired
+	 */
 	function hillClimb(players: IPlayer[]): IPairing[]
 	{
 		let state = stupidGreedy(players);
@@ -171,7 +179,10 @@ namespace Pairings
 		return output.sort((x,y) => (x.cost - y.cost));
 	}
 
-
+	/**
+	 * gets the total cost of a pairing
+	 * @param pairings an array of pairings representing a complete 'round' pairing
+	 */
 	function totalCost(pairings: IPairing[]): number
 	{
 		let sum = 0;
@@ -180,13 +191,22 @@ namespace Pairings
 		return sum;
 	}
 
-	const _colors = function(pairing: IPairing) { return Object.keys(pairing) }({ black: null, white: null });
+	/** An array of the two colors in a pairing as a string. */
+	const _colors = ((pairing: IPairing) => Object.keys(pairing))({ black: null, white: null });
 
+	/**
+	 * Makes a clone of a pairing
+	 * @param pairing
+	 */
 	function duplicatePairing(pairing: IPairing): IPairing
 	{
 		return { white: pairing.white, black: pairing.black };
 	}
 
+	/**
+	 * Finds the best neighboor of a pairing, used by hill climb function
+	 * @param input
+	 */
 	function getBestNeighboor(input: IPairing[]): IPairing[]
 	{
 		let best = input;
