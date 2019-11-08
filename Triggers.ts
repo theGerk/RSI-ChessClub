@@ -47,7 +47,7 @@ function UpdatePlayers()
 	function set(player: IPlayer, change: FrontEnd.NameUpdate.IPlayerUpdate)
 	{
 		if(change.newName)
-			player.name = change.name;
+			player.name = change.newName;
 		player.active = change.active;
 		player.chesskid = change.chessKid;
 		player.group = change.group;

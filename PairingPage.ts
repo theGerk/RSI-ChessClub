@@ -55,9 +55,9 @@
 				let spreadsheet = SpreadsheetApp.getActive();
 
 
-				let sheet = TemplateSheets.generate(spreadsheet, spreadsheet.getSheetByName(CONST.pages.pairing.template), pairings.length, CONST.pages.pairing.name, 1);
-				sheet.getRange(2, CONST.pages.pairing.columns.whitePlayer + 1, pairings.length).setValues(white);
-				sheet.getRange(2, CONST.pages.pairing.columns.blackPlayer + 1, pairings.length).setValues(black);
+				let sheet = TemplateSheets.generate(spreadsheet, spreadsheet.getSheetByName(CONST.pages.pairing.template), white.length, CONST.pages.pairing.name, 1);
+				sheet.getRange(2, CONST.pages.pairing.columns.whitePlayer + 1, white.length).setValues(white);
+				sheet.getRange(2, CONST.pages.pairing.columns.blackPlayer + 1, white.length).setValues(black);
 				sheet.autoResizeColumn(CONST.pages.pairing.columns.whitePlayer + 1);
 				sheet.autoResizeColumn(CONST.pages.pairing.columns.blackPlayer + 1);
 			}

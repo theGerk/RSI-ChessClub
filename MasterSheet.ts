@@ -156,7 +156,7 @@ ${er}`);
 				let nameMap: { [oldName: string]: string } = {};
 				for(let name in club)
 					if(club[name].name !== name)
-						nameMap[club[name].name] = name;
+						nameMap[name] = club[name].name;
 				return nameMap;
 			}
 
@@ -196,7 +196,7 @@ ${er}`);
 			{
 				let player = club[name];
 
-				for(let i = player.pairingHistory.length; i >= 0; i--)
+				for(let i = player.pairingHistory.length - 1; i >= 0; i--)
 					if(nameMap.hasOwnProperty(player.pairingHistory[i].opponent))
 						player.pairingHistory[i].opponent = nameMap[player.pairingHistory[i].opponent];
 			}

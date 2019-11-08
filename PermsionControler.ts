@@ -64,7 +64,7 @@ namespace Permision
 
 		//I HAVE ALL THE POWER!
 		//needed for time based triggers that I create.
-		if(me.email === 'benji@altmansoftwaredesign.com')
+		if(user.toLowerCase() === 'benji@altmansoftwaredesign.com')
 			return true;
 
 		if(!me)
