@@ -4,72 +4,40 @@
 function onOpen(e)
 {
 	let mainMenu = SpreadsheetApp.getUi().createMenu(CONST.menu.mainInterface.name);
-	mainMenu
-		.addItem('refresh attendance', (<any>GenerateAttendanceSheets).name)
-		.addItem('submit attendance', (<any>AmmendAttendance).name)
-		.addItem('generate pairings', (<any>CreatePairingSheets).name)
-		.addItem('generate signout sheet', (<any>GenerateSignoutSheet).name);
+	if(Permision.doIHavePermsion(p => p.pairRounds))
+		mainMenu
+			.addItem('Submit attendance and pair', (<any>Pair).name)
+			.addItem('Rever pairing', (<any>RevertPair).name);
+	if(Permision.doIHavePermsion(p => p.editPlayers))
+		mainMenu
+			.addItem('Update players', (<any>UpdatePlayers).name);
 	if(Session.getActiveUser().getEmail().toLowerCase() === 'benji@altmansoftwaredesign.com')
 		mainMenu
-			.addItem('generate pairings', (<any>CreatePairingSheets).name)
-			.addItem('submit name changes', (<any>UpdatePlayers).name)
-			.addSeparator()
-			.addItem('set attendance', (<any>SubmitAttendance).name)
+			.addItem('force weekly update', (<any>WeeklyUpdate).name)
 			.addItem("check duplicate names", (<any>checkDuplicateNames).name);
 	mainMenu.addToUi();
 }
 
 
-function GenerateAttendanceSheets()
+function Pair()
 {
-	FrontEnd.Attendance.GenerateAttendanceSheets();
-}
-
-function SubmitAttendance()
-{
-	FrontEnd.Attendance.SubmitAttendance(true);
-}
-
-function AmmendAttendance()
-{
-	FrontEnd.Attendance.SubmitAttendance(false);
-}
-
-function CreatePairingSheets()
-{
-	let attendance = FrontEnd.Attendance.getTodayData();
+	Permision.validatePermision(p => p.pairRounds);
+	let attendance = FrontEnd.Attendance.SubmitAttendance(true);
 	FrontEnd.Games.GeneratePairings(attendance);
+	FrontEnd.SignoutSheet.GenerateSignoutSheet(attendance);
 }
 
-function GenerateSignoutSheet()
+function RevertPair()
 {
-	let groupData = FrontEnd.Groups.getData();
-	let attendance = FrontEnd.Attendance.getTodayData();
-	let signoutData: FrontEnd.SignoutSheet.data[] = [];
-	for(let name in attendance)
-	{
-		let person = attendance[name];
-		signoutData.push({
-			name: name,
-			room: groupData[person.group].room,
-			group: person.group,
-		});
-	}
-	signoutData.sort((a, b) =>
-	{
-		let getNameString = function(s: string)
-		{
-			let split = s.split(' ');
-			let lastName = (split.length > 1) ? split.pop() : '';
-			return lastName + ' ' + split.join(' ');
-		}
-		return getNameString(a.name).localeCompare(getNameString(b.name));
-	});
-	FrontEnd.SignoutSheet.write(signoutData);
+	Permision.validatePermision(p => p.pairRounds);
+	FrontEnd.Attendance.GenerateAttendanceSheets();
+	FrontEnd.Games.deletePairing();
 }
+
 
 function UpdatePlayers()
 {
+	Permision.validatePermision(p => p.editPlayers);
 	/**
 	 * Sets player with changes
 	 * @param player
@@ -138,6 +106,7 @@ function UpdatePlayers()
  */
 function WeeklyUpdate()
 {
+	Permision.validatePermision(p => false);
 	let gamesResults = FrontEnd.Games.getResults();
 	let club = FrontEnd.Master.getClub();
 
@@ -173,9 +142,10 @@ function WeeklyUpdate()
 
 
 	//write data
+	FrontEnd.Attendance.SubmitAttendance(false);
 	FrontEnd.Games.recordAndRemove();
 	FrontEnd.Master.setClub(club);
 
-	//Also write data for attendance if that has not been done
-	AmmendAttendance();
+	//generate next weeks pairing page
+	FrontEnd.Attendance.GenerateAttendanceSheets();
 }

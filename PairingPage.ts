@@ -249,5 +249,11 @@
 			TournamentPairings.modifyNames(nameMap);
 			ExtraGames.modifyNames(nameMap);
 		}
+
+
+		export function deletePairing()
+		{
+			return TournamentPairings.deletePage();
+		}
 	}
 }

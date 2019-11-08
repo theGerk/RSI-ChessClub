@@ -97,11 +97,14 @@ const CONST = {
 			name: 'Signout Printoff',
 		},
 		permisions: {
-			name: "INSERT PERMISIONS' PAGE'S NAME HERE",
+			name: "Permisions",
 			columns: {
 				humanName: 0,
 				email: 1,
-				permisions: 2,
+				permision_permsionSetting: 2,
+				permision_playerEditing: 3,
+				permision_roundPairing: 4,
+				permision_editingGroupPage: 5,
 			},
 		},
 		updatePlayer: {

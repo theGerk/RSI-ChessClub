@@ -111,18 +111,18 @@ namespace Benji
 	}
 
 	/**
-	 * Creates an object that maps from a key to each element of the array. The keys around found by a function that is passed in.
+	 * Creates an object that maps from a key to each element of the array. The keys around found by a function that is passed in. If any key is used twice the function throws an error, each key is expected to be unique.
 	 * @param input The array to be converted
-	 * @param getKey A function that takes in a element from the array, the index it is at (optional), and the entire array (optional) and returns a key for that row.
+	 * @param getKey A function that takes in a element from the array, the index it is at (optional), and the entire array (optional) and returns a key (string) for that row that is unique to that row.
 	 */
-	export function makeMap<T>(input: T[], getKey: (input: T, index?: number, array?: T[]) => string): { [key: string]: T }
+	export function makeMap<T>(input: T[], getKey: (input: T, index?: number, array?: T[]) => string, quite?: boolean): { [key: string]: T }
 	{
 		let output: { [key: string]: T } = {};
 		for(let i = 0; i < input.length; i++)
 		{
 			let val = input[i];
 			let key = getKey(val, i, input);
-			if(output.hasOwnProperty(key))
+			if(!quite && output.hasOwnProperty(key))
 				throw new Error(`Array ${input.toString()} has a duplicate value at ${i}.`);
 			output[key] = val;
 		}

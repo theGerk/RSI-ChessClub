@@ -58,7 +58,6 @@ namespace FrontEnd
 		{
 			let ss = SpreadsheetApp.getActive();
 			TemplateSheets.generate(ss, ss.getSheetByName(CONST.pages.updatePlayer.template), 100, CONST.pages.updatePlayer.name);
-
 		}
 	}
 }
