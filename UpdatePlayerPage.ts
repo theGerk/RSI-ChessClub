@@ -2,6 +2,7 @@ namespace FrontEnd
 {
 	export namespace NameUpdate
 	{
+		/** A player update datum */
 		export interface IPlayerUpdate
 		{
 			name: string;
@@ -15,7 +16,10 @@ namespace FrontEnd
 			active: boolean;
 		}
 
-
+		/**
+		 * Maps from a raw row of data about a player update to a player update object
+		 * @param row raw data refering to a player update
+		 */
 		function mapping(row: any[]): IPlayerUpdate
 		{
 			return {
@@ -31,6 +35,7 @@ namespace FrontEnd
 			};
 		}
 
+		/** Gets all data currently on the player update page */
 		export function getData(): IPlayerUpdate[]
 		{
 			let sheet = SpreadsheetApp.getActive().getSheetByName(CONST.pages.updatePlayer.name).getDataRange().getValues();
@@ -42,11 +47,13 @@ namespace FrontEnd
 			return output;
 		}
 
+		/** Removes the player update page */
 		export function remove()
 		{
 			TemplateSheets.deleteSheet(SpreadsheetApp.getActive(), CONST.pages.updatePlayer.name);
 		}
 
+		/** Makes a clean player update page */
 		export function make()
 		{
 			let ss = SpreadsheetApp.getActive();
