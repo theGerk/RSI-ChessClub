@@ -32,7 +32,7 @@ namespace FrontEnd
 		{
 			if(people.length === 0)
 				return;
-			let _cache = people.map(reverse_mapping);
+			_cache = people.map(reverse_mapping);
 			let ss = SpreadsheetApp.getActive();
 			let sheet = TemplateSheets.generate(ss, ss.getSheetByName(CONST.pages.signout_printout.template), _cache.length, CONST.pages.signout_printout.name, 1);
 			sheet.getRange(2, 1, _cache.length, _cache[0].length).setValues(_cache);
@@ -65,7 +65,7 @@ namespace FrontEnd
 
 			signoutData.sort((a, b) => a.name.toLocaleLowerCase().localeCompare(b.name.toLocaleLowerCase()));
 
-			FrontEnd.SignoutSheet.write(signoutData);
+			write(signoutData);
 		}
 
 	}

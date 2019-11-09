@@ -140,6 +140,7 @@ ${er}`);
 				sheet.getDataRange().offset(1, 0).clearContent();
 				if(data.length !== 0)
 					sheet.getRange(2, 1, data.length, data[0].length).setValues(data);
+				_cache[sheetName] = data;
 			}
 			subWrite(input.filter(x => x.active).map(reverseMapping), CONST.pages.mainPage.active);
 			subWrite(input.map(reverseMapping), CONST.pages.mainPage.master);
@@ -221,10 +222,10 @@ ${er}`);
 				//Modify names
 				modifyNames(club, nameMap);
 				FrontEnd.Data.modifyNames(nameMap);
-				FrontEnd.Attendance.modifyNames(nameMap);
 				FrontEnd.Games.modifyNames(nameMap);
 			}
 
+			FrontEnd.Attendance.GenerateAttendanceSheets();
 			writePlayerArray(Benji.objToArray_dropKey(club));
 		}
 	}
