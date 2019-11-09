@@ -22,6 +22,12 @@ namespace FrontEnd
 			return output;
 		}
 
+		export function remove()
+		{
+			TemplateSheets.deleteSheet(SpreadsheetApp.getActive(), CONST.pages.signout_printout.name);
+			_cache = null;
+		}
+
 		var _cache: any[][];
 
 		/**

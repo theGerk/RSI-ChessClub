@@ -3,20 +3,47 @@
 
 function onOpen(e)
 {
-	let mainMenu = SpreadsheetApp.getUi().createMenu(CONST.menu.mainInterface.name);
-	//if(Permision.doIHavePermsion(p => p.pairRounds))
+	generateMenu(false)
+}
+
+function generateMenu(checkPermisions: boolean)
+{
+	let ui = SpreadsheetApp.getUi();
+	let mainMenu = ui.createMenu(CONST.menu.mainInterface.name);
+	if(!checkPermisions)
+		mainMenu
+			.addItem('Remove extra buttons', (<any>removeExtraButtons).name)
+			.addSeparator();
+	if(!checkPermisions || Permision.doIHavePermsion(p => p.pairRounds))
 		mainMenu
 			.addItem('Submit attendance and pair', (<any>Pair).name)
-			.addItem('Rever pairing', (<any>RevertPair).name);
-	//if(Permision.doIHavePermsion(p => p.editPlayers))
+			.addItem('Revert pairing', (<any>RevertPair).name);
+	if(!checkPermisions || Permision.doIHavePermsion(p => p.editPlayers))
 		mainMenu
 			.addItem('Update players', (<any>UpdatePlayers).name);
+
+
+	//------------just for me-------------
 	if(Session.getActiveUser().getEmail().toLowerCase() === 'benji@altmansoftwaredesign.com')
 		mainMenu
 			.addSeparator()
-			.addItem('force weekly update', (<any>WeeklyUpdate).name)
-			.addItem("check duplicate names", (<any>checkDuplicateNames).name);
+			.addSubMenu(
+				ui.createMenu("Developer Buttons")
+					.addItem('force weekly update', (<any>WeeklyUpdate).name)
+					.addItem("check duplicate names", (<any>checkDuplicateNames).name)
+					.addItem('Recalculate', (<any>recalculate).name)
+			);
+	//-----------------------------------
+
+
+
 	mainMenu.addToUi();
+}
+
+function removeExtraButtons()
+{
+	SpreadsheetApp.getActive().removeMenu(CONST.menu.mainInterface.name);
+	generateMenu(true);
 }
 
 
@@ -31,6 +58,17 @@ function Pair()
 function RevertPair()
 {
 	Permision.validatePermision(p => p.pairRounds);
+	let ui = SpreadsheetApp.getUi();
+
+	//MAKE A WARNING
+	let doubleCheck = ui.alert("Warning!", `Are you sure you want to revert the pairing and destroy the current pairings?
+
+Click YES to continue and PERMANENTLY destroy the current pairings.
+Click NO if you want to stop and not do anything.
+`, ui.ButtonSet.YES_NO);
+	if(doubleCheck !== ui.Button.YES)
+		return;
+
 	FrontEnd.Attendance.GenerateAttendanceSheets();
 	FrontEnd.Games.deletePairing();
 }
@@ -146,6 +184,7 @@ function WeeklyUpdate()
 	FrontEnd.Attendance.SubmitAttendance(false);
 	FrontEnd.Games.recordAndRemove();
 	FrontEnd.Master.setClub(club);
+	FrontEnd.SignoutSheet.remove();
 
 	//generate next weeks pairing page
 	FrontEnd.Attendance.GenerateAttendanceSheets();
