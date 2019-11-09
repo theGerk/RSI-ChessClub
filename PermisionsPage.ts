@@ -41,7 +41,10 @@ namespace FrontEnd
 			let sheet = SpreadsheetApp.getActive().getSheetByName(CONST.pages.permisions.name);
 			sheet.getDataRange().offset(1, 0).clearContent();
 			if(raw.length > 0)
+			{
 				sheet.getRange(2, 1, raw.length, raw[0].length).setValues(raw);
+				_cache = raw;
+			}
 		}
 
 		export function normalizeEmails()
@@ -58,11 +61,17 @@ namespace FrontEnd
 			setData(data);
 		}
 
+		/** Contains all raw data with only the header row removed */
+		var _cache: any[][];
+
 		function getData()
 		{
-			let range = SpreadsheetApp.getActive().getSheetByName(CONST.pages.permisions.name).getDataRange().getValues();
-			range.shift();
-			return range.filter(x => x[CONST.pages.permisions.name]).map(mapping);
+			if(!_cache)
+			{
+				_cache = SpreadsheetApp.getActive().getSheetByName(CONST.pages.permisions.name).getDataRange().getValues();
+				_cache.shift();
+			}
+			return _cache.filter(x => x[CONST.pages.permisions.name]).map(mapping);
 		}
 
 		export function getPermisions()
