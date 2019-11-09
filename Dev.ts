@@ -18,24 +18,50 @@ function checkDuplicateNames()
 	SpreadsheetApp.getUi().alert(JSON.stringify(count));
 }
 
-function recalculateGamesPlayed()
+
+function recalculate()
 {
-	let history = FrontEnd.Data.getData();
+	let history = FrontEnd.Data.getHistoryArray();
+	history.sort((a, b) => a.date.localeCompare(b.date));
 	let club = FrontEnd.Master.getClub();
 
-	function countGame(game: FrontEnd.Games.IGame)
+	for(let player in club)
 	{
-		club[game.white].gamesPlayed++;
-		club[game.black].gamesPlayed++;
+		let current = club[player];
+		current.gamesPlayed = 0;
+		current.pairingHistory = [];
+		current.rating = { deviation: undefined, rating: undefined, volatility: undefined };
 	}
 
-	for(let day in history)
+	function countGame(game: FrontEnd.Games.IGame, isTournament: boolean)
 	{
-		let today = history[day].games;
-		for(let i = today.Other.length - 1; i >= 0; i--)
-			countGame(today.Other[i]);
-		for(let i = today.Tournament.length - 1; i >= 0; i--)
-			countGame(today.Tournament[i]);
+		let white = club[game.white];
+		let black = club[game.black];
+
+		white.gamesPlayed++;
+		black.gamesPlayed++;
+
+		if(isTournament)
+		{
+			white.pairingHistory.push({ opponent: black.name, white: true });
+			black.pairingHistory.push({ opponent: white.name, white: false });
+		}
+	}
+
+	let everyoneRating: Glicko.IRating[] = [];
+	for(let player in club)
+		everyoneRating.push(club[player].rating);
+
+	for(let i = 0; i < history.length; i++)
+	{
+		let today = history[i];
+		let games = today.games;
+		for(let j = games.Other.length - 1; j >= 0; j--)
+			countGame(games.Other[j], false);
+		for(let j = games.Tournament.length - 1; j >= 0; j--)
+			countGame(games.Tournament[j], true);
+
+		Glicko.doRatingPeriod(name => club[name].rating, games.Other.concat(games.Tournament), everyoneRating);
 	}
 
 	FrontEnd.Master.setClub(club);

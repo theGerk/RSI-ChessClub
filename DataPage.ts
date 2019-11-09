@@ -65,6 +65,13 @@
 			return Benji.makeMap(data.map(mapping), data => data.date);
 		}
 
+		export function getHistoryArray(): IData[]
+		{
+			let data = SpreadsheetApp.getActive().getSheetByName(CONST.pages.history.name).getDataRange().getValues();
+			data.shift();
+			return data.map(mapping);
+		}
+
 		/**
 		 * writes all the data on the spreadsheet
 		 * @param data the data the write
