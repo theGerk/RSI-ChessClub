@@ -60,16 +60,22 @@
 
 			let groupName = sheetMetadata[CONST.pages.attendance.metadata.groupName].getValue();
 
+			
 			//continue on now that things are all hunky dory
-			let raw = sheet.getDataRange().getValues();
-			raw.shift();	//remove first row
+			if(!_cache[groupName])
+			{
+				_cache[groupName] = sheet.getDataRange().getValues();
+				_cache[groupName].shift();	//remove first row
+			}
+
 			//maps each row, effectively returning my descried array
 			return {
-				data: raw.map(mapping(groupName)),
+				data: _cache[groupName].map(mapping(groupName)),
 				group: groupName
 			};
 		}
 
+		var _cache: { [groupName: string]: any[][] } = {};
 
 		function mapping(groupName: string): (row: any[]) => IAttendanceData
 		{
@@ -244,14 +250,6 @@
 		 */
 		function RemoveAttendanceSheets(group?: string): void
 		{
-			//some weird voodoo here
-			//If the group is defined then matchGroupCheck checks for it being the right group, otherwise it just returns true
-			let matchGroupCheck: (metadata: Benji.metadata.IReturn) => boolean;
-			if(group)
-				matchGroupCheck = (metadata: Benji.metadata.IReturn) => metadata[CONST.pages.attendance.metadata.groupName].getValue() === group;
-			else
-				matchGroupCheck = () => true;
-
 			let spreadsheet = SpreadsheetApp.getActive();
 			let sheets = spreadsheet.getSheets();
 
@@ -259,8 +257,15 @@
 			for(let i = sheets.length - 1; i >= 0; i--)
 			{
 				let metadata = getAttendanceSheetMetadata(sheets[i]);
-				if(metadata !== null && matchGroupCheck(metadata))
-					spreadsheet.deleteSheet(sheets[i]);
+				if(metadata !== null)
+				{
+					let groupName = metadata[CONST.pages.attendance.metadata.groupName].getValue();
+					if(!group || groupName === group)
+					{
+						spreadsheet.deleteSheet(sheets[i]);
+						delete _cache[groupName];
+					}
+				}
 			}
 		}
 
@@ -375,22 +380,13 @@
 			let sheetName = getSheetName(groupName);
 
 			//make the new sheet
-			let currentSheet = TemplateSheets.generate(spreadsheet, spreadsheet.getSheetByName(CONST.pages.attendance.template), input.length, sheetName, 1);
+			let currentSheet = TemplateSheets.generate(spreadsheet, spreadsheet.getSheetByName(CONST.pages.attendance.template), input.length, sheetName);
 
 			//populate the data
-			let outputData: any[][] = input.sort((a, b) =>
-				{
-					let nameA = a.name.toLowerCase();
-					let nameB = b.name.toLowerCase();
-					if(nameA > nameB)
-						return 1;
-					else if(nameA < nameB)
-						return -1;
-					else
-						return 0;
-			}).map(reverseMapping);
+			let outputData: any[][] = input.sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase())).map(reverseMapping);
 
 			currentSheet.getRange(2, 1, outputData.length, outputData[0].length).setValues(outputData);
+			_cache[groupName] = outputData;
 
 			//add metadata
 			currentSheet.addDeveloperMetadata(CONST.pages.attendance.metadata.key, SpreadsheetApp.DeveloperMetadataVisibility.PROJECT);

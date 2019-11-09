@@ -57,12 +57,18 @@
 					throw new Error(`Error creating new data entry, date: ${date} is invalid.`);
 		}
 
+		/** Holds all data (except header row) on a page in raw data format */
+		var _cache: any[][]
+
 		/** Gets all the data from the history page in order, with oldest first */
 		export function getData(): { [date: string]: IData }
 		{
-			let data = SpreadsheetApp.getActive().getSheetByName(CONST.pages.history.name).getDataRange().getValues();
-			data.shift();
-			return Benji.makeMap(data.map(mapping), data => data.date);
+			if(!_cache)
+			{
+				_cache = SpreadsheetApp.getActive().getSheetByName(CONST.pages.history.name).getDataRange().getValues();
+				_cache.shift();
+			}
+			return Benji.makeMap(_cache.map(mapping), row => row.date);
 		}
 
 		export function getHistoryArray(): IData[]
@@ -78,10 +84,10 @@
 		 */
 		export function writeData(data: { [date: string]: IData })
 		{
-			let output = Benji.objToArray_dropKey(data).map(reverseMapping);
+			_cache = Benji.objToArray_dropKey(data).map(reverseMapping);
 			let sheet = SpreadsheetApp.getActive().getSheetByName(CONST.pages.history.name);
 			sheet.getDataRange().offset(1, 0).clearContent();
-			sheet.getRange(2, 1, output.length, output[0].length).setValues(output);
+			sheet.getRange(2, 1, _cache.length, _cache[0].length).setValues(_cache);
 		}
 
 		/**

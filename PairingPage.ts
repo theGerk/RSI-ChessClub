@@ -60,6 +60,15 @@
 				sheet.getRange(2, CONST.pages.pairing.columns.blackPlayer + 1, white.length).setValues(black);
 				sheet.autoResizeColumn(CONST.pages.pairing.columns.whitePlayer + 1);
 				sheet.autoResizeColumn(CONST.pages.pairing.columns.blackPlayer + 1);
+
+				_cache = [];
+				for(let i = 0; i < white.length; i++)
+				{
+					let row = [];
+					row[CONST.pages.pairing.columns.whitePlayer] = white[i];
+					row[CONST.pages.pairing.columns.blackPlayer] = black[i];
+					_cache.push(row);
+				}
 			}
 
 			/**
@@ -75,10 +84,13 @@
 				};
 			}
 
+			var _cache: any[][];
+
 
 			/** Deletes the pairing page, be careful */
 			export function deletePage()
 			{
+				_cache = null;
 				return TemplateSheets.deleteSheet(SpreadsheetApp.getActive(), CONST.pages.pairing.name);
 			}
 
@@ -90,12 +102,15 @@
 			/** Gets the data from pairings page */
 			export function getData(): IGame[]
 			{
-				let sheet = SpreadsheetApp.getActive().getSheetByName(CONST.pages.pairing.name);
-				if(sheet === null)
-					return [];
-				let data = sheet.getDataRange().getValues();
-				data.shift();
-				return data.map(mapping);
+				if(!_cache)
+				{
+					let sheet = SpreadsheetApp.getActive().getSheetByName(CONST.pages.pairing.name);
+					if(sheet === null)
+						return [];
+					_cache = sheet.getDataRange().getValues();
+					_cache.shift();
+				}
+				return _cache.map(mapping);
 			}
 
 			export function modifyNames(nameMap: { [oldName: string]: string })
@@ -106,9 +121,15 @@
 				{
 					let row = data[i];
 					if(nameMap.hasOwnProperty(row.white))
+					{
 						sheet.getRange(i + 2, CONST.pages.pairing.columns.whitePlayer + 1).setValue(nameMap[row.white]);
+						_cache[i][CONST.pages.pairing.columns.whitePlayer] = nameMap[row.white];
+					}
 					if(nameMap.hasOwnProperty(row.black))
+					{
 						sheet.getRange(i + 2, CONST.pages.pairing.columns.blackPlayer + 1).setValue(nameMap[row.black]);
+						_cache[i][CONST.pages.pairing.columns.blackPlayer] = nameMap[row.black];
+					}
 				}
 			}
 		}
@@ -149,6 +170,8 @@
 				return output;
 			}
 
+			var _cache: any[][];
+
 
 			/** Resets the games played page */
 			export function clear()
@@ -158,6 +181,7 @@
 				let range = sheet.getDataRange();
 				if(range.getNumRows() > 1)
 					range.offset(1, 0).clearContent();
+				_cache = [];
 			}
 
 
@@ -168,8 +192,8 @@
 				if(games.length === 0)
 					return;
 
-				let data = games.map(reverseMapping);
-				SpreadsheetApp.getActive().getSheetByName(CONST.pages.extraGames.name).getRange(2, 1, data.length, data[0].length).setValues(data);
+				_cache = games.map(reverseMapping);
+				SpreadsheetApp.getActive().getSheetByName(CONST.pages.extraGames.name).getRange(2, 1, _cache.length, _cache[0].length).setValues(_cache);
 			}
 
 			/**
@@ -179,15 +203,26 @@
 			 */
 			export function getData(): IGame[]
 			{
-				let data = SpreadsheetApp.getActive().getSheetByName(CONST.pages.extraGames.name).getDataRange().getValues();
-				data.shift();
-				return data.filter(x => x[CONST.pages.extraGames.columns.result]).map(mapping);
+				if(!_cache)
+				{
+					_cache = SpreadsheetApp.getActive().getSheetByName(CONST.pages.extraGames.name).getDataRange().getValues();
+					_cache.shift();
+				}
+				return _cache.filter(x => x[CONST.pages.extraGames.columns.result]).map(mapping);
 			}
 
 
 			export function modifyNames(nameMap: { [oldName: string]: string })
 			{
 				let data = getData();
+				for(let i = 0; i < data.length; i++)
+				{
+					if(data[i].white in nameMap)
+						data[i].white = nameMap[data[i].white];
+					if(data[i].black in nameMap)
+						data[i].black = nameMap[data[i].black];
+				}
+				setData(data);
 			}
 		}
 

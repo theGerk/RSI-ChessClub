@@ -32,7 +32,7 @@
 		 */
 		export function getActivePlayersArray(): IPlayer[]
 		{
-			return readSheet(SpreadsheetApp.getActive().getSheetByName(CONST.pages.mainPage.active));
+			return readSheet(CONST.pages.mainPage.active);
 		}
 
 		/**
@@ -41,8 +41,10 @@
 		 */
 		export function getAllPlayersArray(): IPlayer[]
 		{
-			return readSheet(SpreadsheetApp.getActive().getSheetByName(CONST.pages.mainPage.master));
+			return readSheet(CONST.pages.mainPage.master);
 		}
+
+		var _cache: { [sheetName: string]: any[][] } = {};
 
 		/**
 		 * Reads a page treating as if its formated like a master sheet.
@@ -50,11 +52,14 @@
 		 * @param sheet The sheet to be read.
 		 * @returns Array of Player objects
 		 */
-		function readSheet(sheet: GoogleAppsScript.Spreadsheet.Sheet)
+		function readSheet(sheetName: string)
 		{
-			let data = sheet.getDataRange().getValues();
-			data.shift();
-			return data.map(mapping);
+			if(!_cache[sheetName])
+			{
+				_cache[sheetName] = SpreadsheetApp.getActive().getSheetByName(sheetName).getDataRange().getValues();
+				_cache[sheetName].shift();
+			}
+			return _cache[sheetName].map(mapping);
 		}
 
 		/**
@@ -128,15 +133,16 @@ ${er}`);
 		 */
 		function writePlayerArray(input: IPlayer[])
 		{
-			function subWrite(data: any[], sheet: GoogleAppsScript.Spreadsheet.Sheet)
+			let ss = SpreadsheetApp.getActive();
+			function subWrite(data: any[], sheetName: string)
 			{
+				let sheet = ss.getSheetByName(sheetName);
 				sheet.getDataRange().offset(1, 0).clearContent();
 				if(data.length !== 0)
 					sheet.getRange(2, 1, data.length, data[0].length).setValues(data);
 			}
-			let ss = SpreadsheetApp.getActive();
-			subWrite(input.filter(x => x.active).map(reverseMapping), ss.getSheetByName(CONST.pages.mainPage.active));
-			subWrite(input.sort((a, b) => a.name.localeCompare(b.name)).map(reverseMapping), ss.getSheetByName(CONST.pages.mainPage.master));
+			subWrite(input.filter(x => x.active).map(reverseMapping), CONST.pages.mainPage.active);
+			subWrite(input.map(reverseMapping), CONST.pages.mainPage.master);
 		}
 
 		/**

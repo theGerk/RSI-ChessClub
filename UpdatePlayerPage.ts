@@ -35,12 +35,17 @@ namespace FrontEnd
 			};
 		}
 
+		var _cache: any[][];
+
 		/** Gets all data currently on the player update page */
 		export function getData(): IPlayerUpdate[]
 		{
-			let sheet = SpreadsheetApp.getActive().getSheetByName(CONST.pages.updatePlayer.name).getDataRange().getValues();
-			sheet.shift();
-			let output = sheet.filter(r => r[CONST.pages.updatePlayer.columns.name]).map(mapping);
+			if(!_cache)
+			{
+				_cache = SpreadsheetApp.getActive().getSheetByName(CONST.pages.updatePlayer.name).getDataRange().getValues();
+				_cache.shift();
+			}
+			let output = _cache.filter(r => r[CONST.pages.updatePlayer.columns.name]).map(mapping);
 			for(var i = output.length - 1; i >= 0; i--)
 				if(!output[i].group)
 					throw new Error(`On row ${i + 2} of ${CONST.pages.updatePlayer.name} the entry does not have a group.`);
@@ -51,6 +56,7 @@ namespace FrontEnd
 		export function remove()
 		{
 			TemplateSheets.deleteSheet(SpreadsheetApp.getActive(), CONST.pages.updatePlayer.name);
+			_cache = null;
 		}
 
 		/** Makes a clean player update page */
@@ -58,6 +64,7 @@ namespace FrontEnd
 		{
 			let ss = SpreadsheetApp.getActive();
 			TemplateSheets.generate(ss, ss.getSheetByName(CONST.pages.updatePlayer.template), 100, CONST.pages.updatePlayer.name);
+			_cache = [];
 		}
 	}
 }
