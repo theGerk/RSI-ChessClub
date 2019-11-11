@@ -44,6 +44,8 @@
     <TypeScriptCompile Include="Groups_Table.ts" />
     <TypeScriptCompile Include="MasterSheet.ts" />
     <TypeScriptCompile Include="MetadataHandler.ts" />
+    <TypeScriptCompile Include="PermisionsPage.ts" />
+    <TypeScriptCompile Include="PermsionControler.ts" />
     <TypeScriptCompile Include="UpdatePlayerPage.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
@@ -55,7 +57,6 @@
     <TypeScriptCompile Include="TemplatePages.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="UserPage.ts" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.Common.targets" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <Import Project="$(VSToolsPath)\Node.js Tools\Microsoft.NodejsToolsV2.targets" />

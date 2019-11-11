@@ -71,12 +71,22 @@ Click NO if you want to stop and not do anything.
 
 	FrontEnd.Attendance.GenerateAttendanceSheets();
 	FrontEnd.Games.deletePairing();
+	FrontEnd.SignoutSheet.remove();
 }
 
 
 function UpdatePlayers()
 {
 	Permision.validatePermision(p => p.editPlayers);
+
+
+	if(!FrontEnd.NameUpdate.exists())
+	{
+		FrontEnd.NameUpdate.make();
+		return;
+	}
+
+
 	/**
 	 * Sets player with changes
 	 * @param player
@@ -94,8 +104,6 @@ function UpdatePlayers()
 		player.grade = change.grade;
 		player.teacher = change.teacher;
 	}
-
-
 
 	let changes = FrontEnd.NameUpdate.getData();
 	let club = FrontEnd.Master.getClub();

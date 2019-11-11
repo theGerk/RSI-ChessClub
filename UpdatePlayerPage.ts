@@ -66,5 +66,11 @@ namespace FrontEnd
 			TemplateSheets.generate(ss, ss.getSheetByName(CONST.pages.updatePlayer.template), 100, CONST.pages.updatePlayer.name);
 			_cache = [];
 		}
+
+		/** Checks if the page exists */
+		export function exists()
+		{
+			return !!(_cache || SpreadsheetApp.getActive().getSheetByName(CONST.pages.updatePlayer.name));
+		}
 	}
 }

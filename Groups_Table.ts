@@ -10,6 +10,7 @@
 			/** Weather or not this group's players are paired by default */
 			defaultPair: boolean;
 			room: string;
+			hasAttendance: boolean;
 		}
 
 		/**
@@ -22,6 +23,7 @@
 			return {
 				name: row[CONST.pages.groupTable.columns.name],
 				defaultPair: row[CONST.pages.groupTable.columns.pair],
+				hasAttendance: row[CONST.pages.groupTable.columns.generate_attendance_sheet],
 				room: row[CONST.pages.groupTable.columns.room],
 			}
 		}

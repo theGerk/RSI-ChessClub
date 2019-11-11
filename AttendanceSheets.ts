@@ -134,7 +134,11 @@
 				if(!groupData.hasOwnProperty(groupName))
 					throw new Error(`Group ${groupName} does not exist in groups page`);
 
+				if(!groupData[groupName].hasAttendance)
+					return;
+
 				let currentGroup = groups[groupName];
+
 				if(!currentGroup || currentGroup.length === 0)
 					throw new Error(`${groupName} is not a group`);
 
@@ -365,6 +369,11 @@
 			}
 		}
 
+		export function getSheets(): GoogleAppsScript.Spreadsheet.Sheet[]
+		{
+			return SpreadsheetApp.getActive().getSheets().filter(getAttendanceSheetMetadata);
+		}
+
 		/**
 		 * Writes an array of attendance data to a page for a given group
 		 * @param input Array of attendance data
@@ -398,6 +407,17 @@
 				currentSheet.setTabColor(groupName);
 			}
 			catch(er) { }
+		}
+
+		//TODO finish this
+		function setPermision()
+		{
+			let sheets = getSheets();
+			for(let i = sheets.length - 1; i >= 0; i--)
+			{
+				let sheet = sheets[i];
+				sheet.setSheetProtection()
+			}
 		}
 	}
 }

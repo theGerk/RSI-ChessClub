@@ -15,7 +15,7 @@ namespace FrontEnd
 				name: row[CONST.pages.permisions.columns.humanName],
 				email: row[CONST.pages.permisions.columns.email],
 				permisions: {
-					admin: row[CONST.pages.permisions.columns.permision_permsionSetting],
+					permision: row[CONST.pages.permisions.columns.permision_permsionSetting],
 					editPlayers: row[CONST.pages.permisions.columns.permision_playerEditing],
 					pairRounds: row[CONST.pages.permisions.columns.permision_roundPairing],
 					groups: row[CONST.pages.permisions.columns.permision_editingGroupPage],
@@ -29,7 +29,7 @@ namespace FrontEnd
 			output[CONST.pages.permisions.columns.humanName] = data.name;
 			output[CONST.pages.permisions.columns.email] = data.email;
 			output[CONST.pages.permisions.columns.permision_editingGroupPage] = data.permisions.groups;
-			output[CONST.pages.permisions.columns.permision_permsionSetting] = data.permisions.admin;
+			output[CONST.pages.permisions.columns.permision_permsionSetting] = data.permisions.permision;
 			output[CONST.pages.permisions.columns.permision_playerEditing] = data.permisions.editPlayers;
 			output[CONST.pages.permisions.columns.permision_roundPairing] = data.permisions.pairRounds;
 			return output;

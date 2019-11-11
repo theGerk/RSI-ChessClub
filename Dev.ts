@@ -81,5 +81,7 @@ function devfuc()
 
 function testy()
 {
-	Logger.log(JSON.stringify(FrontEnd.Data.getData()));
+	let sheets = FrontEnd.Attendance.getSheets();
+	for(let i = 0; i < sheets.length; i++)
+		Logger.log(sheets[i].getName());
 }
