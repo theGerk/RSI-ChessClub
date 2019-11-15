@@ -12,7 +12,7 @@ function generateMenu(checkPermisions: boolean)
 	let mainMenu = ui.createMenu(CONST.menu.mainInterface.name);
 	if(!checkPermisions)
 		mainMenu
-			.addItem('Remove extra buttons', (<any>removeExtraButtons).name)
+			.addItem('Remove extra buttons', (<any>RemoveExtraButtons).name)
 			.addSeparator();
 	if(!checkPermisions || Permision.doIHavePermsion(p => p.pairRounds))
 		mainMenu
@@ -40,7 +40,19 @@ function generateMenu(checkPermisions: boolean)
 	mainMenu.addToUi();
 }
 
-function removeExtraButtons()
+function UpdatePermisions()
+{
+	Permision.doIHavePermsion(p => p.permision);
+	FrontEnd.Attendance.setPermisions();
+	FrontEnd.Data.setPermisions();
+	FrontEnd.Games.setPermisions();
+	FrontEnd.Groups.setPermisions();
+	FrontEnd.Master.setPermisions();
+	FrontEnd.NameUpdate.setPermisions();
+	FrontEnd.PermisionPage.setPermisions();
+}
+
+function RemoveExtraButtons()
 {
 	SpreadsheetApp.getActive().removeMenu(CONST.menu.mainInterface.name);
 	generateMenu(true);
@@ -196,4 +208,7 @@ function WeeklyUpdate()
 
 	//generate next weeks pairing page
 	FrontEnd.Attendance.GenerateAttendanceSheets();
+
+	//update permisions just because
+	UpdatePermisions();
 }

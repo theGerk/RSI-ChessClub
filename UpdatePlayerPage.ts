@@ -72,5 +72,20 @@ namespace FrontEnd
 		{
 			return !!(_cache || SpreadsheetApp.getActive().getSheetByName(CONST.pages.updatePlayer.name));
 		}
+
+		function createPermisions(sheet: GoogleAppsScript.Spreadsheet.Sheet, rows: number)
+		{
+			setPermision(sheet.protect());
+		}
+
+		function setPermision(protection: GoogleAppsScript.Spreadsheet.Protection)
+		{
+			Permision.setPermisions(protection, p => p.editPlayers || p.permision);
+		}
+
+		export function setPermisions()
+		{
+			setPermision(SpreadsheetApp.getActive().getSheetByName(CONST.pages.updatePlayer.name).protect());
+		}
 	}
 }

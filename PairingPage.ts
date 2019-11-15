@@ -60,6 +60,7 @@
 				sheet.getRange(2, CONST.pages.pairing.columns.blackPlayer + 1, white.length).setValues(black);
 				sheet.autoResizeColumn(CONST.pages.pairing.columns.whitePlayer + 1);
 				sheet.autoResizeColumn(CONST.pages.pairing.columns.blackPlayer + 1);
+				createPermision(sheet, white.length);
 
 				_cache = [];
 				for(let i = 0; i < white.length; i++)
@@ -131,6 +132,19 @@
 						_cache[i][CONST.pages.pairing.columns.blackPlayer] = nameMap[row.black];
 					}
 				}
+			}
+
+			export function createPermision(sheet: GoogleAppsScript.Spreadsheet.Sheet, rows: number)
+			{
+				setPermision(sheet.protect().setUnprotectedRanges([
+					sheet.getRange(2, CONST.pages.pairing.columns.blackResult + 1, rows, 1),
+					sheet.getRange(2, CONST.pages.pairing.columns.whiteResult + 1, rows, 1)
+				]));
+			}
+
+			export function setPermision(protection: GoogleAppsScript.Spreadsheet.Protection)
+			{
+				Permision.setPermisions(protection, p => p.editPlayers || p.pairRounds || p.permision);
 			}
 		}
 
@@ -289,6 +303,13 @@
 		export function deletePairing()
 		{
 			return TournamentPairings.deletePage();
+		}
+
+
+
+		export function setPermisions()
+		{
+			TournamentPairings.setPermision(SpreadsheetApp.getActive().getSheetByName(CONST.pages.pairing.name).protect());
 		}
 	}
 }

@@ -8,20 +8,10 @@ namespace Permision
 		groups: boolean;
 	}
 
-
-	//TODO finish dynamic page permsions
-	/** WORK IN PROGESS */
-	export function setPagePermisions()
-	{
-		let users = FrontEnd.PermisionPage.getPermisions();
-
-		//Set all page permisions
-	}
-
 	export function doIHavePermsion(permisionValidator: (permision: IPermision) => boolean)
 	{
 		let user = Session.getActiveUser().getEmail();
-		let permisions = FrontEnd.PermisionPage.getPermisions();
+		let permisions = FrontEnd.PermisionPage.getPermisions_map();
 		let me = permisions[user];
 
 		//I HAVE ALL THE POWER!
@@ -41,9 +31,16 @@ namespace Permision
 			throw new Error("You do not have permision to do this.");
 	}
 
-	export function updatePagePermisions()
+	export function setPermisions(protection: GoogleAppsScript.Spreadsheet.Protection, permisionValidator: (permision: IPermision) => boolean)
 	{
-		let permisions = FrontEnd.PermisionPage.getPermisions();
-
+		let include: string[] = [];
+		let exclude: string[] = [];
+		let users = FrontEnd.PermisionPage.getPermisions_array();
+		for(let i = users.length - 1; i >= 0; i--)
+			if(permisionValidator(users[i].permisions))
+				include.push(users[i].email);
+			else
+				exclude.push(users[i].email);
+		protection.addEditors(include).removeEditors(exclude);
 	}
 }

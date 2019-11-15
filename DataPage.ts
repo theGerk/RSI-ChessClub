@@ -152,5 +152,10 @@
 				modifyNamesForDay(data[date], nameMap);
 			writeData(data);
 		}
+
+		export function setPermisions()
+		{
+			Permision.setPermisions(SpreadsheetApp.getActive().getSheetByName(CONST.pages.history.name).protect(), p => p.editPlayers || p.pairRounds || p.permision);
+		}
 	}
 }

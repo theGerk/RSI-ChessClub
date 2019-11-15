@@ -44,5 +44,10 @@
 			}
 			return Benji.makeMap(_cache.map(mapping), g => g.name);
 		}
+
+		export function setPermisions()
+		{
+			Permision.setPermisions(SpreadsheetApp.getActive().getSheetByName(CONST.pages.groupTable.name).protect(), p => p.groups || p.permision);
+		}
 	}
 }

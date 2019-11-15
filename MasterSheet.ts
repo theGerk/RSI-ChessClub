@@ -228,5 +228,15 @@ ${er}`);
 			FrontEnd.Attendance.GenerateAttendanceSheets();
 			writePlayerArray(Benji.objToArray_dropKey(club));
 		}
+
+		export function setPermisions()
+		{
+			let ss = SpreadsheetApp.getActive();
+			let active = ss.getSheetByName(CONST.pages.mainPage.active);
+			let master = ss.getSheetByName(CONST.pages.mainPage.master);
+
+			Permision.setPermisions(active.protect(), p => p.editPlayers || p.permision);
+			Permision.setPermisions(master.protect(), p => p.editPlayers || p.permision);
+		}
 	}
 }

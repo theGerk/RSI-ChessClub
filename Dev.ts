@@ -81,7 +81,5 @@ function devfuc()
 
 function testy()
 {
-	let sheets = FrontEnd.Attendance.getSheets();
-	for(let i = 0; i < sheets.length; i++)
-		Logger.log(sheets[i].getName());
+	FrontEnd.Master.setPermisions();
 }

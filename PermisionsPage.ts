@@ -49,7 +49,7 @@ namespace FrontEnd
 
 		export function normalizeEmails()
 		{
-			let data = getData();
+			let data = getPermisions_array();
 			let users = Benji.makeMap(SpreadsheetApp.getActive().getEditors().map(u => u.getEmail()), email => email.toLowerCase());
 			for(var i = data.length - 1; i >= 0; i--)
 			{
@@ -64,19 +64,24 @@ namespace FrontEnd
 		/** Contains all raw data with only the header row removed */
 		var _cache: any[][];
 
-		function getData()
+		export function getPermisions_array()
 		{
 			if(!_cache)
 			{
 				_cache = SpreadsheetApp.getActive().getSheetByName(CONST.pages.permisions.name).getDataRange().getValues();
 				_cache.shift();
 			}
-			return _cache.filter(x => x[CONST.pages.permisions.name]).map(mapping);
+			return _cache.filter(x => x[CONST.pages.permisions.columns.email]).map(mapping);
 		}
 
-		export function getPermisions()
+		export function getPermisions_map()
 		{
-			return Benji.makeMap(getData(), user => user.email, true);
+			return Benji.makeMap(getPermisions_array(), user => user.email, true);
+		}
+
+		export function setPermisions()
+		{
+			Permision.setPermisions(SpreadsheetApp.getActive().getSheetByName(CONST.pages.permisions.name).protect(), p => p.permision);
 		}
 	}
 }

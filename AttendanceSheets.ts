@@ -60,7 +60,7 @@
 
 			let groupName = sheetMetadata[CONST.pages.attendance.metadata.groupName].getValue();
 
-			
+
 			//continue on now that things are all hunky dory
 			if(!_cache[groupName])
 			{
@@ -160,60 +160,30 @@
 
 				//create data
 				let defaultParingSetting = groupData[groupName].defaultPair;
-				let outputData: any[][] = [];
+				let outputData: IAttendanceData[] = [];
 				for(let i = 0; i < currentGroup.length; i++)
 				{
 					let currentPerson = currentGroup[i];
 					let currentPersonName = currentPerson.name;
 
 					if(record[currentPersonName])
-						outputData.push(reverseMapping(record[currentPersonName]));
+						outputData.push(record[currentPersonName]);
 					else if(historyData && historyData.attendance[currentPersonName])
-						outputData.push(reverseMapping(historyData.attendance[currentPersonName]));
+						outputData.push(historyData.attendance[currentPersonName]);
 					else
-						outputData.push(reverseMapping({
+						outputData.push({
 							attending: false,
 							group: groupName,
 							name: currentPersonName,
 							pair: defaultParingSetting,
 							rating: (typeof (currentPerson.rating.rating) === 'number' && isFinite(currentPerson.rating.rating)) ? Math.round(currentPerson.rating.rating) : Glicko.INITIAL_RATING,
-						}));
+						});
 				}
 
 				//sort output data
-				outputData = outputData.sort((a, b) =>
-				{
-					let nameA = (<string>a[CONST.pages.mainPage.columns.name]).toLowerCase();
-					let nameB = (<string>b[CONST.pages.mainPage.columns.name]).toLowerCase();
-					if(nameA === nameB)
-						return 0;
-					else if(nameA < nameB)
-						return -1;
-					else
-						return 1;
-				});
+				outputData = outputData.sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase()));
 
-				//make the new sheet
-				let currentSheet = TemplateSheets.generate(spreadsheet, templateSheet, currentGroup.length, sheetName, 1);
-
-				//add metadata
-				currentSheet.addDeveloperMetadata(CONST.pages.attendance.metadata.key, SpreadsheetApp.DeveloperMetadataVisibility.PROJECT);
-				currentSheet.addDeveloperMetadata(CONST.pages.attendance.metadata.groupName, groupName, SpreadsheetApp.DeveloperMetadataVisibility.PROJECT);
-
-				//populate the data
-				currentSheet.getRange(2, 1, outputData.length, outputData[0].length).setValues(outputData);
-
-				//resize columns
-				currentSheet.autoResizeColumns(1, outputData[0].length);
-
-				//set color
-				try
-				{
-					currentSheet.setTabColor(groupName);
-				}
-				catch(er) { }
-
-				return currentSheet;
+				writeAttendance(outputData, groupName);
 			}
 
 
@@ -255,7 +225,7 @@
 		function RemoveAttendanceSheets(group?: string): void
 		{
 			let spreadsheet = SpreadsheetApp.getActive();
-			let sheets = spreadsheet.getSheets();
+			let sheets = getSheets();
 
 			//go ahead and delete some sheets
 			for(let i = sheets.length - 1; i >= 0; i--)
@@ -381,15 +351,20 @@
 		 */
 		function writeAttendance(input: IAttendanceData[], groupName: string)
 		{
-			RemoveAttendanceSheets(groupName);
 			if(input.length === 0)
+			{
+				RemoveAttendanceSheets(groupName);
 				return;
+			}
 
 			let spreadsheet = SpreadsheetApp.getActive();
 			let sheetName = getSheetName(groupName);
 
 			//make the new sheet
 			let currentSheet = TemplateSheets.generate(spreadsheet, spreadsheet.getSheetByName(CONST.pages.attendance.template), input.length, sheetName);
+
+			//set permisions
+			createPermision(currentSheet, input.length);
 
 			//populate the data
 			let outputData: any[][] = input.sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase())).map(reverseMapping);
@@ -409,15 +384,29 @@
 			catch(er) { }
 		}
 
-		//TODO finish this
-		function setPermision()
+		/**
+		 * 
+		 * @param sheet
+		 * @param rows The number of rows of data, this does not include the header
+		 */
+		function createPermision(sheet: GoogleAppsScript.Spreadsheet.Sheet, rows: number)
+		{
+			setPermision(sheet.protect().setUnprotectedRanges([
+				sheet.getRange(CONST.pages.attendance.columns.pair + 1, 2, 1, rows),
+				sheet.getRange(CONST.pages.attendance.columns.attendance + 1, 2, 1, rows)
+			]));
+		}
+
+		function setPermision(protection: GoogleAppsScript.Spreadsheet.Protection)
+		{
+			Permision.setPermisions(protection, p => p.editPlayers || p.permision || p.permision);
+		}
+
+		export function setPermisions()
 		{
 			let sheets = getSheets();
 			for(let i = sheets.length - 1; i >= 0; i--)
-			{
-				let sheet = sheets[i];
-				sheet.setSheetProtection()
-			}
+				setPermision(sheets[i].protect());
 		}
 	}
 }
