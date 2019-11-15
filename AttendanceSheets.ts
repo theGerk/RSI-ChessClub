@@ -394,8 +394,8 @@
 		function createPermision(sheet: GoogleAppsScript.Spreadsheet.Sheet, rows: number)
 		{
 			setPermision(sheet.protect().setUnprotectedRanges([
-				sheet.getRange(CONST.pages.attendance.columns.pair + 1, 2, 1, rows),
-				sheet.getRange(CONST.pages.attendance.columns.attendance + 1, 2, 1, rows)
+				sheet.getRange(2, CONST.pages.attendance.columns.pair + 1, rows, 1),
+				sheet.getRange(2, CONST.pages.attendance.columns.attendance + 1, rows, 1)
 			]));
 		}
 
