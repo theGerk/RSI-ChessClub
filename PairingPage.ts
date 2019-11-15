@@ -309,7 +309,9 @@
 
 		export function setPermisions()
 		{
-			TournamentPairings.setPermision(SpreadsheetApp.getActive().getSheetByName(CONST.pages.pairing.name).protect());
+			let tournamentPairings = SpreadsheetApp.getActive().getSheetByName(CONST.pages.pairing.name);
+			if(tournamentPairings)
+				TournamentPairings.setPermision(SpreadsheetApp.getActive().getSheetByName(CONST.pages.pairing.name).protect());
 		}
 	}
 }

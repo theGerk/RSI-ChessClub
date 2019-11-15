@@ -21,6 +21,9 @@ function generateMenu(checkPermisions: boolean)
 	if(!checkPermisions || Permision.doIHavePermsion(p => p.editPlayers))
 		mainMenu
 			.addItem('Update players', (<any>UpdatePlayers).name);
+	if(!checkPermisions || Permision.doIHavePermsion(p => p.permision))
+		mainMenu
+			.addItem('Update permisions', (<any>UpdatePermisions).name);
 
 
 	//------------just for me-------------

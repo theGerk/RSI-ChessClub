@@ -62,11 +62,12 @@ namespace FrontEnd
 			for(let name in attendance)
 			{
 				let person = attendance[name];
-				signoutData.push({
-					name: lastnameify(name),
-					room: groupData[person.group].room,
-					group: person.group,
-				});
+				if(person.attending)
+					signoutData.push({
+						name: lastnameify(name),
+						room: groupData[person.group].room,
+						group: person.group,
+					});
 			}
 
 			signoutData.sort((a, b) => a.name.toLocaleLowerCase().localeCompare(b.name.toLocaleLowerCase()));

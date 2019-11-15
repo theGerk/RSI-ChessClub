@@ -376,6 +376,8 @@
 			currentSheet.addDeveloperMetadata(CONST.pages.attendance.metadata.key, SpreadsheetApp.DeveloperMetadataVisibility.PROJECT);
 			currentSheet.addDeveloperMetadata(CONST.pages.attendance.metadata.groupName, groupName, SpreadsheetApp.DeveloperMetadataVisibility.PROJECT);
 
+			currentSheet.autoResizeColumns(1, outputData[0].length);
+
 			//set color
 			try
 			{

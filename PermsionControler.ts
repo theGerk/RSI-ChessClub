@@ -34,13 +34,14 @@ namespace Permision
 	export function setPermisions(protection: GoogleAppsScript.Spreadsheet.Protection, permisionValidator: (permision: IPermision) => boolean)
 	{
 		let include: string[] = [];
-		let exclude: string[] = [];
 		let users = FrontEnd.PermisionPage.getPermisions_array();
 		for(let i = users.length - 1; i >= 0; i--)
 			if(permisionValidator(users[i].permisions))
 				include.push(users[i].email);
-			else
-				exclude.push(users[i].email);
-		protection.addEditors(include).removeEditors(exclude);
+
+		//Remove ALL editors
+		protection.removeEditors(protection.getEditors().map(u => u.getEmail()));
+
+		protection.addEditors(include);
 	}
 }
