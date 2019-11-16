@@ -63,8 +63,9 @@ namespace FrontEnd
 		export function make()
 		{
 			let ss = SpreadsheetApp.getActive();
-			TemplateSheets.generate(ss, ss.getSheetByName(CONST.pages.updatePlayer.template), 100, CONST.pages.updatePlayer.name);
+			let sheet = TemplateSheets.generate(ss, ss.getSheetByName(CONST.pages.updatePlayer.template), CONST.pages.updatePlayer.rows, CONST.pages.updatePlayer.name);
 			_cache = [];
+			createPermisions(sheet, CONST.pages.updatePlayer.rows);
 		}
 
 		/** Checks if the page exists */

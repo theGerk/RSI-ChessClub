@@ -129,6 +129,7 @@ const CONST = {
 				active: 8,
 			},
 			permision: (p: Permision.IPermision) => p.editPlayers,
+			rows: 30,
 		},
 	},
 	menu: {

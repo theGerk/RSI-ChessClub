@@ -209,6 +209,12 @@ function WeeklyUpdate()
 	FrontEnd.Master.setClub(club);
 	FrontEnd.SignoutSheet.remove();
 
+	//update permisions just because
+	UpdatePermisions();
+}
+
+function WeeklyUpdate_2()
+{
 	//generate next weeks pairing page
 	FrontEnd.Attendance.GenerateAttendanceSheets();
 

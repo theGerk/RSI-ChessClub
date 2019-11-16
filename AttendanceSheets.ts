@@ -312,6 +312,17 @@
 				if(data.hasOwnProperty(name))
 					data[name].name = name;
 
+			let sheets = getSheets();
+
+			let groups: { [groupName: string]: boolean } = {};
+
+			for(let i = 0; i < sheets.length; i++)
+				groups[getAttendanceSheetMetadata(sheets[i])[CONST.pages.attendance.metadata.groupName].getValue()] = true;
+
+			for(let x in data)
+				if(!(data[x].group in groups))
+					delete data[x];
+
 			setAttendancePages(data);
 		}
 

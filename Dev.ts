@@ -75,7 +75,8 @@ function getUsers()
 
 function devfuc()
 {
-	FrontEnd.NameUpdate.make();
+	let attendance = FrontEnd.Attendance.getTodayData();
+	FrontEnd.SignoutSheet.GenerateSignoutSheet(attendance);
 }
 
 
