@@ -11,6 +11,7 @@
 			defaultPair: boolean;
 			room: string;
 			hasAttendance: boolean;
+			pairingPool: string;
 		}
 
 		/**
@@ -25,6 +26,7 @@
 				defaultPair: row[CONST.pages.groupTable.columns.pair],
 				hasAttendance: row[CONST.pages.groupTable.columns.generate_attendance_sheet],
 				room: row[CONST.pages.groupTable.columns.room],
+				pairingPool: row[CONST.pages.groupTable.columns.defaultPairingPool],
 			}
 		}
 

@@ -15,6 +15,7 @@
 			pair: boolean;
 			/** Their rating (rounded) */
 			rating: number;
+			pairingPool: string;
 		}
 
 		/**
@@ -92,6 +93,7 @@
 					attending: row[CONST.pages.attendance.columns.attendance],
 					pair: row[CONST.pages.attendance.columns.pair],
 					rating: row[CONST.pages.attendance.columns.rating],
+					pairingPool: row[CONST.pages.attendance.columns.pairingPool],
 				};
 			}
 		}
@@ -104,6 +106,7 @@
 			output[CONST.pages.attendance.columns.name] = row.name;
 			output[CONST.pages.attendance.columns.pair] = row.pair;
 			output[CONST.pages.attendance.columns.rating] = row.rating;
+			output[CONST.pages.attendance.columns.pairingPool] = row.pairingPool;
 			return output;
 		}
 

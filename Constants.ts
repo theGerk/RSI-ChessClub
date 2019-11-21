@@ -17,6 +17,7 @@ const CONST = {
 				generate_attendance_sheet: 1,
 				pair: 2,
 				room: 3,
+				defaultPairingPool: 4,
 			},
 		},
 		extraGames: {
@@ -59,6 +60,7 @@ const CONST = {
 				rating: 1,
 				attendance: 2,
 				pair: 3,
+				pairingPool: 4,
 			},
 		},
 		pairing: {
