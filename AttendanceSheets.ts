@@ -77,8 +77,13 @@
 
 		var _cache: { [groupName: string]: any[][] } = {};
 
+		/**
+		 * gets mapping function based on group name
+		 * @param groupName the group name
+		 */
 		function mapping(groupName: string): (row: any[]) => IAttendanceData
 		{
+
 			return function(row: any[])
 			{
 				return {

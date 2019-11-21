@@ -67,7 +67,6 @@ function Pair()
 	Permision.validatePermision(p => p.pairRounds);
 	let attendance = FrontEnd.Attendance.SubmitAttendance(true);
 	FrontEnd.Games.GeneratePairings(attendance);
-	FrontEnd.SignoutSheet.GenerateSignoutSheet(attendance);
 }
 
 function RevertPair()

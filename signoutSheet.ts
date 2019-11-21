@@ -36,7 +36,7 @@ namespace FrontEnd
 		 */
 		export function write(people: IData[])
 		{
-			if(people.length === 0)
+			if (people.length === 0)
 				return;
 			_cache = people.map(reverse_mapping);
 			let ss = SpreadsheetApp.getActive();
@@ -48,7 +48,7 @@ namespace FrontEnd
 		export function GenerateSignoutSheet(attendance?: { [name: string]: FrontEnd.Attendance.IAttendanceData })
 		{
 			let groupData = FrontEnd.Groups.getData();
-			if(!attendance)
+			if (!attendance)
 				attendance = FrontEnd.Attendance.getTodayData();
 			let signoutData: FrontEnd.SignoutSheet.IData[] = [];
 
@@ -59,10 +59,10 @@ namespace FrontEnd
 				return lastName + ', ' + split.join(' ');
 			}
 
-			for(let name in attendance)
+			for (let name in attendance)
 			{
 				let person = attendance[name];
-				if(person.attending)
+				if (person.attending)
 					signoutData.push({
 						name: lastnameify(name),
 						room: groupData[person.group].room,

@@ -18,7 +18,6 @@ const CONST = {
 				pair: 2,
 				room: 3,
 			},
-			permision: (p: Permision.IPermision) => p.groups,
 		},
 		extraGames: {
 			name: 'Other Games',
@@ -46,7 +45,6 @@ const CONST = {
 				tournamentHistory: 11,
 				active: 12,
 			},
-			permision: (p: Permision.IPermision) => p.editPlayers,
 		},
 		attendance: {
 			template: "Template-Attendance",
@@ -62,7 +60,6 @@ const CONST = {
 				attendance: 2,
 				pair: 3,
 			},
-			permision: (p: Permision.IPermision) => p.editPlayers || p.pairRounds,
 		},
 		pairing: {
 			name: 'Tournament Pairings',
@@ -79,7 +76,6 @@ const CONST = {
 				blackResult: 2,
 				blackPlayer: 3,
 			},
-			permision: (p: Permision.IPermision) => p.editPlayers || p.pairRounds,
 		},
 		history: {
 			name: 'Data',
@@ -88,7 +84,6 @@ const CONST = {
 				games: 1,
 				attendance: 2,
 			},
-			permision: (p: Permision.IPermision) => p.editPlayers || p.pairRounds,
 		},
 		signout_printout: {
 			template: 'Template-Print',
@@ -112,7 +107,6 @@ const CONST = {
 				permision_roundPairing: 4,
 				permision_editingGroupPage: 5,
 			},
-			permision: (p: Permision.IPermision) => p.permision,
 		},
 		updatePlayer: {
 			name: "Add and Update Players",
@@ -128,9 +122,14 @@ const CONST = {
 				chessKid: 7,
 				active: 8,
 			},
-			permision: (p: Permision.IPermision) => p.editPlayers,
 			rows: 30,
-		},
+        },
+        pairingPools: {
+            name: 'Pairing Pools',
+            columns: {
+                name: 1,
+            },
+        },
 	},
 	menu: {
 		mainInterface: {
