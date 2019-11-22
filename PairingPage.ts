@@ -112,7 +112,7 @@
 				};
 			}
 
-			var _cache: { [pairingPool: string]: any[][] };
+			var _cache: { [pairingPool: string]: any[][] } = {};
 
 
 			/**

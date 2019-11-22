@@ -85,7 +85,6 @@
 		 */
 		function mapping(groupName: string): (row: any[]) => IAttendanceData
 		{
-
 			return function(row: any[])
 			{
 				return {
@@ -127,7 +126,6 @@
 		export function GenerateAttendanceSheets(group?: string): void
 		{
 			let spreadsheet = SpreadsheetApp.getActive();
-			let templateSheet = spreadsheet.getSheetByName(CONST.pages.attendance.template);
 			let groups = FrontEnd.Master.getGroupsObject();
 			let groupData = FrontEnd.Groups.getData();
 			let historyData = FrontEnd.Data.getData()[Benji.friday()];
@@ -385,14 +383,14 @@
 			//make the new sheet
 			let currentSheet = TemplateSheets.generate(spreadsheet, spreadsheet.getSheetByName(CONST.pages.attendance.template), input.length, sheetName);
 
-			//set permisions
-			createPermision(currentSheet, input.length);
-
 			//populate the data
 			let outputData: any[][] = input.sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase())).map(reverseMapping);
 
 			currentSheet.getRange(2, 1, outputData.length, outputData[0].length).setValues(outputData);
 			_cache[groupName] = outputData;
+
+			//set permisions
+			createPermision(currentSheet, input.length);
 
 			//add metadata
 			currentSheet.addDeveloperMetadata(CONST.pages.attendance.metadata.key, SpreadsheetApp.DeveloperMetadataVisibility.PROJECT);
