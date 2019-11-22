@@ -30,11 +30,11 @@
 			 * Generates the pairings page from a list of pairings
 			 * @param pairings
 			 */
-			export function generate(pairings: Pairings.IPairing[])
+			export function generate(pairings: Pairings.IPairing[], poolName: string)
 			{
 				if(pairings.length === 0)
 				{
-					deletePage();
+					removePairingSheets();
 					return;
 				}
 				//handle white and black players separately as otherwise equations can get overwritten
@@ -54,22 +54,49 @@
 				//do things to the sheet
 				let spreadsheet = SpreadsheetApp.getActive();
 
-
-				let sheet = TemplateSheets.generate(spreadsheet, spreadsheet.getSheetByName(CONST.pages.pairing.template), white.length, CONST.pages.pairing.name, 1);
+				//populate data
+				let sheet = TemplateSheets.generate(spreadsheet, spreadsheet.getSheetByName(CONST.pages.pairing.template), white.length, `Tournament for ${poolName}`, 1);
 				sheet.getRange(2, CONST.pages.pairing.columns.whitePlayer + 1, white.length).setValues(white);
 				sheet.getRange(2, CONST.pages.pairing.columns.blackPlayer + 1, white.length).setValues(black);
 				sheet.autoResizeColumn(CONST.pages.pairing.columns.whitePlayer + 1);
 				sheet.autoResizeColumn(CONST.pages.pairing.columns.blackPlayer + 1);
+
+				//generate permisions
 				createPermision(sheet, white.length);
 
-				_cache = [];
+				//add metadata
+				sheet.addDeveloperMetadata(CONST.pages.pairing.metadata.key, SpreadsheetApp.DeveloperMetadataVisibility.PROJECT);
+				sheet.addDeveloperMetadata(CONST.pages.pairing.metadata.pool, poolName, SpreadsheetApp.DeveloperMetadataVisibility.PROJECT);
+
+				//update cache
+				_cache[poolName] = [];
 				for(let i = 0; i < white.length; i++)
 				{
 					let row = [];
 					row[CONST.pages.pairing.columns.whitePlayer] = white[i];
 					row[CONST.pages.pairing.columns.blackPlayer] = black[i];
-					_cache.push(row);
+					_cache[poolName].push(row);
 				}
+			}
+
+			/**
+			 * Gets metadata from a pairing sheet, will return null if it is not a pairing sheet.
+			 * This is the accepted way to determine if a sheet is a pairing sheet.
+			 * @param sheet The sheet in question
+			 * @returns the metadata on the sheet as an map from key to metadata objects if this is a pairing sheet, otherwise returns null
+			 */
+			function getPairingSheetMetadata(sheet: GoogleAppsScript.Spreadsheet.Sheet): Benji.metadata.IReturn
+			{
+				let metadata = Benji.metadata.getMetadataOnSheet(sheet);
+				if(metadata.hasOwnProperty(CONST.pages.pairing.metadata.key))
+					return metadata;
+				else
+					return null;
+			}
+
+			function getSheets()
+			{
+				return SpreadsheetApp.getActive().getSheets().filter(getPairingSheetMetadata);
 			}
 
 			/**
@@ -85,14 +112,32 @@
 				};
 			}
 
-			var _cache: any[][];
+			var _cache: { [pairingPool: string]: any[][] };
 
 
-			/** Deletes the pairing page, be careful */
-			export function deletePage()
+			/**
+			 * Be careful, this destroys all pairings without any recovery method. It removes all attendance sheets, or a single sheet for a given pairing pool.
+			 * @param pairingPool the name of the pairing pool to be deleted, left undefined to delete all sheets
+			 */
+			export function removePairingSheets(pairingPool?: string)
 			{
-				_cache = null;
-				return TemplateSheets.deleteSheet(SpreadsheetApp.getActive(), CONST.pages.pairing.name);
+				let spreadsheet = SpreadsheetApp.getActive();
+				let sheets = getSheets();
+
+				//go ahead and delete some sheets
+				for(let i = sheets.length - 1; i >= 0; i--)
+				{
+					let metadata = getPairingSheetMetadata(sheets[i]);
+					if(metadata !== null)
+					{
+						let pool = metadata[CONST.pages.pairing.metadata.pool].getValue();
+						if(!pairingPool || pool === pairingPool)
+						{
+							spreadsheet.deleteSheet(sheets[i]);
+							delete _cache[pool];
+						}
+					}
+				}
 			}
 
 			export function getResults(): IGame[]
@@ -100,36 +145,66 @@
 				return getData().filter(x => typeof (x.result) === 'number' && x.result >= 0 && x.result <= 1);
 			}
 
-			/** Gets the data from pairings page */
+
+			function getPageData(sheet: GoogleAppsScript.Spreadsheet.Sheet): { data: IGame[], pool: string }
+			{
+				let metadata = getPairingSheetMetadata(sheet);
+
+				if(metadata === null)
+					return null;
+
+				let poolName = metadata[CONST.pages.pairing.metadata.pool].getValue();
+
+				if(!_cache[poolName])
+				{
+					_cache[poolName] = sheet.getDataRange().getValues();
+					_cache[poolName].shift();
+				}
+
+				return {
+					data: _cache[poolName].map(mapping),
+					pool: poolName
+				};
+			}
+
+			/** Gets the data from all pairings */
 			export function getData(): IGame[]
 			{
-				if(!_cache)
+				let output: IGame[] = [];
+				let sheets = SpreadsheetApp.getActive().getSheets();
+				for(let i = sheets.length; i >= 0; i--)
 				{
-					let sheet = SpreadsheetApp.getActive().getSheetByName(CONST.pages.pairing.name);
-					if(sheet === null)
-						return [];
-					_cache = sheet.getDataRange().getValues();
-					_cache.shift();
+					let tmp = getPageData(sheets[i]);
+					if(tmp !== null)
+					{
+						output.push(...tmp.data);
+					}
 				}
-				return _cache.map(mapping);
+
+				return output;
 			}
 
 			export function modifyNames(nameMap: { [oldName: string]: string })
 			{
-				let sheet = SpreadsheetApp.getActive().getSheetByName(CONST.pages.pairing.name);
-				let data = getData();
-				for(let i = data.length - 1; i >= 0; i--)
+				let sheets = getSheets();
+				for(let j = sheets.length - 1; j >= 0; j--)
 				{
-					let row = data[i];
-					if(nameMap.hasOwnProperty(row.white))
+					let sheet = sheets[j];
+					let cache = _cache[Benji.metadata.getMetadataOnSheet(sheet)[CONST.pages.pairing.metadata.pool].getValue()];
+					let data = getData();
+					for(let i = data.length - 1; i >= 0; i--)
 					{
-						sheet.getRange(i + 2, CONST.pages.pairing.columns.whitePlayer + 1).setValue(nameMap[row.white]);
-						_cache[i][CONST.pages.pairing.columns.whitePlayer] = nameMap[row.white];
-					}
-					if(nameMap.hasOwnProperty(row.black))
-					{
-						sheet.getRange(i + 2, CONST.pages.pairing.columns.blackPlayer + 1).setValue(nameMap[row.black]);
-						_cache[i][CONST.pages.pairing.columns.blackPlayer] = nameMap[row.black];
+						let row = data[i];
+						if(nameMap.hasOwnProperty(row.white))
+						{
+							sheet.getRange(i + 2, CONST.pages.pairing.columns.whitePlayer + 1).setValue(nameMap[row.white]);
+							cache[i][CONST.pages.pairing.columns.whitePlayer] = nameMap[row.white];
+						}
+						if(nameMap.hasOwnProperty(row.black))
+						{
+							sheet.getRange(i + 2, CONST.pages.pairing.columns.blackPlayer + 1).setValue(nameMap[row.black]);
+							cache[i][CONST.pages.pairing.columns.blackPlayer] = nameMap[row.black];
+						}
 					}
 				}
 			}
@@ -138,8 +213,15 @@
 			{
 				setPermision(sheet.protect().setUnprotectedRanges([
 					sheet.getRange(2, CONST.pages.pairing.columns.blackResult + 1, rows, 1),
-					sheet.getRange(2, CONST.pages.pairing.columns.whiteResult + 1, rows, 1)
+					sheet.getRange(2, CONST.pages.pairing.columns.whiteResult + 1, rows, 1),
 				]));
+			}
+
+			export function setPermisions()
+			{
+				let sheets = getSheets();
+				for(let i = sheets.length - 1; i >= 0; i--)
+					setPermision(sheets[i].protect());
 			}
 
 			export function setPermision(protection: GoogleAppsScript.Spreadsheet.Protection)
@@ -249,20 +331,28 @@
 			//get attendance data
 			let club = FrontEnd.Master.getClub();
 
-			let playersToPair: IPlayer[] = [];
+			let pools: { [poolName: string]: IPlayer[] } = {};
 
 			//get array of players to be paired
 			for(let player in attendance)
 			{
 				let current = attendance[player];
-				if(current.attending && current.pair)
-					playersToPair.push(club[current.name]);
+				if(current.attending && current.pair && current.pairingPool)
+				{
+					let pool = pools[current.pairingPool]
+					if(pool)
+						pool.push(club[current.name]);
+					else
+						pools[current.pairingPool] = [club[current.name]];
+				}
 			}
 
 			//pair everyone
-			let pairings = Pairings.pair(playersToPair);
-
-			TournamentPairings.generate(pairings);
+			for(let poolName in pools)
+			{
+				let pool = pools[poolName];
+				TournamentPairings.generate(Pairings.pair(pool), poolName);
+			}
 		}
 
 		/** Gets the results of all games played */
@@ -285,7 +375,7 @@
 			data[today].games = output;
 			FrontEnd.Data.writeData(data);
 			ExtraGames.clear();
-			TournamentPairings.deletePage();
+			TournamentPairings.removePairingSheets();
 		}
 
 
@@ -302,16 +392,14 @@
 
 		export function deletePairing()
 		{
-			return TournamentPairings.deletePage();
+			return TournamentPairings.removePairingSheets();
 		}
 
 
 
 		export function setPermisions()
 		{
-			let tournamentPairings = SpreadsheetApp.getActive().getSheetByName(CONST.pages.pairing.name);
-			if(tournamentPairings)
-				TournamentPairings.setPermision(SpreadsheetApp.getActive().getSheetByName(CONST.pages.pairing.name).protect());
+			TournamentPairings.setPermisions();
 		}
 	}
 }

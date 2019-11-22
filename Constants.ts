@@ -64,13 +64,12 @@ const CONST = {
 			},
 		},
 		pairing: {
-			name: 'Tournament Pairings',
 			template: "Template-Pairings",
 			metadata: {
 				/** Identifies a paring sheet */
 				key: 'pairingSheet',
 				/** Has array of group's included (JSON format) */
-				groupName: 'name'
+				pool: 'name',
 			},
 			columns: {
 				whiteResult: 0,

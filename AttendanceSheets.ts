@@ -15,6 +15,7 @@
 			pair: boolean;
 			/** Their rating (rounded) */
 			rating: number;
+			/** The pairing pool a specific player is in */
 			pairingPool: string;
 		}
 
@@ -168,6 +169,7 @@
 
 				//create data
 				let defaultParingSetting = groupData[groupName].defaultPair;
+				let defaultParingPool = groupData[groupName].pairingPool;
 				let outputData: IAttendanceData[] = [];
 				for(let i = 0; i < currentGroup.length; i++)
 				{
@@ -185,6 +187,7 @@
 							name: currentPersonName,
 							pair: defaultParingSetting,
 							rating: (typeof (currentPerson.rating.rating) === 'number' && isFinite(currentPerson.rating.rating)) ? Math.round(currentPerson.rating.rating) : Glicko.INITIAL_RATING,
+							pairingPool: defaultParingPool,
 						});
 				}
 
@@ -228,7 +231,7 @@
 
 		/**
 		 * Removes all the attendance sheets, or a single sheet for given group
-		 * @param group the name of the group to be deleted, left blank to delete all sheets
+		 * @param group the name of the group to be deleted, left undefined to delete all sheets
 		 */
 		function RemoveAttendanceSheets(group?: string): void
 		{
