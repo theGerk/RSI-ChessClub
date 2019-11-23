@@ -223,9 +223,9 @@ ${er}`);
 				modifyNames(club, nameMap);
 				FrontEnd.Data.modifyNames(nameMap);
 				FrontEnd.Games.modifyNames(nameMap);
+				FrontEnd.Attendance.modifyNames(nameMap);
 			}
 
-			FrontEnd.Attendance.GenerateAttendanceSheets();
 			writePlayerArray(Benji.objToArray_dropKey(club));
 		}
 
