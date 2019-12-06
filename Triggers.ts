@@ -137,7 +137,7 @@ function UpdatePlayers()
 		else
 		{
 			club[currentRow.name] = {
-				active: currentRow.active || true,
+				active: typeof currentRow.active === 'boolean' ? currentRow.active : true,
 				chesskid: currentRow.chessKid,
 				gamesPlayed: 0,
 				gender: currentRow.gender,
