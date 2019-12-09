@@ -206,7 +206,8 @@ function WeeklyUpdate()
 	FrontEnd.Attendance.SubmitAttendance(false);
 	FrontEnd.Games.recordAndRemove();
 	FrontEnd.Master.setClub(club);
-	FrontEnd.SignoutSheet.remove();
+	//FrontEnd.SignoutSheet.remove();
+	FrontEnd.SignoutSheet.GenerateSignoutSheet();
 
 	//update permisions just because
 	UpdatePermisions();

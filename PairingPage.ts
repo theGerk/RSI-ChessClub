@@ -172,7 +172,7 @@
 			{
 				let output: IGame[] = [];
 				let sheets = SpreadsheetApp.getActive().getSheets();
-				for(let i = sheets.length; i >= 0; i--)
+				for(let i = sheets.length - 1; i >= 0; i--)
 				{
 					let tmp = getPageData(sheets[i]);
 					if(tmp !== null)
