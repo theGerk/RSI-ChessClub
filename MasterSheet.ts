@@ -59,7 +59,7 @@
 				_cache[sheetName] = SpreadsheetApp.getActive().getSheetByName(sheetName).getDataRange().getValues();
 				_cache[sheetName].shift();
 			}
-			return _cache[sheetName].map(mapping);
+			return _cache[sheetName].map(mapping).filter(x => x.name);
 		}
 
 		/**
