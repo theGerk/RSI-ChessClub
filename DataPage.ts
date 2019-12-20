@@ -126,6 +126,8 @@
 		 */
 		function modifyNamesForGames(data: { Tournament: FrontEnd.Games.IGame[], Other: FrontEnd.Games.IGame[] }, nameMap: { [oldName: string]: string })
 		{
+			if(data === null)
+				return;
 			modifyNamesForGameArray(data.Tournament, nameMap);
 			modifyNamesForGameArray(data.Other, nameMap);
 		}
