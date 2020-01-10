@@ -67,6 +67,7 @@ function Pair()
 	Permision.validatePermision(p => p.pairRounds);
 	let attendance = FrontEnd.Attendance.SubmitAttendance(true);
 	FrontEnd.Games.GeneratePairings(attendance);
+	FrontEnd.SignoutSheet.GenerateSignoutSheet(attendance);
 }
 
 function RevertPair()
@@ -83,7 +84,6 @@ Click NO if you want to stop and not do anything.
 	if(doubleCheck !== ui.Button.YES)
 		return;
 
-	FrontEnd.Attendance.GenerateAttendanceSheets();
 	FrontEnd.Games.deletePairing();
 	FrontEnd.SignoutSheet.remove();
 }
@@ -206,8 +206,6 @@ function WeeklyUpdate()
 	FrontEnd.Attendance.SubmitAttendance(false);
 	FrontEnd.Games.recordAndRemove();
 	FrontEnd.Master.setClub(club);
-	//FrontEnd.SignoutSheet.remove();
-	FrontEnd.SignoutSheet.GenerateSignoutSheet();
 
 	//update permisions just because
 	UpdatePermisions();
@@ -217,6 +215,8 @@ function WeeklyUpdate_2()
 {
 	//generate next weeks pairing page
 	FrontEnd.Attendance.GenerateAttendanceSheets();
+
+	FrontEnd.SignoutSheet.GenerateSignoutSheet();
 
 	//update permisions just because
 	UpdatePermisions();

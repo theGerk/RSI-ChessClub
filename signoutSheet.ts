@@ -7,6 +7,7 @@ namespace FrontEnd
 			name: string;
 			group: string;
 			room: string;
+			here: boolean;
 		}
 
 		/**
@@ -19,6 +20,7 @@ namespace FrontEnd
 			output[CONST.pages.signout_printout.columns.name] = d.name;
 			output[CONST.pages.signout_printout.columns.room] = d.room;
 			output[CONST.pages.signout_printout.columns.group] = d.group;
+			output[CONST.pages.signout_printout.columns.here] = d.here;
 			return output;
 		}
 
@@ -67,6 +69,7 @@ namespace FrontEnd
 					name: lastnameify(name),
 					room: groupData[person.group].room,
 					group: person.group,
+					here: person.attending
 				});
 			}
 

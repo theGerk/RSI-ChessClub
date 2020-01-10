@@ -75,20 +75,7 @@ function getUsers()
 
 function devfuc()
 {
-	let players = FrontEnd.Master.getActivePlayersArray();
-	let fakeAttendance: { [name: string]: FrontEnd.Attendance.IAttendanceData } = {};
-	for(let i = 0; i < players.length; i++)
-	{
-		fakeAttendance[players[i].name] = {
-			attending: true,
-			name: players[i].name,
-			group: players[i].group,
-			pair: false,
-			pairingPool: '',
-			rating: players[i].rating.rating,
-		};
-	}
-	FrontEnd.SignoutSheet.GenerateSignoutSheet(fakeAttendance);
+	FrontEnd.SignoutSheet.GenerateSignoutSheet();
 }
 
 

@@ -95,6 +95,7 @@ const CONST = {
 				name: 0,
 				group: 1,
 				room: 2,
+				here: 3,
 			},
 			name: 'Signout Printoff',
 		},

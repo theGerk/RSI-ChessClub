@@ -224,6 +224,7 @@ ${er}`);
 				FrontEnd.Data.modifyNames(nameMap);
 				FrontEnd.Games.modifyNames(nameMap);
 				FrontEnd.Attendance.modifyNames(nameMap);
+				FrontEnd.SignoutSheet.GenerateSignoutSheet();
 			}
 
 			writePlayerArray(Benji.objToArray_dropKey(club));
