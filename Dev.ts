@@ -58,10 +58,12 @@ function recalculate()
 		let games = today.games;
 		for(let j = games.Other.length - 1; j >= 0; j--)
 			countGame(games.Other[j], false);
-		for(let j = games.Tournament.length - 1; j >= 0; j--)
-			countGame(games.Tournament[j], true);
+		for(let j = games.Tournament.Games.length - 1; j >= 0; j--)
+			countGame(games.Tournament.Games[j], true);
+		for(let j = games.Tournament.Byes.length - 1; j >= 0; j--)
+			club[games.Tournament.Byes[j]].pairingHistory.push(null);
 
-		Glicko.doRatingPeriod(name => club[name].rating, games.Other.concat(games.Tournament), everyoneRating);
+		Glicko.doRatingPeriod(name => club[name].rating, games.Other.concat(games.Tournament.Games), everyoneRating);
 	}
 
 	FrontEnd.Master.setClub(club);
@@ -82,4 +84,19 @@ function devfuc()
 function testy()
 {
 	FrontEnd.Master.setPermisions();
+}
+
+function reformatdata()
+{
+	var range = SpreadsheetApp.getActive().getSheetByName(CONST.pages.history.name).getRange(CONST.pages.history.columns.games + 1, 2, 1, 20);
+	range.setValues(range.getValues().map(function(x)
+	{
+		var val = x[0];
+		if(!val)
+			return val;
+
+		var o = JSON.parse(val);
+		o.Tournament = { games: o.Tournament, byes: [] };
+		return JSON.stringify(o);
+	}));
 }

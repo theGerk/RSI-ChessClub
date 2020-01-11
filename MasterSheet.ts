@@ -204,7 +204,7 @@ ${er}`);
 				let player = club[name];
 
 				for(let i = player.pairingHistory.length - 1; i >= 0; i--)
-					if(nameMap.hasOwnProperty(player.pairingHistory[i].opponent))
+					if(player.pairingHistory[i] !== null && nameMap.hasOwnProperty(player.pairingHistory[i].opponent))
 						player.pairingHistory[i].opponent = nameMap[player.pairingHistory[i].opponent];
 			}
 		}

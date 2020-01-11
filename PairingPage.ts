@@ -13,6 +13,12 @@
 			result: number;
 		}
 
+		export interface IRound
+		{
+			Games: IGame[];
+			Byes: string[];
+		}
+
 		namespace TournamentPairings
 		{
 			/** The result map */
@@ -37,16 +43,25 @@
 					removePairingSheets();
 					return;
 				}
-				//handle white and black players separately as otherwise equations can get overwritten
+				//handle white and black players separately as otherwise formulas on the Google Sheet can get overwritten
 				let white: string[][] = [];
 				let black: string[][] = [];
 				for(let i = pairings.length - 1; i >= 0; i--)
 				{
 					let current = pairings[i];
-					if(current.white !== null && current.black !== null)
+					if(current.white !== null)
 					{
 						white.push([current.white.name]);
-						black.push([current.black.name]);
+
+						if(current.black !== null)
+							black.push([current.black.name]);
+						else
+							black.push([CONST.pages.pairing.byeString]);
+					}
+					else if(current.black !== null)
+					{
+						white.push([current.black.name]);
+						black.push([CONST.pages.pairing.byeString]);
 					}
 				}
 
@@ -61,7 +76,7 @@
 				sheet.autoResizeColumn(CONST.pages.pairing.columns.whitePlayer + 1);
 				sheet.autoResizeColumn(CONST.pages.pairing.columns.blackPlayer + 1);
 
-				//generate permisions
+				//generate permissions
 				createPermision(sheet, white.length);
 
 				//add metadata
@@ -100,7 +115,7 @@
 			}
 
 			/**
-			 * Maps a row of data to a IGame
+			 * Maps a row of data to an IGame
 			 * @param row a row from Pairings page
 			 */
 			function mapping(row: any[]): IGame
@@ -140,9 +155,11 @@
 				}
 			}
 
-			export function getResults(): IGame[]
+			export function getResults(): IRound
 			{
-				return getData().filter(x => typeof (x.result) === 'number' && x.result >= 0 && x.result <= 1);
+				let output = processToRound(getData());
+				output.Games = output.Games.filter(x => typeof (x.result) === 'number' && x.result >= 0 && x.result <= 1);
+				return output;
 			}
 
 
@@ -161,11 +178,44 @@
 					_cache[poolName].shift();
 				}
 
+				let outputData = _cache[poolName].map(mapping);
+
+
 				return {
-					data: _cache[poolName].map(mapping),
+					data: outputData,
 					pool: poolName
 				};
 			}
+
+			/**
+			 * Turns a game array into an IRound (separates out byes)
+			 * @param outputData array of IGames that may contain byes.
+			 */
+			function processToRound(outputData: IGame[]): IRound
+			{
+				let games: IGame[] = [];
+				let byes: string[] = [];
+
+				outputData.forEach((g) =>
+				{
+					if(g.white === CONST.pages.pairing.byeString)
+						if(g.black === CONST.pages.pairing.byeString)
+							return;
+						else
+							byes.push(g.black);
+					else
+						if(g.black === CONST.pages.pairing.byeString)
+							byes.push(g.white);
+						else
+							games.push(g);
+				});
+
+				return {
+					Games: games,
+					Byes: byes
+				};
+			}
+
 
 			/** Gets the data from all pairings */
 			export function getData(): IGame[]
@@ -356,7 +406,7 @@
 		}
 
 		/** Gets the results of all games played */
-		export function getResults(): { Tournament: IGame[], Other: IGame[] }
+		export function getResults(): { Tournament: IRound, Other: IGame[] }
 		{
 			return {
 				Tournament: TournamentPairings.getResults(),

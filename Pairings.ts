@@ -8,8 +8,12 @@ namespace Pairings
 		black: IPlayer;
 	}
 
-	/** Multiplicative constant, higher values disincentivizes playing recent opponents */
+	/** Multiplicative constant, higher values disincentivize playing recent opponents */
 	const K = 100;  //just a guess, may need to adjust as we go.
+
+	/** Additive constant used to make sure two players with the same ratting cant constantly play each-other */
+	const RATING_EPSILON = 1; //arbitrary number, hard to think of a good value or rule for what it maybe should be.
+
 
 	/**
 	 * Calculates cost for player to play given opponent. Formula should be documented.
@@ -18,26 +22,33 @@ namespace Pairings
 	 */
 	function cost(player: IPlayer, opponent: IPlayer): number
 	{
-		//null player refers to a bye, that has cost of 0 always
-		if(player === null || opponent === null)
-			return 0;
+		if(player === null)
+			if(opponent === null)
+				return 0;
+			else
+				return cost(opponent, player);
+
+		let opponentRating = (opponent === null) ? player.rating : opponent.rating;
 
 		//unrated players have to played any games, and have no rating so the cost of pairing them is free. No need to worry about history as they have never played
-		if(!Glicko.israted(player.rating) || !Glicko.israted(opponent.rating))
+		if(!Glicko.israted(player.rating) || !Glicko.israted(opponentRating))
 			return 0;
 
 		//if the player is not unrated then 
-		let ratingDif = Math.abs(player.rating.rating - opponent.rating.rating);
+		let ratingDif = Math.abs(player.rating.rating - opponentRating.rating);
 		let gameHistoryCost = 0;
-		for(var i = 0; i < player.pairingHistory.length; i++)
-			if(player.pairingHistory[i].opponent === opponent.name)
+		let check = (opponent === null) ? ((i: number) => player.pairingHistory[i] === null) : ((i: number) => player.pairingHistory[i] !== null && player.pairingHistory[i].opponent === opponent.name);
+		for(let i = 0; i < player.pairingHistory.length; i++)
+			if(check(i))
 				gameHistoryCost += 1 / (i + 1);
-		return ratingDif * Math.pow(K, gameHistoryCost);
+
+		return (ratingDif + RATING_EPSILON) * Math.pow(K, gameHistoryCost);
 	}
 
 	function whiteFraction(history: { white: boolean }[])
 	{
-		return history.filter(x => x.white).length / history.length;
+		let hist = history.filter(x => x !== null);
+		return hist.filter(x => x.white).length / hist.length;
 	}
 
 	/**
@@ -72,7 +83,7 @@ namespace Pairings
 		for(var i = players.length - 1; i >= 0; i--)
 		{
 			let player = players[i];
-				
+
 
 			//don't do someone who has already been paired
 			if(usedSet.hasOwnProperty(player.name))
@@ -138,9 +149,16 @@ namespace Pairings
 			let white = pair.white;
 			let black = pair.black;
 
-			if(white === null || black === null)
+			//nulls should always be black (its okay if both are null)
+			if(black === null)
 				continue;
-			
+			else if(white === null)
+			{
+				pair.white = black;
+				pair.black = white;
+				continue;
+			}
+
 			//find how often each player is white
 			let whiteRatio = whiteFraction(white.pairingHistory);
 			let blackRatio = whiteFraction(black.pairingHistory);
@@ -176,7 +194,7 @@ namespace Pairings
 				});
 			}
 		}
-		return output.sort((x,y) => (x.cost - y.cost));
+		return output.sort((x, y) => (x.cost - y.cost));
 	}
 
 	/**

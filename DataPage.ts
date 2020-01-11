@@ -9,7 +9,7 @@
 			/** The date in yyyy-MM-dd format. On the sheet this is postpended with a period, however here it removed. */
 			date: string;
 			/** The games that are played on the corresponding day. This is stored in JSON format on the page. */
-			games: { Tournament: FrontEnd.Games.IGame[], Other: FrontEnd.Games.IGame[] };
+			games: { Tournament: FrontEnd.Games.IRound, Other: FrontEnd.Games.IGame[] };
 			/** The attendance data for the day. */
 			attendance: { [name: string]: FrontEnd.Attendance.IAttendanceData };
 		}
@@ -124,11 +124,12 @@
 		 * @param data the games part of a data object.
 		 * @param nameMap A map from old name to new name.
 		 */
-		function modifyNamesForGames(data: { Tournament: FrontEnd.Games.IGame[], Other: FrontEnd.Games.IGame[] }, nameMap: { [oldName: string]: string })
+		function modifyNamesForGames(data: { Tournament: FrontEnd.Games.IRound, Other: FrontEnd.Games.IGame[] }, nameMap: { [oldName: string]: string })
 		{
 			if(data === null)
 				return;
-			modifyNamesForGameArray(data.Tournament, nameMap);
+			modifyNamesForGameArray(data.Tournament.Games, nameMap);
+			data.Tournament.Byes = data.Tournament.Byes.map(x => nameMap[x] || x);
 			modifyNamesForGameArray(data.Other, nameMap);
 		}
 

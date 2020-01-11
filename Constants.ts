@@ -77,6 +77,7 @@ const CONST = {
 				blackResult: 2,
 				blackPlayer: 3,
 			},
+			byeString: "BYE",
 		},
 		history: {
 			name: 'Data',
@@ -157,6 +158,7 @@ interface IPlayer
 	gender: string;
 	chesskid: string;
 	rating: Glicko.IRating;
+	/** A null in the array refers to a bye */
 	pairingHistory: { opponent: string, white: boolean }[];
 	active: boolean;
 	gamesPlayed: number;

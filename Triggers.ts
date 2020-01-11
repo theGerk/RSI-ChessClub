@@ -85,7 +85,7 @@ Click NO if you want to stop and not do anything.
 		return;
 
 	FrontEnd.Games.deletePairing();
-	FrontEnd.SignoutSheet.remove();
+	FrontEnd.Attendance.GenerateAttendanceSheets();
 }
 
 
@@ -177,17 +177,19 @@ function WeeklyUpdate()
 	for(let name in club)
 		everyoneRatings.push(club[name].rating);
 
-	Glicko.doRatingPeriod(name => club[name].rating, gamesResults.Tournament.concat(gamesResults.Other), everyoneRatings);
+	Glicko.doRatingPeriod(name => club[name].rating, gamesResults.Tournament.Games.concat(gamesResults.Other), everyoneRatings);
 
 
 	//add games to history
-	let tourny = gamesResults.Tournament;
+	let tourny = gamesResults.Tournament.Games;
 	for(let i = tourny.length - 1; i >= 0; i--)
 	{
 		let currentGame = tourny[i];
 		club[currentGame.white].pairingHistory.push({ opponent: currentGame.black, white: true });
 		club[currentGame.black].pairingHistory.push({ opponent: currentGame.white, white: false });
 	}
+	//add byes to history
+	gamesResults.Tournament.Byes.forEach(playerName => club[playerName].pairingHistory.push(null));
 
 	function countGame(game: FrontEnd.Games.IGame)
 	{
@@ -196,8 +198,8 @@ function WeeklyUpdate()
 	}
 
 	//add to games played count
-	for(let i = 0; i < gamesResults.Tournament.length; i++)
-		countGame(gamesResults.Tournament[i]);
+	for(let i = 0; i < gamesResults.Tournament.Games.length; i++)
+		countGame(gamesResults.Tournament.Games[i]);
 	for(let i = 0; i < gamesResults.Other.length; i++)
 		countGame(gamesResults.Other[i]);
 
