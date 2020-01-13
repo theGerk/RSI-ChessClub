@@ -88,15 +88,18 @@ function testy()
 
 function reformatdata()
 {
-	var range = SpreadsheetApp.getActive().getSheetByName(CONST.pages.history.name).getRange(CONST.pages.history.columns.games + 1, 2, 1, 20);
-	range.setValues(range.getValues().map(function(x)
-	{
+	var range = SpreadsheetApp.getActive().getSheetByName(CONST.pages.history.name).getRange(CONST.pages.history.columns.games + 1, 2, 20);
+	var dat = range.getValues();
+	var formated = dat.map(x =>
+	[(x => {
 		var val = x[0];
 		if(!val)
 			return val;
-
 		var o = JSON.parse(val);
+		if(!o)
+			return val;
 		o.Tournament = { games: o.Tournament, byes: [] };
 		return JSON.stringify(o);
-	}));
+	})(x)]);
+	range.setValues(formated);
 }

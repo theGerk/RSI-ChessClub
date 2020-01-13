@@ -38,9 +38,9 @@ namespace Pairings
 		let ratingDif = Math.abs(player.rating.rating - opponentRating.rating);
 		let gameHistoryCost = 0;
 		let check = (opponent === null) ? ((i: number) => player.pairingHistory[i] === null) : ((i: number) => player.pairingHistory[i] !== null && player.pairingHistory[i].opponent === opponent.name);
-		for(let i = 0; i < player.pairingHistory.length; i++)
+		for(let i = player.pairingHistory.length - 1; i >= 0; i--)
 			if(check(i))
-				gameHistoryCost += 1 / (i + 1);
+				gameHistoryCost += 1 / (player.pairingHistory.length - i);
 
 		return (ratingDif + RATING_EPSILON) * Math.pow(K, gameHistoryCost);
 	}
