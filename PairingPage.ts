@@ -70,7 +70,7 @@
 				let spreadsheet = SpreadsheetApp.getActive();
 
 				//populate data
-				let sheet = TemplateSheets.generate(spreadsheet, spreadsheet.getSheetByName(CONST.pages.pairing.template), white.length, `Tournament for ${poolName}`, 1);
+				let sheet = TemplateSheets.generate(spreadsheet, spreadsheet.getSheetByName(CONST.pages.pairing.template), white.length, `Tournament for ${poolName}`, 0);
 				sheet.getRange(2, CONST.pages.pairing.columns.whitePlayer + 1, white.length).setValues(white);
 				sheet.getRange(2, CONST.pages.pairing.columns.blackPlayer + 1, white.length).setValues(black);
 				sheet.autoResizeColumn(CONST.pages.pairing.columns.whitePlayer + 1);

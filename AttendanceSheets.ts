@@ -381,7 +381,7 @@
 			let sheetName = getSheetName(groupName);
 
 			//make the new sheet
-			let currentSheet = TemplateSheets.generate(spreadsheet, spreadsheet.getSheetByName(CONST.pages.attendance.template), input.length, sheetName);
+			let currentSheet = TemplateSheets.generate(spreadsheet, spreadsheet.getSheetByName(CONST.pages.attendance.template), input.length, sheetName, 0);
 
 			//populate the data
 			let outputData: any[][] = input.sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase())).map(reverseMapping);
