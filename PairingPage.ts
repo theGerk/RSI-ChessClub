@@ -383,13 +383,16 @@
 
 			let pools: { [poolName: string]: IPlayer[] } = {};
 
+			let groupsData = FrontEnd.Groups.getData();
+
 			//get array of players to be paired
 			for(let player in attendance)
 			{
 				let current = attendance[player];
-				if(current.attending && current.pair && current.pairingPool)
+				if(current.attending && current.pair)
 				{
-					let pool = pools[current.pairingPool]
+					let poolId = current.pairingPool || groupsData[current.group].pairingPool;
+					let pool = pools[poolId];
 					if(pool)
 						pool.push(club[current.name]);
 					else
