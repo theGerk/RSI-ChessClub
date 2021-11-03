@@ -167,7 +167,6 @@
 
 				//create data
 				let defaultParingSetting = groupData[groupName].defaultPair;
-				let defaultParingPool = groupData[groupName].pairingPool;
 				let outputData: IAttendanceData[] = [];
 				for(let i = 0; i < currentGroup.length; i++)
 				{
@@ -185,7 +184,7 @@
 							name: currentPersonName,
 							pair: defaultParingSetting,
 							rating: (typeof (currentPerson.rating.rating) === 'number' && isFinite(currentPerson.rating.rating)) ? Math.round(currentPerson.rating.rating) : Glicko.INITIAL_RATING,
-							pairingPool: defaultParingPool,
+							pairingPool: "",
 						});
 				}
 
