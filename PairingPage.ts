@@ -391,12 +391,12 @@
 				let current = attendance[player];
 				if(current.attending && current.pair)
 				{
-					let poolId = current.pairingPool || groupsData[current.group].pairingPool;
-					let pool = pools[poolId];
+					let poolName = current.pairingPool || groupsData[current.group].pairingPool;
+					let pool = pools[poolName];
 					if(pool)
 						pool.push(club[current.name]);
 					else
-						pools[current.pairingPool] = [club[current.name]];
+						pools[poolName] = [club[current.name]];
 				}
 			}
 
