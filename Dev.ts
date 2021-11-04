@@ -108,19 +108,35 @@ function reformatdata()
 
 function importNewYear()
 {
+
 	let newPlayers = SpreadsheetApp.getActive().getSheetByName("Sheet22").getDataRange().getValues();
 	const returnmap = { 'R': 'Return', 'N': 'New' };
-	newPlayers.shift();
 	let club = FrontEnd.Master.getClub();
 	for(let playerName in club)
 	{
 		club[playerName].active = false;
 	}
-	for(let i in newPlayers)
+	let notFound: number[] = [];
+	for(let i = 1; i < newPlayers.length; i++)
 	{
 		let current = newPlayers[i];
-		let playerName = current[1] + " " + current[2];
+		let playerName = (<string>current[1]).trim() + " " + (<string>current[2]).trim();
 		let inClub = club[playerName];
+		if(!inClub && current[6] != 'N')
+		{
+			function fallbackMatching()
+			{
+				//check for chessKid match
+				for(let player in club)
+					if(club[player].chesskid == current[8])
+						return club[player];
+
+				notFound.push(i);
+			}
+
+			inClub = fallbackMatching();
+		}
+
 		if(inClub)
 		{
 			inClub.level = returnmap[current[6]];
@@ -130,9 +146,8 @@ function importNewYear()
 			inClub.teacher = current[5];
 			inClub.gender = current[7];
 			inClub.chesskid = current[8];
-			inClub.level = "";
 		}
-		else
+		else if(current[6] == 'N')
 		{
 			club[playerName] = {
 				group: current[3],
@@ -149,5 +164,15 @@ function importNewYear()
 			};
 		}
 	}
+	let backgrounds: string[][] = [];
+	let blankline: null[] = [];
+	let coloredline: string[] = [];
+	for(let i = 0; i < newPlayers[0].length; i++)
+		blankline.push(null), coloredline.push('red');
+	for(let i = 0; i < newPlayers.length; i++)
+		backgrounds.push(blankline);
+	for(let i = 0; i < notFound.length; i++)
+		backgrounds[notFound[i]] = coloredline;
+	SpreadsheetApp.getActive().getSheetByName("Sheet22").getDataRange().setBackgrounds(backgrounds);
 	FrontEnd.Master.setClub(club);
 }
