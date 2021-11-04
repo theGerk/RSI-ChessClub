@@ -177,7 +177,13 @@ function WeeklyUpdate()
 	for(let name in club)
 		everyoneRatings.push(club[name].rating);
 
-	Glicko.doRatingPeriod(name => club[name].rating, gamesResults.Tournament.Games.concat(gamesResults.Other), everyoneRatings);
+	Glicko.doRatingPeriod(gamesResults.Tournament.Games.concat(gamesResults.Other).map(x => {
+		return {
+			white: club[x.white].rating,
+			black: club[x.black].rating,
+			result: x.result,
+		};
+	}), everyoneRatings);
 
 
 	//add games to history
