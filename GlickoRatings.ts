@@ -185,7 +185,7 @@ namespace Glicko
 			{
 				let tempG = g(opponentArray[j].deviation);
 				let tempE = E(me.rating, opponentArray[j].rating, opponentArray[j].deviation);
-				estimatedVariance += tempG * tempG * tempE * (1 - tempE)
+				estimatedVariance += tempG * tempG * tempE * (1 - tempE);
 			}
 			estimatedVariance = 1 / estimatedVariance;
 
