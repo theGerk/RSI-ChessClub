@@ -97,7 +97,7 @@ namespace Glicko
 	 * @param ratingMap Function mapping from whatever games[i].white may be to a rating object\
 	 * @returns the array of objects that we want
 	 */
-	function makeOpponentArray<T>(player: IRating, games: { white: T, black: T, result: number }[], ratingMap: (key: T) => IRating): { rating: number, deviation: number, score: number }[]
+	function makeOpponentArray(player: IRating, games: { white: Glicko.IRating, black: Glicko.IRating, result: number }[]): { rating: number, deviation: number, score: number }[]
 	{
 		/**
 		 * Makes an object for a match from one player's perspective.
@@ -122,12 +122,12 @@ namespace Glicko
 				throw new Error(`No one can play themselves!`);
 
 			//check is player is white player
-			else if(ratingMap(games[i].white) === player)
-				output.push(makeObj(ratingMap(games[i].black), games[i].result));
+			else if(games[i].white === player)
+				output.push(makeObj(games[i].black, games[i].result));
 
 			//check if player is black player
-			else if(ratingMap(games[i].black) === player)
-				output.push(makeObj(ratingMap(games[i].white), 1 - games[i].result));
+			else if(games[i].black === player)
+				output.push(makeObj(games[i].white, 1 - games[i].result));
 		}
 
 		return output;
@@ -139,14 +139,14 @@ namespace Glicko
 	 * @param games Has a white and black player and result from white's perspective, white and black will be fed into the ratingMap to get their rating object
 	 * @param everyone A array of every rating object in the system.
 	 */
-	export function doRatingPeriod<T>(ratingMap: (key: T) => IRating, games: { white: T, black: T, result: number }[], everyone: IRating[])
+	export function doRatingPeriod(games: { white: Glicko.IRating, black: Glicko.IRating, result: number }[], everyone: IRating[])
 	{
 		//Step 1: Determine a rating and RD (deviation) for each player at the onset of the rating period.
 		//Go through every player that played and make sure they are rated, if they aren't then initialize their rating.
 		for(let i = 0; i < games.length; i++)
 		{
-			setRating(ratingMap(games[i].white));
-			setRating(ratingMap(games[i].black));
+			setRating(games[i].white);
+			setRating(games[i].black);
 		}
 
 		//Step 2: For each player, convert the ratings and RD's (deviation's) onto the Glicko-2 scale.
@@ -155,7 +155,7 @@ namespace Glicko
 
 		let opponentArrays: { rating: number, deviation: number, score: number }[][] = [];
 		for(let i = 0; i < everyone.length; i++)
-			opponentArrays.push(makeOpponentArray(everyone[i], games, ratingMap));
+			opponentArrays.push(makeOpponentArray(everyone[i], games));
 
 		/** Function defined in step 3 */
 		function g(deviation: number) { return 1 / Math.sqrt(1 + 3 * (deviation * deviation) / (Math.PI * Math.PI)); }
