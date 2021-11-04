@@ -3,7 +3,7 @@
 
 function onOpen(e)
 {
-	generateMenu(true);
+	generateMenu(false);
 }
 
 function generateMenu(checkPermisions: boolean)
