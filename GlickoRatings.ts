@@ -33,7 +33,8 @@ namespace Glicko
 		return typeof rating.deviation != 'number';
 	}
 
-	export function makeNewRating(): IRating {
+	export function makeNewRating(): IRating
+	{
 		return {
 			deviation: <any>'',
 			rating: <any>'',
@@ -49,7 +50,7 @@ namespace Glicko
 	{
 		if(israted(rating))
 			return;
-		
+
 		if(!(typeof (rating.rating) === 'number' && isFinite(rating.rating)))
 			rating.rating = Glicko.INITIAL_RATING;
 
