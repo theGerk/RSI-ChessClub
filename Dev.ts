@@ -123,6 +123,7 @@ function addNewPlayers()
 			inClub.teacher = current[5];
 			inClub.gender = current[7];
 			inClub.chesskid = current[8];
+			inClub.level = "";
 		}
 		else {
 			club[playerName] = {
@@ -132,14 +133,15 @@ function addNewPlayers()
 				level: "",
 				gender: current[7],
 				chesskid: current[8],
-				rating: Glicko, 
+				rating: Glicko.makeNewRating(),
 				pairingHistory: [],
 				active: true,
 				gamesPlayed: 0,
 				name: playerName,
-            }
+			};
         }
-    }
+	}
+	FrontEnd.Master.setClub(club);
 
 
 }
