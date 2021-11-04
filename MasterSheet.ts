@@ -82,7 +82,7 @@ ${er}`);
 		 * Takes in a row from master table and returns an IPlayer
 		 * @param row the row coming in
 		 */
-		function mapping(row: any[])
+		function mapping(row: any[]) : IPlayer
 		{
 			return {
 				name: row[CONST.pages.mainPage.columns.name],

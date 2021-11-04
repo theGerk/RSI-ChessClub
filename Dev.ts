@@ -103,3 +103,43 @@ function reformatdata()
 	})(x)]);
 	range.setValues(formated);
 }
+
+
+function addNewPlayers()
+{
+	let newPlayers = SpreadsheetApp.getActive().getSheetByName("Sheet22").getDataRange().getValues();
+	let club = FrontEnd.Master.getClub();
+	for (let playerName in club) {
+		club[playerName].active = false;
+	}
+	for (let newPlayer in newPlayers) {
+		let current = newPlayers[newPlayer];
+		let playerName = current[1] + " " + current[2];
+		let inClub = club[playerName];
+		if (inClub) {
+			inClub.active = true;
+			inClub.group = current[3];
+			inClub.grade = current[4];
+			inClub.teacher = current[5];
+			inClub.gender = current[7];
+			inClub.chesskid = current[8];
+		}
+		else {
+			club[playerName] = {
+				group: current[3],
+				grade: current[4],
+				teacher: current[5],
+				level: "",
+				gender: current[7],
+				chesskid: current[8],
+				rating: Glicko, 
+				pairingHistory: [],
+				active: true,
+				gamesPlayed: 0,
+				name: playerName,
+            }
+        }
+    }
+
+
+}
