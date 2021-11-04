@@ -108,12 +108,13 @@ function reformatdata()
 function addNewPlayers()
 {
 	let newPlayers = SpreadsheetApp.getActive().getSheetByName("Sheet22").getDataRange().getValues();
+	newPlayers.shift();
 	let club = FrontEnd.Master.getClub();
 	for (let playerName in club) {
 		club[playerName].active = false;
 	}
-	for (let newPlayer in newPlayers) {
-		let current = newPlayers[newPlayer];
+	for (let i in newPlayers) {
+		let current = newPlayers[i];
 		let playerName = current[1] + " " + current[2];
 		let inClub = club[playerName];
 		if (inClub) {
