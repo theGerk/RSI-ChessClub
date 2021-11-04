@@ -17,6 +17,7 @@ namespace Pairings
 
 	/**
 	 * Calculates cost for player to play given opponent. Formula should be documented.
+	 * A null player or opponent indicates a bye.
 	 * @param player current player
 	 * @param opponent opponent player
 	 */
@@ -24,7 +25,7 @@ namespace Pairings
 	{
 		if(player === null)
 			if(opponent === null)
-				return 0;
+				return 0; //This should really never happen. 
 			else
 				return cost(opponent, player);
 
