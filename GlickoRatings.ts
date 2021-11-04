@@ -95,7 +95,6 @@ namespace Glicko
 	 * Makes an array of objects used in calculating the rating changes for each player. This is described at the end of step 2 in the glicko2.pdf
 	 * @param player Player whose opponents object we are making
 	 * @param games Array of all games played
-	 * @param ratingMap Function mapping from whatever games[i].white may be to a rating object\
 	 * @returns the array of objects that we want
 	 */
 	function makeOpponentArray(player: IRating, games: { white: Glicko.IRating, black: Glicko.IRating, result: number }[]): { rating: number, deviation: number, score: number }[]
@@ -136,8 +135,7 @@ namespace Glicko
 
 	/**
 	 * Does a rating period of glicko ratings
-	 * @param ratingMap Takes in some identifier and returns a reference to a rating object.
-	 * @param games Has a white and black player and result from white's perspective, white and black will be fed into the ratingMap to get their rating object
+	 * @param games Has a white and black player and result from white's perspective, white and black property are rating objects and need to be refrencing the same object as is being refrenced in everyone array.
 	 * @param everyone A array of every rating object in the system.
 	 */
 	export function doRatingPeriod(games: { white: Glicko.IRating, black: Glicko.IRating, result: number }[], everyone: IRating[])
