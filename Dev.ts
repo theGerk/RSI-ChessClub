@@ -91,33 +91,39 @@ function reformatdata()
 	var range = SpreadsheetApp.getActive().getSheetByName(CONST.pages.history.name).getRange(CONST.pages.history.columns.games + 1, 2, 20);
 	var dat = range.getValues();
 	var formated = dat.map(x =>
-	[(x => {
-		var val = x[0];
-		if(!val)
-			return val;
-		var o = JSON.parse(val);
-		if(!o)
-			return val;
-		o.Tournament = { games: o.Tournament, byes: [] };
-		return JSON.stringify(o);
-	})(x)]);
+		[(x =>
+		{
+			var val = x[0];
+			if(!val)
+				return val;
+			var o = JSON.parse(val);
+			if(!o)
+				return val;
+			o.Tournament = { games: o.Tournament, byes: [] };
+			return JSON.stringify(o);
+		})(x)]);
 	range.setValues(formated);
 }
 
 
-function addNewPlayers()
+function importNewYear()
 {
 	let newPlayers = SpreadsheetApp.getActive().getSheetByName("Sheet22").getDataRange().getValues();
+	const returnmap = { 'R': 'Return', 'N': 'New' };
 	newPlayers.shift();
 	let club = FrontEnd.Master.getClub();
-	for (let playerName in club) {
+	for(let playerName in club)
+	{
 		club[playerName].active = false;
 	}
-	for (let i in newPlayers) {
+	for(let i in newPlayers)
+	{
 		let current = newPlayers[i];
 		let playerName = current[1] + " " + current[2];
 		let inClub = club[playerName];
-		if (inClub) {
+		if(inClub)
+		{
+			inClub.level = returnmap[current[6]];
 			inClub.active = true;
 			inClub.group = current[3];
 			inClub.grade = current[4];
@@ -126,12 +132,13 @@ function addNewPlayers()
 			inClub.chesskid = current[8];
 			inClub.level = "";
 		}
-		else {
+		else
+		{
 			club[playerName] = {
 				group: current[3],
 				grade: current[4],
 				teacher: current[5],
-				level: "",
+				level: returnmap[current[6]],
 				gender: current[7],
 				chesskid: current[8],
 				rating: Glicko.makeNewRating(),
@@ -140,9 +147,7 @@ function addNewPlayers()
 				gamesPlayed: 0,
 				name: playerName,
 			};
-        }
+		}
 	}
 	FrontEnd.Master.setClub(club);
-
-
 }
