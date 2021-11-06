@@ -63,7 +63,14 @@ function recalculate()
 		for(let j = games.Tournament.Byes.length - 1; j >= 0; j--)
 			club[games.Tournament.Byes[j]].pairingHistory.push(null);
 
-		Glicko.doRatingPeriod(name => club[name].rating, games.Other.concat(games.Tournament.Games), everyoneRating);
+		Glicko.doRatingPeriod(games.Other.concat(games.Tournament.Games).map(x =>
+		{
+			return {
+				black: club[x.black].rating,
+				white: club[x.white].rating,
+				result: x.result,
+			};
+		}), everyoneRating);
 	}
 
 	FrontEnd.Master.setClub(club);
@@ -175,4 +182,28 @@ function importNewYear()
 		backgrounds[notFound[i]] = coloredline;
 	SpreadsheetApp.getActive().getSheetByName("Sheet22").getDataRange().setBackgrounds(backgrounds);
 	FrontEnd.Master.setClub(club);
+}
+
+
+function fixdata()
+{
+	let dat = FrontEnd.Data.getData();
+	for(let date in dat)
+	{
+		let cur = dat[date];
+		if(cur.games == null)
+			cur.games = { Other: [], Tournament: { Byes: [], Games: {} } };
+		else
+		{
+			let tournamentOjb = cur.games.Tournament;
+			if(tournamentOjb.hasOwnProperty('games'))
+			{
+				tournamentOjb.Games = (<any>tournamentOjb).games;
+				tournamentOjb.Byes = (<any>tournamentOjb).byes;
+				delete tournamentOjb['games'];
+				delete tournamentOjb['byes'];
+			}
+		}
+	}
+	FrontEnd.Data.writeData(dat);
 }
