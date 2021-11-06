@@ -158,7 +158,7 @@ interface IPlayer
 	gender: string;
 	chesskid: string;
 	rating: Glicko.IRating;
-	/** A null in the array refers to a bye */
+	/** A null in the array refers to a bye, most recent games are at the end of the array, first game is at the beggining. */
 	pairingHistory: { opponent: string, white: boolean }[];
 	active: boolean;
 	gamesPlayed: number;
