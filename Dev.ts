@@ -30,7 +30,7 @@ function recalculate()
 		let current = club[player];
 		current.gamesPlayed = 0;
 		current.pairingHistory = [];
-		current.rating = { deviation: undefined, rating: undefined, volatility: undefined };
+		current.rating = Glicko.makeNewRating();
 	}
 
 	function countGame(game: FrontEnd.Games.IGame, isTournament: boolean)

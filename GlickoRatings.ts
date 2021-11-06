@@ -36,9 +36,9 @@ namespace Glicko
 	export function makeNewRating(): IRating
 	{
 		return {
-			deviation: <any>'',
-			rating: <any>'',
-			volatility: <any>'',
+			deviation: undefined,
+			rating: undefined,
+			volatility: undefined,
 		}
 	}
 
