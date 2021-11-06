@@ -30,7 +30,7 @@ namespace Glicko
 	 */
 	export function israted(rating: IRating)
 	{
-		return typeof rating.deviation != 'number';
+		return typeof rating.deviation == 'number';
 	}
 
 	export function makeNewRating(): IRating
