@@ -183,27 +183,3 @@ function importNewYear()
 	SpreadsheetApp.getActive().getSheetByName("Sheet22").getDataRange().setBackgrounds(backgrounds);
 	FrontEnd.Master.setClub(club);
 }
-
-
-function fixdata()
-{
-	let dat = FrontEnd.Data.getData();
-	for(let date in dat)
-	{
-		let cur = dat[date];
-		if(cur.games == null)
-			cur.games = { Other: [], Tournament: { Byes: [], Games: {} } };
-		else
-		{
-			let tournamentOjb = cur.games.Tournament;
-			if(tournamentOjb.hasOwnProperty('games'))
-			{
-				tournamentOjb.Games = (<any>tournamentOjb).games;
-				tournamentOjb.Byes = (<any>tournamentOjb).byes;
-				delete tournamentOjb['games'];
-				delete tournamentOjb['byes'];
-			}
-		}
-	}
-	FrontEnd.Data.writeData(dat);
-}
