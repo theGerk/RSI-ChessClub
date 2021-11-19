@@ -57,10 +57,11 @@ const CONST = {
 			},
 			columns: {
 				name: 0,
-				rating: 1,
-				attendance: 2,
-				pair: 3,
-				pairingPool: 4,
+				grade: 1,
+				rating: 2,
+				attendance: 3,
+				pair: 4,
+				pairingPool: 5,
 			},
 		},
 		pairing: {

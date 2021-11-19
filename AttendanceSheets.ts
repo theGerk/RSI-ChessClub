@@ -17,6 +17,8 @@
 			rating: number;
 			/** The pairing pool a specific player is in */
 			pairingPool: string;
+			/** The grade the individual is in. */
+			grade: number | string;
 		}
 
 		/**
@@ -94,6 +96,7 @@
 					pair: row[CONST.pages.attendance.columns.pair],
 					rating: row[CONST.pages.attendance.columns.rating],
 					pairingPool: row[CONST.pages.attendance.columns.pairingPool],
+					grade: row[CONST.pages.attendance.columns.grade],
 				};
 			}
 		}
@@ -185,6 +188,7 @@
 							pair: defaultParingSetting,
 							rating: (typeof (currentPerson.rating.rating) === 'number' && isFinite(currentPerson.rating.rating)) ? Math.round(currentPerson.rating.rating) : Glicko.INITIAL_RATING,
 							pairingPool: "",
+							grade: currentPerson.grade,
 						});
 				}
 
