@@ -179,7 +179,7 @@
 				}
 
 				//sort output data
-				outputData = outputData.sort(Benji.ordering(
+				outputData.sort(Benji.ordering(
 					Benji.OrderingFunctions.Ascending(x => x.grade),
 					Benji.OrderingFunctions.Ascending(x => x.name),
 				));
