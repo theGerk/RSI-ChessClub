@@ -1,10 +1,8 @@
 /// <reference path="Constants.ts"/>
 
 /** Things that I write that I use everywhere */
-namespace Benji
-{
-	export function getDayString(date: Date)
-	{
+namespace Benji {
+	export function getDayString(date: Date) {
 		return Utilities.formatDate(date, getGMTOffset(date), 'yyyy-MM-dd');
 	}
 
@@ -13,10 +11,9 @@ namespace Benji
 	 * @param num The number to be printed
 	 * @param digits The least number of digits to be printed
 	 */
-	export function formatInteger(num: number, digits: number): string
-	{
+	export function formatInteger(num: number, digits: number): string {
 		let str = num.toString();
-		while(str.length < digits)
+		while (str.length < digits)
 			str = '0' + str;
 		return str;
 	}
@@ -25,14 +22,12 @@ namespace Benji
 	 * get the GMT offset as an object with all 
 	 * @param datetime date object to get the offset of, if left blank simply uses local time
 	 */
-	export function getGMTOffset(datetime?: Date)
-	{
-		if(!datetime)
+	export function getGMTOffset(datetime?: Date) {
+		if (!datetime)
 			datetime = new Date();
 		let offset = datetime.getTimezoneOffset();
 		let sign = '-';
-		if(offset < 0)
-		{
+		if (offset < 0) {
 			sign = '+';
 			offset *= -1;
 		}
@@ -45,9 +40,8 @@ namespace Benji
 	 * Gets string version of a date for the Sunday of this week
 	 * @param day An integer [0, 6] for which day of the week to use.
 	 */
-	export function getWeekString(day?: number): string
-	{
-		if(day === undefined)
+	export function getWeekString(day?: number): string {
+		if (day === undefined)
 			day = 0;
 		let datetime = new Date();
 		let gmtOffsetString = getGMTOffset(datetime);
@@ -62,9 +56,8 @@ namespace Benji
 	 * Gets string version of a date
 	 * @param datetime the given time
 	 */
-	export function makeDayStringGMT(datetime?: Date)
-	{
-		if(!datetime)
+	export function makeDayStringGMT(datetime?: Date) {
+		if (!datetime)
 			datetime = new Date();
 		return Utilities.formatDate(datetime, 'GMT', 'yyyy-MM-dd');
 	}
@@ -73,14 +66,12 @@ namespace Benji
 	 * Makes a deep clone (as opposed to shallow) will break on recursive references.
 	 * @param input variable to be deep cloned
 	 */
-	export function deepClone<T>(input: T): T
-	{
+	export function deepClone<T>(input: T): T {
 		//TODO make this better by not doing the whole JSON thing.
 		return JSON.parse(JSON.stringify(input));
 	}
 
-	export function shalowCloneArray<T>(input: T[]): T[]
-	{
+	export function shalowCloneArray<T>(input: T[]): T[] {
 		return [...input];
 	}
 
@@ -89,10 +80,9 @@ namespace Benji
 	 * @param input An object mapping from strings to T.
 	 * @returns An array of T
 	 */
-	export function objToArray_dropKey<T>(input: { [key: string]: T }): T[]
-	{
+	export function objToArray_dropKey<T>(input: { [key: string]: T }): T[] {
 		let output: T[] = [];
-		for(let key in input)
+		for (let key in input)
 			output.push(input[key]);
 		return output;
 	}
@@ -102,10 +92,9 @@ namespace Benji
 	 * @param input An object mapping from strings to T.
 	 * @returns An array of {key: string, value: T}.
 	 */
-	export function objToArray<T>(input: { [key: string]: T }): { key: string, value: T }[]
-	{
+	export function objToArray<T>(input: { [key: string]: T }): { key: string, value: T }[] {
 		let output: { key: string, value: T }[] = [];
-		for(let key in input)
+		for (let key in input)
 			output.push({ key: key, value: input[key] });
 		return output;
 	}
@@ -115,14 +104,12 @@ namespace Benji
 	 * @param input The array to be converted
 	 * @param getKey A function that takes in a element from the array, the index it is at (optional), and the entire array (optional) and returns a key (string) for that row that is unique to that row.
 	 */
-	export function makeMap<T>(input: T[], getKey: (input: T, index?: number, array?: T[]) => string, quite?: boolean): { [key: string]: T }
-	{
+	export function makeMap<T>(input: T[], getKey: (input: T, index?: number, array?: T[]) => string, quite?: boolean): { [key: string]: T } {
 		let output: { [key: string]: T } = {};
-		for(let i = 0; i < input.length; i++)
-		{
+		for (let i = 0; i < input.length; i++) {
 			let val = input[i];
 			let key = getKey(val, i, input);
-			if(!quite && output.hasOwnProperty(key))
+			if (!quite && output.hasOwnProperty(key))
 				throw new Error(`Array ${input.toString()} has a duplicate value at ${i}.`);
 			output[key] = val;
 		}
@@ -134,16 +121,54 @@ namespace Benji
 	 * Shuffles array in place.
 	 * @param array An array containing the items.
 	 */
-	export function shuffle<T>(array: T[]): T[]
-	{
+	export function shuffle<T>(array: T[]): T[] {
 		var j, x, i;
-		for(i = array.length - 1; i > 0; i--)
-		{
+		for (i = array.length - 1; i > 0; i--) {
 			j = Math.floor(Math.random() * (i + 1));
 			x = array[i];
 			array[i] = array[j];
 			array[j] = x;
 		}
 		return array;
+	}
+
+	export namespace OrderingFunctions {
+		export function Ascending<T, U>(fn: (val: T) => U) {
+			return function (a: T, b: T) {
+				const _a = fn(a);
+				const _b = fn(b);
+				if (_a < _b)
+					return -1;
+				else if (_a > _b)
+					return 1;
+				else
+					return 0;
+			}
+		}
+
+		export function Descending<T, U>(fn: (val: T) => U) {
+			return function (a: T, b: T) {
+				const _a = fn(a);
+				const _b = fn(b);
+				if (_a < _b)
+					return 1;
+				else if (_a > _b)
+					return -1;
+				else
+					return 0;
+			}
+		}
+	}
+
+	export function ordering<T>(...args: ((a: T, b: T) => number)[]) {
+		return (a: T, b: T) => {
+			const length = args.length;
+			for (var i = 0; i < length; i++) {
+				const response = args[i](a, b);
+				if (response != 0)
+					return response;
+			}
+			return 0;
+		}
 	}
 }
