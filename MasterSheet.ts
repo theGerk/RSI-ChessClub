@@ -9,7 +9,6 @@
 		 */
 		export function getGroupsObject()
 		{
-
 			//create object mapping group name to array of group members
 			let groups: { [groupName: string]: IPlayer[] } = {};
 
@@ -100,6 +99,7 @@ ${er}`);
 				level: row[CONST.pages.mainPage.columns.level],
 				teacher: row[CONST.pages.mainPage.columns.teacher],
 				gamesPlayed: row[CONST.pages.mainPage.columns.gamesPlayed] || 0,
+				guid: row[CONST.pages.mainPage.columns.guid],
 			};
 		}
 
@@ -124,6 +124,7 @@ ${er}`);
 			output[CONST.pages.mainPage.columns.teacher] = row.teacher;
 			output[CONST.pages.mainPage.columns.gamesPlayed] = row.gamesPlayed;
 			output[CONST.pages.mainPage.columns.active] = row.active;
+			output[CONST.pages.mainPage.columns.guid] = row.guid;
 			return output;
 		}
 

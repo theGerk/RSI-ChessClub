@@ -113,73 +113,82 @@ function reformatdata()
 }
 
 
-function importNewYear()
-{
+//function importNewYear()
+//{
 
-	let newPlayers = SpreadsheetApp.getActive().getSheetByName("Sheet22").getDataRange().getValues();
-	const returnmap = { 'R': 'Return', 'N': 'New' };
-	let club = FrontEnd.Master.getClub();
-	for(let playerName in club)
-	{
-		club[playerName].active = false;
+//	let newPlayers = SpreadsheetApp.getActive().getSheetByName("Sheet22").getDataRange().getValues();
+//	const returnmap = { 'R': 'Return', 'N': 'New' };
+//	let club = FrontEnd.Master.getClub();
+//	for(let playerName in club)
+//	{
+//		club[playerName].active = false;
+//	}
+//	let notFound: number[] = [];
+//	for(let i = 1; i < newPlayers.length; i++)
+//	{
+//		let current = newPlayers[i];
+//		let playerName = (<string>current[1]).trim() + " " + (<string>current[2]).trim();
+//		let inClub = club[playerName];
+//		if(!inClub && current[6] != 'N')
+//		{
+//			function fallbackMatching()
+//			{
+//				//check for chessKid match
+//				for(let player in club)
+//					if(club[player].chesskid == current[8])
+//						return club[player];
+
+//				notFound.push(i);
+//			}
+
+//			inClub = fallbackMatching();
+//		}
+
+//		if(inClub)
+//		{
+//			inClub.level = returnmap[current[6]];
+//			inClub.active = true;
+//			inClub.group = current[3];
+//			inClub.grade = current[4];
+//			inClub.teacher = current[5];
+//			inClub.gender = current[7];
+//			inClub.chesskid = current[8];
+//		}
+//		else if(current[6] == 'N')
+//		{
+//			club[playerName] = {
+//				group: current[3],
+//				grade: current[4],
+//				teacher: current[5],
+//				level: returnmap[current[6]],
+//				gender: current[7],
+//				chesskid: current[8],
+//				rating: Glicko.makeNewRating(),
+//				pairingHistory: [],
+//				active: true,
+//				gamesPlayed: 0,
+//				name: playerName,
+//			};
+//		}
+//	}
+//	let backgrounds: string[][] = [];
+//	let blankline: null[] = [];
+//	let coloredline: string[] = [];
+//	for(let i = 0; i < newPlayers[0].length; i++)
+//		blankline.push(null), coloredline.push('red');
+//	for(let i = 0; i < newPlayers.length; i++)
+//		backgrounds.push(blankline);
+//	for(let i = 0; i < notFound.length; i++)
+//		backgrounds[notFound[i]] = coloredline;
+//	SpreadsheetApp.getActive().getSheetByName("Sheet22").getDataRange().setBackgrounds(backgrounds);
+//	FrontEnd.Master.setClub(club);
+//}
+
+
+function initGuid() {
+	let players = FrontEnd.Master.getClub();
+	for (var p in players) {
+		players[p].guid = Utilities.getUuid();
 	}
-	let notFound: number[] = [];
-	for(let i = 1; i < newPlayers.length; i++)
-	{
-		let current = newPlayers[i];
-		let playerName = (<string>current[1]).trim() + " " + (<string>current[2]).trim();
-		let inClub = club[playerName];
-		if(!inClub && current[6] != 'N')
-		{
-			function fallbackMatching()
-			{
-				//check for chessKid match
-				for(let player in club)
-					if(club[player].chesskid == current[8])
-						return club[player];
-
-				notFound.push(i);
-			}
-
-			inClub = fallbackMatching();
-		}
-
-		if(inClub)
-		{
-			inClub.level = returnmap[current[6]];
-			inClub.active = true;
-			inClub.group = current[3];
-			inClub.grade = current[4];
-			inClub.teacher = current[5];
-			inClub.gender = current[7];
-			inClub.chesskid = current[8];
-		}
-		else if(current[6] == 'N')
-		{
-			club[playerName] = {
-				group: current[3],
-				grade: current[4],
-				teacher: current[5],
-				level: returnmap[current[6]],
-				gender: current[7],
-				chesskid: current[8],
-				rating: Glicko.makeNewRating(),
-				pairingHistory: [],
-				active: true,
-				gamesPlayed: 0,
-				name: playerName,
-			};
-		}
-	}
-	let backgrounds: string[][] = [];
-	let blankline: null[] = [];
-	let coloredline: string[] = [];
-	for(let i = 0; i < newPlayers[0].length; i++)
-		blankline.push(null), coloredline.push('red');
-	for(let i = 0; i < newPlayers.length; i++)
-		backgrounds.push(blankline);
-	for(let i = 0; i < notFound.length; i++)
-		backgrounds[notFound[i]] = coloredline;
-	SpreadsheetApp.getActive().getSheetByName("Sheet22").getDataRange().setBackgrounds(backgrounds);
-	FrontEnd.Master.setClub(club);
+	FrontEnd.Master.setClub(players);
 }

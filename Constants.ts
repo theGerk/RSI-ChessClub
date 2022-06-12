@@ -32,19 +32,20 @@ const CONST = {
 			active: "Active Players",
 			master: "Master Sheet",
 			columns: {
-				name: 0,
-				group: 1,
-				grade: 2,
-				teacher: 3,
-				level: 4,
-				gender: 5,
-				chesskid: 6,
-				gamesPlayed: 7,
-				rating: 8,
-				ratingDeviation: 9,
-				ratingVolatility: 10,
-				tournamentHistory: 11,
-				active: 12,
+				guid: 0,
+				name: 1,
+				group: 2,
+				grade: 3,
+				teacher: 4,
+				level: 5,
+				gender: 6,
+				chesskid: 7,
+				gamesPlayed: 8,
+				rating: 9,
+				ratingDeviation: 10,
+				ratingVolatility: 11,
+				tournamentHistory: 12,
+				active: 13,
 			},
 		},
 		attendance: {
@@ -163,6 +164,7 @@ interface IPlayer
 	pairingHistory: { opponent: string, white: boolean }[];
 	active: boolean;
 	gamesPlayed: number;
+	guid: string;
 };
 
 
