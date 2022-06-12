@@ -126,6 +126,7 @@ function UpdatePlayers()
 	{
 		let currentRow = changes[i];
 		let me = club[currentRow.name];
+		// I already exist.
 		if(me)
 		{
 			if(me.name !== currentRow.name)
@@ -134,6 +135,7 @@ function UpdatePlayers()
 			//TODO add more changes here
 			set(me, currentRow);
 		}
+		// player doesn't exist yet.
 		else
 		{
 			club[currentRow.name] = {
@@ -152,6 +154,7 @@ function UpdatePlayers()
 					volatility: undefined,
 				},
 				teacher: currentRow.teacher,
+				guid: Utilities.getUuid(),
 			};
 		}
 	}
