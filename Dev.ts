@@ -103,7 +103,8 @@ function reformatdata() {
 function importNewYear()
 {
 	const SHEET_NAME = "Sheet33";
-	const FIRST_NAME_ROW = 0;
+	const FIRST_NAME_ROW = 2;
+	const ALT_FIRST_NAME_ROW = 0;
 	const LAST_NAME_ROW = 1;
 	const CHESS_KID_ROW = 7;
 	const NEW_RETURN_ROW = 6;
@@ -126,6 +127,8 @@ function importNewYear()
 		let current = newPlayers[i];
 		let playerName = (<string>current[FIRST_NAME_ROW]).trim() + " " + (<string>current[LAST_NAME_ROW]).trim();
 		let inClub = club[playerName];
+		if (!inClub)
+			inClub = club[(<string>current[ALT_FIRST_NAME_ROW]).trim() + " " + (<string>current[LAST_NAME_ROW]).trim()];
 		if(!inClub && current[NEW_RETURN_ROW] != 'N')
 		{
 			function fallbackMatching()
@@ -150,6 +153,7 @@ function importNewYear()
 			inClub.teacher = current[TEACHER_ROW];
 			inClub.gender = '';//current[GENDER_ROW];
 			inClub.chesskid = current[CHESS_KID_ROW];
+			inClub.name = playerName;
 		}
 		else if(current[6] == 'N')
 		{
