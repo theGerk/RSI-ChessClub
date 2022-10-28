@@ -100,76 +100,87 @@ function reformatdata() {
 }
 
 
-//function importNewYear()
-//{
+function importNewYear()
+{
+	const SHEET_NAME = "Sheet33";
+	const FIRST_NAME_ROW = 0;
+	const LAST_NAME_ROW = 1;
+	const CHESS_KID_ROW = 7;
+	const NEW_RETURN_ROW = 6;
+	const GROUP_ROW = 3;
+	const GRADE_ROW = 4;
+	const TEACHER_ROW = 5;
+	//const GENDER_ROW = ;
 
-//	let newPlayers = SpreadsheetApp.getActive().getSheetByName("Sheet22").getDataRange().getValues();
-//	const returnmap = { 'R': 'Return', 'N': 'New' };
-//	let club = FrontEnd.Master.getClub();
-//	for(let playerName in club)
-//	{
-//		club[playerName].active = false;
-//	}
-//	let notFound: number[] = [];
-//	for(let i = 1; i < newPlayers.length; i++)
-//	{
-//		let current = newPlayers[i];
-//		let playerName = (<string>current[1]).trim() + " " + (<string>current[2]).trim();
-//		let inClub = club[playerName];
-//		if(!inClub && current[6] != 'N')
-//		{
-//			function fallbackMatching()
-//			{
-//				//check for chessKid match
-//				for(let player in club)
-//					if(club[player].chesskid == current[8])
-//						return club[player];
 
-//				notFound.push(i);
-//			}
+	let newPlayers = SpreadsheetApp.getActive().getSheetByName(SHEET_NAME).getDataRange().getValues();
+	const returnmap = { 'R': 'Return', 'N': 'New' };
+	let club = FrontEnd.Master.getClub();
+	for(let playerName in club)
+	{
+		club[playerName].active = false;
+	}
+	let notFound: number[] = [];
+	for(let i = 1; i < newPlayers.length; i++)
+	{
+		let current = newPlayers[i];
+		let playerName = (<string>current[FIRST_NAME_ROW]).trim() + " " + (<string>current[LAST_NAME_ROW]).trim();
+		let inClub = club[playerName];
+		if(!inClub && current[NEW_RETURN_ROW] != 'N')
+		{
+			function fallbackMatching()
+			{
+				//check for chessKid match
+				for(let player in club)
+					if(club[player].chesskid == current[CHESS_KID_ROW])
+						return club[player];
 
-//			inClub = fallbackMatching();
-//		}
+				notFound.push(i);
+			}
 
-//		if(inClub)
-//		{
-//			inClub.level = returnmap[current[6]];
-//			inClub.active = true;
-//			inClub.group = current[3];
-//			inClub.grade = current[4];
-//			inClub.teacher = current[5];
-//			inClub.gender = current[7];
-//			inClub.chesskid = current[8];
-//		}
-//		else if(current[6] == 'N')
-//		{
-//			club[playerName] = {
-//				group: current[3],
-//				grade: current[4],
-//				teacher: current[5],
-//				level: returnmap[current[6]],
-//				gender: current[7],
-//				chesskid: current[8],
-//				rating: Glicko.makeNewRating(),
-//				pairingHistory: [],
-//				active: true,
-//				gamesPlayed: 0,
-//				name: playerName,
-//			};
-//		}
-//	}
-//	let backgrounds: string[][] = [];
-//	let blankline: null[] = [];
-//	let coloredline: string[] = [];
-//	for(let i = 0; i < newPlayers[0].length; i++)
-//		blankline.push(null), coloredline.push('red');
-//	for(let i = 0; i < newPlayers.length; i++)
-//		backgrounds.push(blankline);
-//	for(let i = 0; i < notFound.length; i++)
-//		backgrounds[notFound[i]] = coloredline;
-//	SpreadsheetApp.getActive().getSheetByName("Sheet22").getDataRange().setBackgrounds(backgrounds);
-//	FrontEnd.Master.setClub(club);
-//}
+			inClub = fallbackMatching();
+		}
+
+		if(inClub)
+		{
+			inClub.level = returnmap[current[NEW_RETURN_ROW]];
+			inClub.active = true;
+			inClub.group = current[GROUP_ROW];
+			inClub.grade = current[GRADE_ROW];
+			inClub.teacher = current[TEACHER_ROW];
+			inClub.gender = '';//current[GENDER_ROW];
+			inClub.chesskid = current[CHESS_KID_ROW];
+		}
+		else if(current[6] == 'N')
+		{
+			club[playerName] = {
+				guid: Utilities.getUuid(),
+				group: current[GROUP_ROW],
+				grade: current[GRADE_ROW],
+				teacher: current[TEACHER_ROW],
+				level: returnmap[current[NEW_RETURN_ROW]],
+				gender: '',//current[GENDER_ROW],
+				chesskid: current[CHESS_KID_ROW],
+				rating: Glicko.makeNewRating(),
+				pairingHistory: [],
+				active: true,
+				gamesPlayed: 0,
+				name: playerName,
+			};
+		}
+	}
+	let backgrounds: string[][] = [];
+	let blankline: null[] = [];
+	let coloredline: string[] = [];
+	for(let i = 0; i < newPlayers[0].length; i++)
+		blankline.push(null), coloredline.push('red');
+	for(let i = 0; i < newPlayers.length; i++)
+		backgrounds.push(blankline);
+	for(let i = 0; i < notFound.length; i++)
+		backgrounds[notFound[i]] = coloredline;
+	SpreadsheetApp.getActive().getSheetByName(SHEET_NAME).getDataRange().setBackgrounds(backgrounds);
+	//FrontEnd.Master.setClub(club);
+}
 
 
 function initGuid() {
