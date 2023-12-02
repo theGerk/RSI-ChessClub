@@ -100,14 +100,13 @@ function reformatdata() {
 }
 
 
-function importNewYear()
-{
-	const SHEET_NAME = "Sheet33";
-	const FIRST_NAME_ROW = 2;
-	const ALT_FIRST_NAME_ROW = 0;
+function importNewYear() {
+	const SHEET_NAME = "Sheet37";
+	const FIRST_NAME_ROW = 0;
+	const ALT_FIRST_NAME_ROW = 2;
 	const LAST_NAME_ROW = 1;
-	const CHESS_KID_ROW = 7;
-	const NEW_RETURN_ROW = 6;
+	const CHESS_KID_ROW = '';
+	const NEW_RETURN_ROW = '';
 	const GROUP_ROW = 3;
 	const GRADE_ROW = 4;
 	const TEACHER_ROW = 5;
@@ -117,54 +116,52 @@ function importNewYear()
 	let newPlayers = SpreadsheetApp.getActive().getSheetByName(SHEET_NAME).getDataRange().getValues();
 	const returnmap = { 'R': 'Return', 'N': 'New' };
 	let club = FrontEnd.Master.getClub();
-	for(let playerName in club)
-	{
+	for (let playerName in club) {
 		club[playerName].active = false;
 	}
 	let notFound: number[] = [];
-	for(let i = 1; i < newPlayers.length; i++)
-	{
+	for (let i = 1; i < newPlayers.length; i++) {
 		let current = newPlayers[i];
 		let playerName = (<string>current[FIRST_NAME_ROW]).trim() + " " + (<string>current[LAST_NAME_ROW]).trim();
 		let inClub = club[playerName];
 		if (!inClub)
 			inClub = club[(<string>current[ALT_FIRST_NAME_ROW]).trim() + " " + (<string>current[LAST_NAME_ROW]).trim()];
-		if(!inClub && current[NEW_RETURN_ROW] != 'N')
-		{
-			function fallbackMatching()
-			{
-				//check for chessKid match
-				for(let player in club)
-					if(club[player].chesskid == current[CHESS_KID_ROW])
-						return club[player];
+		//if(!inClub && current[NEW_RETURN_ROW] != 'N')
+		//{
+		//	function fallbackMatching()
+		//	{
+		//		//check for chessKid match
+		//		for(let player in club)
+		//			if(club[player].chesskid == current[CHESS_KID_ROW])
+		//				return club[player];
 
-				notFound.push(i);
-			}
+		//		notFound.push(i);
+		//	}
 
-			inClub = fallbackMatching();
-		}
+		//	inClub = fallbackMatching();
+		//}
+		if (!inClub && current[GROUP_ROW] != 'Green')
+			notFound.push(i);
 
-		if(inClub)
-		{
-			inClub.level = returnmap[current[NEW_RETURN_ROW]];
+		if (inClub) {
+			inClub.level = 'Return';
 			inClub.active = true;
 			inClub.group = current[GROUP_ROW];
 			inClub.grade = current[GRADE_ROW];
 			inClub.teacher = current[TEACHER_ROW];
 			inClub.gender = '';//current[GENDER_ROW];
-			inClub.chesskid = current[CHESS_KID_ROW];
+			inClub.chesskid = '';//current[CHESS_KID_ROW];
 			inClub.name = playerName;
 		}
-		else if(current[6] == 'N')
-		{
+		else/* if(current[6] == 'N')*/ {
 			club[playerName] = {
 				guid: Utilities.getUuid(),
 				group: current[GROUP_ROW],
 				grade: current[GRADE_ROW],
 				teacher: current[TEACHER_ROW],
-				level: returnmap[current[NEW_RETURN_ROW]],
+				level: 'New',
 				gender: '',//current[GENDER_ROW],
-				chesskid: current[CHESS_KID_ROW],
+				chesskid: '',
 				rating: Glicko.makeNewRating(),
 				pairingHistory: [],
 				active: true,
@@ -176,11 +173,11 @@ function importNewYear()
 	let backgrounds: string[][] = [];
 	let blankline: null[] = [];
 	let coloredline: string[] = [];
-	for(let i = 0; i < newPlayers[0].length; i++)
+	for (let i = 0; i < newPlayers[0].length; i++)
 		blankline.push(null), coloredline.push('red');
-	for(let i = 0; i < newPlayers.length; i++)
+	for (let i = 0; i < newPlayers.length; i++)
 		backgrounds.push(blankline);
-	for(let i = 0; i < notFound.length; i++)
+	for (let i = 0; i < notFound.length; i++)
 		backgrounds[notFound[i]] = coloredline;
 	SpreadsheetApp.getActive().getSheetByName(SHEET_NAME).getDataRange().setBackgrounds(backgrounds);
 	//FrontEnd.Master.setClub(club);
@@ -194,4 +191,44 @@ function initGuid() {
 			players[p].guid = Utilities.getUuid();
 	}
 	FrontEnd.Master.setClub(players);
+}
+
+
+function generateAttendanceSheets() {
+	FrontEnd.Attendance.GenerateAttendanceSheets();
+}
+
+
+function makePrintableSignin() {
+	let ss = SpreadsheetApp.getActiveSpreadsheet();
+	let players = FrontEnd.Master.getActivePlayersArray();
+	let splitPlayers = { k: <IPlayer[]>[], '1': <IPlayer[]>[], '2-3': <IPlayer[]>[], '3-4': <IPlayer[]>[] };
+	for (let i = 0; i < players.length; i++) {
+		let grouping: IPlayer[];
+		switch (players[i].grade) {
+			case 'K':
+				grouping = splitPlayers.k;
+				break;
+			case 1:
+				grouping = splitPlayers[1];
+				break;
+			case 2:
+			case 3:
+				grouping = splitPlayers["2-3"];
+				break;
+			case 4:
+			case 5:
+				grouping = splitPlayers["3-4"];
+				break;
+		}
+		if (grouping)
+			grouping.push(players[i]);
+	}
+	for (let g in splitPlayers) {
+		let grouping: IPlayer[] = splitPlayers[g];
+		let sheet = TemplateSheets.generate(ss, ss.getSheetByName('Template-Sign In Printoff'), grouping.length, `Signin printoff ${g}`);
+		let range = sheet.getRange(2, 1, grouping.length, 3);
+		let data = grouping.map(x => [x.name, x.group, '']);
+		range.setValues(data);
+	}
 }

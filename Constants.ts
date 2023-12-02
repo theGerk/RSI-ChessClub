@@ -55,6 +55,7 @@ const CONST = {
 				key: 'attendanceSheet',
 				/** Has the name of the group */
 				groupName: 'name',
+				grade: 'grade',
 			},
 			columns: {
 				name: 0,
