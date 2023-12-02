@@ -218,7 +218,7 @@ function makePrintableSignin() {
 				break;
 			case 4:
 			case 5:
-				grouping = splitPlayers["3-4"];
+				grouping = splitPlayers["4-5"];
 				break;
 		}
 		if (grouping)
