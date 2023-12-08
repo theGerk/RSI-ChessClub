@@ -135,6 +135,7 @@ ${er}`);
 		function writePlayerArray(input: IPlayer[])
 		{
 			let ss = SpreadsheetApp.getActive();
+			input.sort((a, b) => a.name.localeCompare(b.name));
 			function subWrite(data: any[], sheetName: string)
 			{
 				let sheet = ss.getSheetByName(sheetName);
