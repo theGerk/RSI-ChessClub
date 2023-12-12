@@ -60,8 +60,8 @@
 		 * @param sheet The sheet in question
 		 * @returns the metadata on the sheet as an map from key to metadata objects if this is an attendance sheet, otherwise returns null
 		 */
-		function getAttendanceSheetMetadata(sheet: GoogleAppsScript.Spreadsheet.Sheet): Benji.metadata.IReturn {
-			let metadata = Benji.metadata.getMetadataOnSheet(sheet);
+		function getAttendanceSheetMetadata(sheet: GoogleAppsScript.Spreadsheet.Sheet): Benji.Metadata.IReturn {
+			let metadata = Benji.Metadata.getMetadataOnSheet(sheet);
 			if (metadata.hasOwnProperty(CONST.pages.attendance.metadata.key))
 				return metadata;
 			else

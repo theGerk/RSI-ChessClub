@@ -100,9 +100,9 @@
 			 * @param sheet The sheet in question
 			 * @returns the metadata on the sheet as an map from key to metadata objects if this is a pairing sheet, otherwise returns null
 			 */
-			function getPairingSheetMetadata(sheet: GoogleAppsScript.Spreadsheet.Sheet): Benji.metadata.IReturn
+			function getPairingSheetMetadata(sheet: GoogleAppsScript.Spreadsheet.Sheet): Benji.Metadata.IReturn
 			{
-				let metadata = Benji.metadata.getMetadataOnSheet(sheet);
+				let metadata = Benji.Metadata.getMetadataOnSheet(sheet);
 				if(metadata.hasOwnProperty(CONST.pages.pairing.metadata.key))
 					return metadata;
 				else
@@ -240,7 +240,7 @@
 				for(let j = sheets.length - 1; j >= 0; j--)
 				{
 					let sheet = sheets[j];
-					let cache = _cache[Benji.metadata.getMetadataOnSheet(sheet)[CONST.pages.pairing.metadata.pool].getValue()];
+					let cache = _cache[Benji.Metadata.getMetadataOnSheet(sheet)[CONST.pages.pairing.metadata.pool].getValue()];
 					let data = getData();
 					for(let i = data.length - 1; i >= 0; i--)
 					{

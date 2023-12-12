@@ -2,7 +2,7 @@
 
 namespace Benji
 {
-	export namespace metadata
+	export namespace Metadata
 	{
 		/** Maps keys to their developer metadata object */
 		export interface IReturn { [key: string]: GoogleAppsScript.Spreadsheet.DeveloperMetadata }
