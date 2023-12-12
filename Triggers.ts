@@ -1,33 +1,34 @@
 /// <reference path="Constants.ts"/>
 
+function doGet(e) {
 
-function onOpen(e)
-{
+}
+
+function onOpen(e) {
 	generateMenu(false);
 }
 
-function generateMenu(checkPermisions: boolean)
-{
+function generateMenu(checkPermisions: boolean) {
 	let ui = SpreadsheetApp.getUi();
 	let mainMenu = ui.createMenu(CONST.menu.mainInterface.name);
-	if(!checkPermisions)
+	if (!checkPermisions)
 		mainMenu
 			.addItem('Remove extra buttons', (<any>RemoveExtraButtons).name)
 			.addSeparator();
-	if(!checkPermisions || Permision.doIHavePermsion(p => p.pairRounds))
+	if (!checkPermisions || Permision.doIHavePermsion(p => p.pairRounds))
 		mainMenu
 			.addItem('Submit attendance and pair', (<any>Pair).name)
 			.addItem('Revert pairing', (<any>RevertPair).name);
-	if(!checkPermisions || Permision.doIHavePermsion(p => p.editPlayers))
+	if (!checkPermisions || Permision.doIHavePermsion(p => p.editPlayers))
 		mainMenu
 			.addItem('Update players', (<any>UpdatePlayers).name);
-	if(!checkPermisions || Permision.doIHavePermsion(p => p.permision))
+	if (!checkPermisions || Permision.doIHavePermsion(p => p.permision))
 		mainMenu
 			.addItem('Update permisions', (<any>UpdatePermisions).name);
 
 
 	//------------just for me-------------
-	if(Session.getActiveUser().getEmail().toLowerCase() === 'benji@altmansoftwaredesign.com')
+	if (Session.getActiveUser().getEmail().toLowerCase() === 'benji@altmansoftwaredesign.com')
 		mainMenu
 			.addSeparator()
 			.addSubMenu(
@@ -43,8 +44,7 @@ function generateMenu(checkPermisions: boolean)
 	mainMenu.addToUi();
 }
 
-function UpdatePermisions()
-{
+function UpdatePermisions() {
 	Permision.doIHavePermsion(p => p.permision);
 	FrontEnd.Attendance.setPermisions();
 	FrontEnd.Data.setPermisions();
@@ -55,23 +55,20 @@ function UpdatePermisions()
 	FrontEnd.PermisionPage.setPermisions();
 }
 
-function RemoveExtraButtons()
-{
+function RemoveExtraButtons() {
 	SpreadsheetApp.getActive().removeMenu(CONST.menu.mainInterface.name);
 	generateMenu(true);
 }
 
 
-function Pair()
-{
+function Pair() {
 	Permision.validatePermision(p => p.pairRounds);
 	let attendance = FrontEnd.Attendance.SubmitAttendance(true);
 	FrontEnd.Games.GeneratePairings(attendance);
 	FrontEnd.SignoutSheet.GenerateSignoutSheet(attendance);
 }
 
-function RevertPair()
-{
+function RevertPair() {
 	Permision.validatePermision(p => p.pairRounds);
 	let ui = SpreadsheetApp.getUi();
 
@@ -81,7 +78,7 @@ function RevertPair()
 Click YES to continue and PERMANENTLY destroy the current pairings.
 Click NO if you want to stop and not do anything.
 `, ui.ButtonSet.YES_NO);
-	if(doubleCheck !== ui.Button.YES)
+	if (doubleCheck !== ui.Button.YES)
 		return;
 
 	FrontEnd.Games.deletePairing();
@@ -89,13 +86,11 @@ Click NO if you want to stop and not do anything.
 }
 
 
-function UpdatePlayers()
-{
+function UpdatePlayers() {
 	Permision.validatePermision(p => p.editPlayers);
 
 
-	if(!FrontEnd.NameUpdate.exists())
-	{
+	if (!FrontEnd.NameUpdate.exists()) {
 		FrontEnd.NameUpdate.make();
 		return;
 	}
@@ -106,9 +101,8 @@ function UpdatePlayers()
 	 * @param player
 	 * @param change
 	 */
-	function set(player: IPlayer, change: FrontEnd.NameUpdate.IPlayerUpdate)
-	{
-		if(change.newName)
+	function set(player: IPlayer, change: FrontEnd.NameUpdate.IPlayerUpdate) {
+		if (change.newName)
 			player.name = change.newName;
 		player.active = change.active;
 		player.chesskid = change.chessKid;
@@ -122,22 +116,19 @@ function UpdatePlayers()
 	let changes = FrontEnd.NameUpdate.getData();
 	let club = FrontEnd.Master.getClub();
 
-	for(let i = 0; i < changes.length; i++)
-	{
+	for (let i = 0; i < changes.length; i++) {
 		let currentRow = changes[i];
 		let me = club[currentRow.name];
 		// I already exist.
-		if(me)
-		{
-			if(me.name !== currentRow.name)
+		if (me) {
+			if (me.name !== currentRow.name)
 				throw new Error(`Duplicate in name change, ${currentRow.name} appears in multiple rows`);
 
 			//TODO add more changes here
 			set(me, currentRow);
 		}
 		// player doesn't exist yet.
-		else
-		{
+		else {
 			club[currentRow.name] = {
 				active: typeof currentRow.active === 'boolean' ? currentRow.active : true,
 				chesskid: currentRow.chessKid,
@@ -168,8 +159,7 @@ function UpdatePlayers()
  * Consumes and commits to storage the games played
  * Does rating changes
  */
-function WeeklyUpdate()
-{
+function WeeklyUpdate() {
 	Permision.validatePermision(p => false);
 	let gamesResults = FrontEnd.Games.getResults();
 	let club = FrontEnd.Master.getClub();
@@ -177,7 +167,7 @@ function WeeklyUpdate()
 
 	//do ratings
 	let everyoneRatings: Glicko.IRating[] = [];
-	for(let name in club)
+	for (let name in club)
 		everyoneRatings.push(club[name].rating);
 
 	Glicko.doRatingPeriod(gamesResults.Tournament.Games.concat(gamesResults.Other).map(x => {
@@ -191,8 +181,7 @@ function WeeklyUpdate()
 
 	//add games to history
 	let tourny = gamesResults.Tournament.Games;
-	for(let i = tourny.length - 1; i >= 0; i--)
-	{
+	for (let i = tourny.length - 1; i >= 0; i--) {
 		let currentGame = tourny[i];
 		club[currentGame.white].pairingHistory.push({ opponent: currentGame.black, white: true });
 		club[currentGame.black].pairingHistory.push({ opponent: currentGame.white, white: false });
@@ -200,16 +189,15 @@ function WeeklyUpdate()
 	//add byes to history
 	gamesResults.Tournament.Byes.forEach(playerName => club[playerName].pairingHistory.push(null));
 
-	function countGame(game: FrontEnd.Games.IGame)
-	{
+	function countGame(game: FrontEnd.Games.IGame) {
 		club[game.white].gamesPlayed++;
 		club[game.black].gamesPlayed++;
 	}
 
 	//add to games played count
-	for(let i = 0; i < gamesResults.Tournament.Games.length; i++)
+	for (let i = 0; i < gamesResults.Tournament.Games.length; i++)
 		countGame(gamesResults.Tournament.Games[i]);
-	for(let i = 0; i < gamesResults.Other.length; i++)
+	for (let i = 0; i < gamesResults.Other.length; i++)
 		countGame(gamesResults.Other[i]);
 
 
@@ -222,8 +210,7 @@ function WeeklyUpdate()
 	UpdatePermisions();
 }
 
-function WeeklyUpdate_2()
-{
+function WeeklyUpdate_2() {
 	//generate next weeks pairing page
 	FrontEnd.Attendance.GenerateAttendanceSheets();
 
