@@ -5,7 +5,7 @@ namespace PostHandling {
 	}
 
 	const endpointHandlers: { [endpoint: string]: (e: GoogleAppsScript.Events.DoPost) => string } = {
-		"checkin": PostHandling.Checkin.handle,
+		checkin: PostHandling.Checkin.handle,
 	}
 
 	export function dispatch(request: GoogleAppsScript.Events.DoPost) {
