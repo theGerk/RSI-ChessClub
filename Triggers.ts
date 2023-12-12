@@ -1,7 +1,7 @@
 /// <reference path="Constants.ts"/>
 
-function doGet(e: GoogleAppsScript.Events.DoGet) {
-	return ContentService.createTextOutput(SpreadsheetApp.getActive().getSheets().map(x => x.getName()).join(','));
+function doPost(e: GoogleAppsScript.Events.DoPost) {
+	ContentService.createTextOutput(PostHandling.dispatch(e));
 }
 
 function onOpen(e: GoogleAppsScript.Events.SheetsOnOpen) {

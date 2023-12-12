@@ -24,6 +24,9 @@
     <Content Include=".editorconfig" />
     <Content Include=".gitignore" />
     <Content Include="appsscript.json" />
+    <Content Include="HTTPRequestDispatching.ts">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="package-lock.json" />
     <Content Include="package.json" />
     <Content Include="tsconfig.json" />
@@ -43,6 +46,9 @@
     <TypeScriptCompile Include="General.ts" />
     <TypeScriptCompile Include="GlickoRatings.ts" />
     <TypeScriptCompile Include="Groups_Table.ts" />
+    <TypeScriptCompile Include="HTTPPost_checkin.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="MasterSheet.ts" />
     <TypeScriptCompile Include="MetadataHandler.ts" />
     <TypeScriptCompile Include="PairingPoolsPage.ts">
