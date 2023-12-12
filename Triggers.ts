@@ -1,10 +1,10 @@
 /// <reference path="Constants.ts"/>
 
-function doGet(e) {
-
+function doGet(e: GoogleAppsScript.Events.DoGet) {
+	return ContentService.createTextOutput(SpreadsheetApp.getActive().getSheets().map(x => x.getName()).join(','));
 }
 
-function onOpen(e) {
+function onOpen(e: GoogleAppsScript.Events.SheetsOnOpen) {
 	generateMenu(false);
 }
 
