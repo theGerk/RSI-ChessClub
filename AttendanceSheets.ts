@@ -14,9 +14,25 @@
 			rating: number;
 			/** The pairing pool a specific player is in */
 			pairingPool: string;
-			/** The grade the individual is in. */
-			grade: number | string;
+			/** unique id for each player */
+			guid: string;
 		}
+
+		export function checkin(guid: string) {
+			let sheets = SpreadsheetApp.getActive().getSheets();
+			for (let sheet of sheets) {
+				let data = getAttendanceSheetArray(sheet).data;
+				for (let i = 0; i < data.length; i++) {
+					if (data[i].guid == guid) {
+						sheet.getRange(i + 2, CONST.pages.attendance.columns.attending).setValue(true);
+						_cache[data[0].group][i][CONST.pages.attendance.columns.attending] = true;
+						return;
+					}
+				}
+			}
+		}
+
+
 
 		/**
 		 * gets an attendance sheet as a map from name to player data
@@ -83,11 +99,11 @@
 				return {
 					name: row[CONST.pages.attendance.columns.name],
 					group: groupName,
-					attending: row[CONST.pages.attendance.columns.attendance],
+					attending: row[CONST.pages.attendance.columns.attending],
 					pair: row[CONST.pages.attendance.columns.pair],
 					rating: row[CONST.pages.attendance.columns.rating],
 					pairingPool: row[CONST.pages.attendance.columns.pairingPool],
-					grade: row[CONST.pages.attendance.columns.grade],
+					guid: row[CONST.pages.attendance.columns.guid],
 				};
 			}
 		}
@@ -95,7 +111,7 @@
 
 		function reverseMapping(row: IAttendanceData): any[] {
 			let output = [];
-			output[CONST.pages.attendance.columns.attendance] = row.attending;
+			output[CONST.pages.attendance.columns.attending] = row.attending;
 			output[CONST.pages.attendance.columns.name] = row.name;
 			output[CONST.pages.attendance.columns.pair] = row.pair;
 			output[CONST.pages.attendance.columns.rating] = row.rating;
@@ -174,13 +190,12 @@
 							pair: defaultParingSetting,
 							rating: (typeof (currentPerson.rating.rating) === 'number' && isFinite(currentPerson.rating.rating)) ? Math.round(currentPerson.rating.rating) : Glicko.INITIAL_RATING,
 							pairingPool: "",
-							grade: currentPerson.grade,
+							guid: currentPerson.guid,
 						});
 				}
 
 				//sort output data
 				outputData.sort(Benji.ordering(
-					Benji.OrderingFunctions.Ascending(x => x.grade),
 					Benji.OrderingFunctions.Ascending(x => x.name),
 				));
 
@@ -387,7 +402,7 @@
 		function createPermision(sheet: GoogleAppsScript.Spreadsheet.Sheet, rows: number) {
 			setPermision(sheet.protect().setUnprotectedRanges([
 				sheet.getRange(2, CONST.pages.attendance.columns.pair + 1, rows, 1),
-				sheet.getRange(2, CONST.pages.attendance.columns.attendance + 1, rows, 1)
+				sheet.getRange(2, CONST.pages.attendance.columns.attending + 1, rows, 1)
 			]));
 		}
 
