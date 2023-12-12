@@ -21,11 +21,15 @@
 		export function checkin(guid: string) {
 			let sheets = SpreadsheetApp.getActive().getSheets();
 			for (let sheet of sheets) {
-				let data = getAttendanceSheetArray(sheet).data;
-				for (let i = 0; i < data.length; i++) {
+				let sheetArray = getAttendanceSheetArray(sheet);
+				if (sheetArray == null) {
+					continue;
+				}
+				let data = sheetArray.data;
+				for (let i = data.length-1; i >= 0; i--) {
 					if (data[i].guid == guid) {
-						sheet.getRange(i + 2, CONST.pages.attendance.columns.attending).setValue(true);
-						_cache[data[0].group][i][CONST.pages.attendance.columns.attending] = true;
+						sheet.getRange(i + 2, CONST.pages.attendance.columns.attending + 1).setValue(true);
+						_cache[sheetArray.group][i][CONST.pages.attendance.columns.attending] = true;
 						return;
 					}
 				}
@@ -116,6 +120,7 @@
 			output[CONST.pages.attendance.columns.pair] = row.pair;
 			output[CONST.pages.attendance.columns.rating] = row.rating;
 			output[CONST.pages.attendance.columns.pairingPool] = row.pairingPool;
+			output[CONST.pages.attendance.columns.guid] = row.guid;
 			return output;
 		}
 

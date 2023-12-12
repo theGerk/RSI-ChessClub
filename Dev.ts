@@ -231,4 +231,10 @@ function makePrintableSignin() {
 		let data = grouping.map(x => [x.name, x.group, '']);
 		range.setValues(data);
 	}
+
+}
+
+
+function testCheckIn() {
+	FrontEnd.Attendance.checkin("cff9d30d-5ad0-4be6-bdc1-46cfb1b30ab2");
 }
