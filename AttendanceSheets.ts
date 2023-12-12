@@ -18,6 +18,10 @@
 			guid: string;
 		}
 
+		/**
+		 * takes a player's guid, finds their row in the attendance sheet, and sets their attendance to true in the sheet
+		 * @param guid players guid
+		 */
 		export function checkin(guid: string) {
 			let sheets = SpreadsheetApp.getActive().getSheets();
 			for (let sheet of sheets) {
