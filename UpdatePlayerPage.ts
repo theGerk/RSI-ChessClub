@@ -45,7 +45,7 @@ namespace FrontEnd
 				_cache = SpreadsheetApp.getActive().getSheetByName(CONST.pages.updatePlayer.name).getDataRange().getValues();
 				_cache.shift();
 			}
-			let output = _cache.filter(r => r[CONST.pages.updatePlayer.columns.name]).map(mapping);
+			let output = _cache.filter(r => r[CONST.pages.updatePlayer.columns.name] || r[CONST.pages.updatePlayer.columns.newName]).map(mapping);
 			for(var i = output.length - 1; i >= 0; i--)
 				if(!output[i].group)
 					throw new Error(`On row ${i + 2} of ${CONST.pages.updatePlayer.name} the entry does not have a group.`);

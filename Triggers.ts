@@ -1,7 +1,8 @@
 /// <reference path="Constants.ts"/>
 
 function doPost(e: GoogleAppsScript.Events.DoPost) {
-	ContentService.createTextOutput(PostHandling.dispatch(e));
+	Logger.log(e.postData.contents);
+	return ContentService.createTextOutput(PostHandling.dispatch(e));
 }
 
 function onOpen(e: GoogleAppsScript.Events.SheetsOnOpen) {
@@ -118,9 +119,12 @@ function UpdatePlayers() {
 
 	for (let i = 0; i < changes.length; i++) {
 		let currentRow = changes[i];
-		let me = club[currentRow.name];
+		let name = currentRow.name || currentRow.newName;
+		let me = club[name];
 		// I already exist.
 		if (me) {
+			if (!currentRow.name)
+				throw new Error (`${name} already exists in master sheet.`);
 			if (me.name !== currentRow.name)
 				throw new Error(`Duplicate in name change, ${currentRow.name} appears in multiple rows`);
 
@@ -129,7 +133,7 @@ function UpdatePlayers() {
 		}
 		// player doesn't exist yet.
 		else {
-			club[currentRow.name] = {
+			club[name] = {
 				active: typeof currentRow.active === 'boolean' ? currentRow.active : true,
 				chesskid: currentRow.chessKid,
 				gamesPlayed: 0,
