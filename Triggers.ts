@@ -1,5 +1,9 @@
 /// <reference path="Constants.ts"/>
 
+function doGet(e: GoogleAppsScript.Events.DoGet) {
+	return ContentService.createTextOutput(GetHandling.dispatch(e));
+}
+
 function doPost(e: GoogleAppsScript.Events.DoPost) {
 	Logger.log(e.postData.contents);
 	return ContentService.createTextOutput(PostHandling.dispatch(e));

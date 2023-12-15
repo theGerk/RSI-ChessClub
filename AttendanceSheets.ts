@@ -224,7 +224,7 @@
 		 * Gets all data for attendance sheets
 		 * @returns A map from players to their attendance data
 		 */
-		function getAllAttendanceData(): { [name: string]: IAttendanceData } {
+		export function getAllAttendanceData(): { [name: string]: IAttendanceData } {
 			let arr: IAttendanceData[] = [];
 
 			let sheets = SpreadsheetApp.getActive().getSheets();
@@ -360,7 +360,7 @@
 			}
 		}
 
-		export function getSheets(): GoogleAppsScript.Spreadsheet.Sheet[] {
+		 function getSheets(): GoogleAppsScript.Spreadsheet.Sheet[] {
 			return SpreadsheetApp.getActive().getSheets().filter(getAttendanceSheetMetadata);
 		}
 
