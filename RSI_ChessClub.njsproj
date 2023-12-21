@@ -61,7 +61,7 @@
     </TypeScriptCompile>
     <TypeScriptCompile Include="PairingPage.ts" />
     <TypeScriptCompile Include="Pairings.ts" />
-    <TypeScriptCompile Include="signoutSheet.ts">
+    <TypeScriptCompile Include="SignoutSheet.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="TemplatePages.ts">
