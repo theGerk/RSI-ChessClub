@@ -90,8 +90,8 @@ const CONST = {
 				attendance: 2,
 			},
 		},
-		signout_printout: {
-			template: 'Template-Print',
+		signout: {
+			template: 'Template-Signout',
 			metadata: {
 				key: 'printSheet',
 			},
@@ -100,6 +100,8 @@ const CONST = {
 				group: 1,
 				room: 2,
 				here: 3,
+				guid: 4,
+				signedOut: 5,
 			},
 			name: 'Signout Printoff',
 		},

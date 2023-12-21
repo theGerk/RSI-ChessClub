@@ -56,6 +56,9 @@
     </TypeScriptCompile>
     <TypeScriptCompile Include="PermisionsPage.ts" />
     <TypeScriptCompile Include="PermsionControler.ts" />
+    <TypeScriptCompile Include="HTTPPost_checkout.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="UpdatePlayerPage.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>

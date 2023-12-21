@@ -116,6 +116,21 @@ namespace Benji {
 		return output;
 	}
 
+	/**
+	 * Creates an object that maps from a key to true. The keys around found by a function that is passed in. If any key is used twice, it will continue as normal
+	 * @param input The array to be converted
+	 * @param getKey A function that takes in a element from the array, the index it is at (optional), and the entire array (optional) and returns a key (string) for that row that is unique to that row.
+	 */
+	export function makeSet<T>(input: T[], getKey: (input: T, index?: number, array?: T[]) => string): { [key: string]: true } {
+		let output: { [key: string]: true } = {};
+		for (let i = 0; i < input.length; i++) {
+			let val = input[i];
+			let key = getKey(val, i, input);
+			output[key] = true;
+		}
+		return output;
+	}
+
 
 	/**
 	 * Shuffles array in place.

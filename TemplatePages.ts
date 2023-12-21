@@ -1,7 +1,7 @@
 ﻿/** Namespace for general functions concerning template sheets */
 namespace TemplateSheets
 {
-
+	export const TEMPLATE_KEY = "template";
 	/**
 	 * Deletes a sheet with a given name.
 	 * 
@@ -83,7 +83,7 @@ namespace TemplateSheets
 		}
 
 		sheet.showSheet();
-		sheet.addDeveloperMetadata("template", template.getSheetName());
+		sheet.addDeveloperMetadata(TEMPLATE_KEY, template.getSheetName());
 
 		return sheet;
 	}
