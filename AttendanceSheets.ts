@@ -30,7 +30,7 @@
 					continue;
 				}
 				let data = sheetArray.data;
-				for (let i = data.length-1; i >= 0; i--) {
+				for (let i = data.length - 1; i >= 0; i--) {
 					if (data[i].guid == guid) {
 						sheet.getRange(i + 2, CONST.pages.attendance.columns.attending + 1).setValue(true);
 						_cache[sheetArray.group][i][CONST.pages.attendance.columns.attending] = true;
@@ -141,7 +141,7 @@
 		 * 
 		 * @param group the group name that we are generating for, defaults to all groups (optional)
 		 */
-		export function GenerateAttendanceSheets(group?: string): void {
+		export function GenerateAttendanceSheets(): void {
 			let spreadsheet = SpreadsheetApp.getActive();
 			let groups = FrontEnd.Master.getGroupsObject();
 			let groupData = FrontEnd.Groups.getData();
@@ -213,11 +213,8 @@
 
 
 			//go through each group and create attendance sheet
-			if (group)
-				makePage(group)
-			else
-				for (let groupName in groups)
-					makePage(groupName);
+			for (let groupName in groups)
+				makePage(groupName);
 		}
 
 		/**
@@ -360,7 +357,7 @@
 			}
 		}
 
-		 function getSheets(): GoogleAppsScript.Spreadsheet.Sheet[] {
+		function getSheets(): GoogleAppsScript.Spreadsheet.Sheet[] {
 			return SpreadsheetApp.getActive().getSheets().filter(getAttendanceSheetMetadata);
 		}
 
