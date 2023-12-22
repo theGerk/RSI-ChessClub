@@ -29,19 +29,19 @@ namespace GetHandling {
 	}
 
 	const endpointHandlers: { [endpoint: string]: (e: GoogleAppsScript.Events.DoGet) => string } = {
-		checkinAttendancesStatus: e => {
-			let data = FrontEnd.Attendance.getAllAttendanceData();
-			let output: { Name: string, Id: string, SignedIn: boolean }[] = [];
-			for (let name in data) {
-				let person = data[name];
-				output.push({
-					Name: name,
-					Id: person.guid,
-					SignedIn: person.attending,
-				});
-			}
-			return JSON.stringify(output);
-		},
+		//checkinAttendancesStatus: e => {
+		//	let data = FrontEnd.Attendance.getAllAttendanceData();
+		//	let output: { Name: string, Id: string, SignedIn: boolean }[] = [];
+		//	for (let name in data) {
+		//		let person = data[name];
+		//		output.push({
+		//			Name: name,
+		//			Id: person.guid,
+		//			SignedIn: person.attending,
+		//		});
+		//	}
+		//	return JSON.stringify(output);
+		//},
 	}
 
 	export function dispatch(request: GoogleAppsScript.Events.DoGet) {

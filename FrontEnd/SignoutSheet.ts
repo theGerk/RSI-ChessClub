@@ -42,7 +42,7 @@ namespace FrontEnd {
 
 		var _cache: any[][];
 
-		function read(): IData[] {
+		export function read(): IData[] {
 			if (!_cache) {
 				let sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(CONST.pages.signout.name);
 				if (!sheet) {
@@ -99,7 +99,7 @@ namespace FrontEnd {
 		}
 
 
-		export function signout(guids: {[guid: string]: true}) {
+		export function checkout(guids: {[guid: string]: true}) {
 			let data = read();
 			let sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(CONST.pages.signout.name);
 			if (!sheet)
@@ -107,7 +107,7 @@ namespace FrontEnd {
 			for (let i = data.length - 1; i >= 0; i--) {
 				if (guids[data[i].guid]) {
 					_cache[i][CONST.pages.signout.columns.signedOut] = true;
-					sheet.getRange(i + 2, CONST.pages.signout.columns.signedOut).setValue(true);
+					sheet.getRange(i + 2, CONST.pages.signout.columns.signedOut + 1).setValue(true);
 				}
 			}
 		}

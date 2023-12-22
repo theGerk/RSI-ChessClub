@@ -88,6 +88,7 @@ const CONST = {
 				date: 0,
 				games: 1,
 				attendance: 2,
+				signout: 3,
 			},
 		},
 		signout: {

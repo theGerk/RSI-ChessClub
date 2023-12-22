@@ -12,6 +12,8 @@
 			games: { Tournament: FrontEnd.Games.IRound, Other: FrontEnd.Games.IGame[] };
 			/** The attendance data for the day. */
 			attendance: { [name: string]: FrontEnd.Attendance.IAttendanceData };
+			/** Array of all GUIDs signed out for the day. */
+			signout: string[];
 		}
 
 		/**
@@ -25,6 +27,7 @@
 				date: (<string>row[CONST.pages.history.columns.date]).slice(0, -1),
 				attendance: row[CONST.pages.history.columns.attendance] ? JSON.parse(row[CONST.pages.history.columns.attendance]) : {},
 				games: row[CONST.pages.history.columns.games] ? JSON.parse(row[CONST.pages.history.columns.games]) : { Tournament: [], Other: [] },
+				signout: row[CONST.pages.history.columns.signout] ? JSON.parse(row[CONST.pages.history.columns.signout]) : [],
 			};
 		}
 
@@ -39,6 +42,7 @@
 			output[CONST.pages.history.columns.attendance] = JSON.stringify(row.attendance);
 			output[CONST.pages.history.columns.date] = row.date + '.';
 			output[CONST.pages.history.columns.games] = JSON.stringify(row.games);
+			output[CONST.pages.history.columns.signout] = JSON.stringify(row.signout);
 			return output;
 		}
 
@@ -49,10 +53,10 @@
 		export function newData(date?: string): IData
 		{
 			if(date === undefined)
-				return { date: Benji.friday(), attendance: {}, games: null };
+				return { date: Benji.friday(), attendance: {}, games: null, signout: null };
 			else
 				if(date.match(/\d\d\d\d-\d\d-\d\d/))
-					return { date: date, attendance: {}, games: null };
+					return { date: date, attendance: {}, games: null, signout: null };
 				else
 					throw new Error(`Error creating new data entry, date: ${date} is invalid.`);
 		}
