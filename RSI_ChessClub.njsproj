@@ -34,35 +34,37 @@
     <None Include="Triggers.ts" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="HTTPPost\" />
+    <Folder Include="FrontEnd\" />
     <Folder Include="RSI_ChessClub" />
   </ItemGroup>
   <ItemGroup>
-    <TypeScriptCompile Include="AttendanceSheets.ts" />
+    <TypeScriptCompile Include="FrontEnd\AttendanceSheets.ts" />
     <TypeScriptCompile Include="Constants.ts" />
-    <TypeScriptCompile Include="DataPage.ts" />
+    <TypeScriptCompile Include="FrontEnd\DataPage.ts" />
     <TypeScriptCompile Include="Dev.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="General.ts" />
     <TypeScriptCompile Include="GlickoRatings.ts" />
-    <TypeScriptCompile Include="Groups_Table.ts" />
-    <TypeScriptCompile Include="HTTPPost_checkin.ts">
+    <TypeScriptCompile Include="FrontEnd\Groups_Table.ts" />
+    <TypeScriptCompile Include="HTTPPost\Checkin.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="MasterSheet.ts" />
+    <TypeScriptCompile Include="FrontEnd\MasterSheet.ts" />
     <TypeScriptCompile Include="MetadataHandler.ts" />
-    <TypeScriptCompile Include="PairingPoolsPage.ts">
+    <TypeScriptCompile Include="FrontEnd\PairingPoolsPage.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="PermisionsPage.ts" />
+    <TypeScriptCompile Include="FrontEnd\PermisionsPage.ts" />
     <TypeScriptCompile Include="PermsionControler.ts" />
-    <TypeScriptCompile Include="HTTPPost_checkout.ts">
+    <TypeScriptCompile Include="HTTPPost\Checkout.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="UpdatePlayerPage.ts">
+    <TypeScriptCompile Include="FrontEnd\UpdatePlayerPage.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="PairingPage.ts" />
+    <TypeScriptCompile Include="FrontEnd\PairingPage.ts" />
     <TypeScriptCompile Include="Pairings.ts" />
     <TypeScriptCompile Include="SignoutSheet.ts">
       <SubType>Code</SubType>

@@ -2,6 +2,7 @@
 	"target": "ES2019",
 	"compileOnSave": false,
 	"include": [
-		"*.ts"
+		"*.ts",
+		"*/*.ts"
 	]
 }
