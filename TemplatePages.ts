@@ -83,7 +83,7 @@ namespace TemplateSheets
 		}
 
 		sheet.showSheet();
-		sheet.addDeveloperMetadata(TEMPLATE_KEY, template.getSheetName());
+		sheet.addDeveloperMetadata(TemplateSheets.TEMPLATE_KEY, template.getSheetName());
 
 		return sheet;
 	}

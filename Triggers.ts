@@ -128,7 +128,7 @@ function UpdatePlayers() {
 		// I already exist.
 		if (me) {
 			if (!currentRow.name)
-				throw new Error (`${name} already exists in master sheet.`);
+				throw new Error(`${name} already exists in master sheet.`);
 			if (me.name !== currentRow.name)
 				throw new Error(`Duplicate in name change, ${currentRow.name} appears in multiple rows`);
 
@@ -208,8 +208,16 @@ function WeeklyUpdate() {
 	for (let i = 0; i < gamesResults.Other.length; i++)
 		countGame(gamesResults.Other[i]);
 
+	// Handle signout data
+	let signedout = FrontEnd.SignoutSheet.read().filter(x => x.signedOut).map(x => x.guid);
+	let data = FrontEnd.Data.getData();
+	let friday = Benji.friday();
+	if (!data[friday])
+		data[friday] = FrontEnd.Data.newData(friday)
+	data[friday].signout = signedout;
 
 	//write data
+	FrontEnd.Data.writeData(data);
 	FrontEnd.Attendance.SubmitAttendance(false);
 	FrontEnd.Games.recordAndRemove();
 	FrontEnd.Master.setClub(club);
