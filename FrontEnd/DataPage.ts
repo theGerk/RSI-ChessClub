@@ -64,7 +64,7 @@
 		/** Holds all data (except header row) on a page in raw data format */
 		var _cache: any[][]
 
-		/** Gets all the data from the history page in order, with oldest first */
+		/** Gets all the data from the history page as a map from the date string to the data. */
 		export function getData(): { [date: string]: IData }
 		{
 			if(!_cache)

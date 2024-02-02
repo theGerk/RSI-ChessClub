@@ -161,6 +161,7 @@ function UpdatePlayers() {
 	FrontEnd.Master.setClub(club);
 	FrontEnd.NameUpdate.remove();
 	FrontEnd.NameUpdate.make();
+	FrontEnd.Attendance.GenerateAttendanceSheets(true);
 }
 
 /**

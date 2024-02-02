@@ -135,13 +135,14 @@
 		 */
 		function getSheetName(groupName: string) { return groupName[0].toUpperCase() + groupName.substring(1).toLowerCase() + " attendance"; }
 
+
 		//TODO redo this... Wow it was clever but boy is it stupid.
 		/**
-		 * Creates an attendance sheet for the given group (TEST version, will be replaced?)
+		 * Creates an attendance sheets for every group.
 		 * 
-		 * @param group the group name that we are generating for, defaults to all groups (optional)
+		 * @param recreateOnly only regenerate attenance sheets for the groups currently existing.
 		 */
-		export function GenerateAttendanceSheets(): void {
+		export function GenerateAttendanceSheets(recreateOnly: boolean = false): void {
 			let spreadsheet = SpreadsheetApp.getActive();
 			let groups = FrontEnd.Master.getGroupsObject();
 			let groupData = FrontEnd.Groups.getData();
@@ -177,6 +178,8 @@
 					else
 						record = tmp.data;
 				}
+				else if (recreateOnly)
+					return;
 				else
 					record = {};
 
@@ -367,7 +370,7 @@
 		 * @param groupName The group that these data belong to
 		 */
 		function writeAttendance(input: IAttendanceData[], groupName: string) {
-			if (input.length === 0) {
+			if (input.length == 0) {
 				RemoveAttendanceSheets(groupName);
 				return;
 			}

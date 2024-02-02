@@ -219,7 +219,7 @@ ${er}`);
 		{
 			let nameMap = validateNameChanges(club);
 
-			if(Object.keys(nameMap).length !== 0)
+			if(Object.keys(nameMap).length != 0)
 			{
 				//Modify names
 				modifyNames(club, nameMap);
@@ -230,6 +230,9 @@ ${er}`);
 			}
 
 			writePlayerArray(Benji.objToArray_dropKey(club));
+
+			if (FrontEnd.Attendance.IsGenerated())
+				FrontEnd.Attendance.GenerateAttendanceSheets();
 		}
 
 		export function setPermisions()
