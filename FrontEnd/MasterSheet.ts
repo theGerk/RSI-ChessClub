@@ -230,9 +230,6 @@ ${er}`);
 			}
 
 			writePlayerArray(Benji.objToArray_dropKey(club));
-
-			if (FrontEnd.Attendance.IsGenerated())
-				FrontEnd.Attendance.GenerateAttendanceSheets();
 		}
 
 		export function setPermisions()
