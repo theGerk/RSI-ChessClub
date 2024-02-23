@@ -95,15 +95,23 @@
 		}
 
 		/**
-		 * Modifies the names on the attendance part of a data object.
+		 * Modifies the names on the attendance part of a data object and returns a new fixed one.
 		 * @param data the attendance data portion of a data object
 		 * @param nameMap A map from old names to new names.
+		 * 
+		 * @returns Returns a new attendance part of the data object.
 		 */
 		function modifyNamesForAttendance(data: { [name: string]: FrontEnd.Attendance.IAttendanceData }, nameMap: { [oldName: string]: string })
 		{
-			for(let name in data)
-				if(name.hasOwnProperty(name))
+			for (let name in data)
+				if (nameMap.hasOwnProperty(name))
 					data[name].name = nameMap[name];
+
+			let output: typeof data = {};
+			for (let name in data)
+				output[data[name].name] = data[name];
+
+			return output;
 		}
 
 		/**
@@ -145,7 +153,7 @@
 		function modifyNamesForDay(data: IData, nameMap: { [oldName: string]: string })
 		{
 			modifyNamesForGames(data.games, nameMap);
-			modifyNamesForAttendance(data.attendance, nameMap);
+			data.attendance = modifyNamesForAttendance(data.attendance, nameMap);
 		}
 
 		/**
